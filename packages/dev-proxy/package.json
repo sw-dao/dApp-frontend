@@ -1,0 +1,14 @@
+{
+  "name": "dev-proxy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^2.0.1"
+  },
+  "scripts": {
+    "start": "node index-local.js",
+    "start:stage": "node index-stage.js"
+  }
+}

@@ -1,0 +1,65 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SWD
+    network: mainnet 
+    source:
+      address: '0x1fd154b4d0e3753b714b511a53fe1fb72dc7ae1c'
+      abi: SWD
+      startBlock: 13543668
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - SWDUser
+      abis:
+        - name: SWD
+          file: ./abis/SWD.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: SW DAO Alpha Portfolio
+    network: mainnet
+    source:
+      address: '0xb8a62d3df12755ac1722d934bd70aae82d842a43'
+      abi: SetToken
+      startBlock: 13627846
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: SetToken
+          file: ./abis/SetToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: SW Yield Fund
+    network: mainnet
+    source:
+      address: '0xefa6903aa49cd539c079ac4b0a090db432615822'
+      abi: ERC20
+      startBlock: 13653166
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts

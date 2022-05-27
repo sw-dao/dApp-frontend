@@ -1,0 +1,32 @@
+{
+  "network": "ropsten",
+  "token": {
+    "swd": {
+      "name": "SWD",
+      "address": "0x196e9172712b5e6102e59668278Cd7051b104DaE",
+      "abi": {
+        "name": "SWDAO",
+        "file": "../contracts/deployments/ropsten/SWDAO.json"
+      },
+      "startBlock": 11436512
+    },
+    "swap": {
+      "name": "SWAP",
+      "address": "0xC6D513643A9A9497b375A6baAFa951158d16e566",
+      "abi": {
+        "name": "SetTokenMock",
+        "file": "../contracts/deployments/ropsten/SetTokenMock.json"
+      },
+      "startBlock": 11486472
+    },
+    "swyf": {
+      "name": "SWYF",
+      "address": "0x2bfe504e5C145F5d5b95df2b7798Ec1C422C5Bc1",
+      "abi": {
+        "name": "SetTokenMock",
+        "file": "../contracts/deployments/ropsten/SetTokenMock_2.json"
+      },
+      "startBlock": 11486474
+    }
+  }
+}

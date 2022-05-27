@@ -1,0 +1,13 @@
+{
+    "projects": {
+      "backend": {
+        "schema": "http://localhost:8080/v1/graphql",
+        "extensions": {
+          "codegen": {
+            "generates": "./src/types.ts",
+            "plugins": ["typescript", "typescript-resolvers"]
+          }
+        }
+      }
+    }
+  }

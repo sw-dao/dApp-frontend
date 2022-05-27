@@ -1,0 +1,4 @@
+runtime: nodejs14
+service: stage
+env_variables:
+  PORT: 8080

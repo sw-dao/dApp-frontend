@@ -1,0 +1,3934 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "prices.daily"
+  """
+  delete_prices_daily(
+    """filter the rows which have to be deleted"""
+    where: prices_daily_bool_exp!
+  ): prices_daily_mutation_response
+
+  """
+  delete single row from the table: "prices.daily"
+  """
+  delete_prices_daily_by_pk(id: Int!): prices_daily
+
+  """
+  delete data from the table: "prices.hourly"
+  """
+  delete_prices_hourly(
+    """filter the rows which have to be deleted"""
+    where: prices_hourly_bool_exp!
+  ): prices_hourly_mutation_response
+
+  """
+  delete single row from the table: "prices.hourly"
+  """
+  delete_prices_hourly_by_pk(id: Int!): prices_hourly
+
+  """
+  delete data from the table: "prices.minutes"
+  """
+  delete_prices_minutes(
+    """filter the rows which have to be deleted"""
+    where: prices_minutes_bool_exp!
+  ): prices_minutes_mutation_response
+
+  """
+  delete single row from the table: "prices.minutes"
+  """
+  delete_prices_minutes_by_pk(id: Int!): prices_minutes
+
+  """
+  delete data from the table: "prices.networks"
+  """
+  delete_prices_networks(
+    """filter the rows which have to be deleted"""
+    where: prices_networks_bool_exp!
+  ): prices_networks_mutation_response
+
+  """
+  delete single row from the table: "prices.networks"
+  """
+  delete_prices_networks_by_pk(id: Int!): prices_networks
+
+  """
+  delete data from the table: "prices.token_infos"
+  """
+  delete_prices_token_infos(
+    """filter the rows which have to be deleted"""
+    where: prices_token_infos_bool_exp!
+  ): prices_token_infos_mutation_response
+
+  """
+  delete single row from the table: "prices.token_infos"
+  """
+  delete_prices_token_infos_by_pk(id: Int!): prices_token_infos
+
+  """
+  delete data from the table: "prices.tokens"
+  """
+  delete_prices_tokens(
+    """filter the rows which have to be deleted"""
+    where: prices_tokens_bool_exp!
+  ): prices_tokens_mutation_response
+
+  """
+  delete single row from the table: "prices.tokens"
+  """
+  delete_prices_tokens_by_pk(id: Int!): prices_tokens
+
+  """
+  delete data from the table: "prices.tokenset_allocations"
+  """
+  delete_prices_tokenset_allocations(
+    """filter the rows which have to be deleted"""
+    where: prices_tokenset_allocations_bool_exp!
+  ): prices_tokenset_allocations_mutation_response
+
+  """
+  delete single row from the table: "prices.tokenset_allocations"
+  """
+  delete_prices_tokenset_allocations_by_pk(id: Int!): prices_tokenset_allocations
+
+  """
+  insert data into the table: "prices.daily"
+  """
+  insert_prices_daily(
+    """the rows to be inserted"""
+    objects: [prices_daily_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prices_daily_on_conflict
+  ): prices_daily_mutation_response
+
+  """
+  insert a single row into the table: "prices.daily"
+  """
+  insert_prices_daily_one(
+    """the row to be inserted"""
+    object: prices_daily_insert_input!
+
+    """upsert condition"""
+    on_conflict: prices_daily_on_conflict
+  ): prices_daily
+
+  """
+  insert data into the table: "prices.hourly"
+  """
+  insert_prices_hourly(
+    """the rows to be inserted"""
+    objects: [prices_hourly_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prices_hourly_on_conflict
+  ): prices_hourly_mutation_response
+
+  """
+  insert a single row into the table: "prices.hourly"
+  """
+  insert_prices_hourly_one(
+    """the row to be inserted"""
+    object: prices_hourly_insert_input!
+
+    """upsert condition"""
+    on_conflict: prices_hourly_on_conflict
+  ): prices_hourly
+
+  """
+  insert data into the table: "prices.minutes"
+  """
+  insert_prices_minutes(
+    """the rows to be inserted"""
+    objects: [prices_minutes_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prices_minutes_on_conflict
+  ): prices_minutes_mutation_response
+
+  """
+  insert a single row into the table: "prices.minutes"
+  """
+  insert_prices_minutes_one(
+    """the row to be inserted"""
+    object: prices_minutes_insert_input!
+
+    """upsert condition"""
+    on_conflict: prices_minutes_on_conflict
+  ): prices_minutes
+
+  """
+  insert data into the table: "prices.networks"
+  """
+  insert_prices_networks(
+    """the rows to be inserted"""
+    objects: [prices_networks_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prices_networks_on_conflict
+  ): prices_networks_mutation_response
+
+  """
+  insert a single row into the table: "prices.networks"
+  """
+  insert_prices_networks_one(
+    """the row to be inserted"""
+    object: prices_networks_insert_input!
+
+    """upsert condition"""
+    on_conflict: prices_networks_on_conflict
+  ): prices_networks
+
+  """
+  insert data into the table: "prices.token_infos"
+  """
+  insert_prices_token_infos(
+    """the rows to be inserted"""
+    objects: [prices_token_infos_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prices_token_infos_on_conflict
+  ): prices_token_infos_mutation_response
+
+  """
+  insert a single row into the table: "prices.token_infos"
+  """
+  insert_prices_token_infos_one(
+    """the row to be inserted"""
+    object: prices_token_infos_insert_input!
+
+    """upsert condition"""
+    on_conflict: prices_token_infos_on_conflict
+  ): prices_token_infos
+
+  """
+  insert data into the table: "prices.tokens"
+  """
+  insert_prices_tokens(
+    """the rows to be inserted"""
+    objects: [prices_tokens_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prices_tokens_on_conflict
+  ): prices_tokens_mutation_response
+
+  """
+  insert a single row into the table: "prices.tokens"
+  """
+  insert_prices_tokens_one(
+    """the row to be inserted"""
+    object: prices_tokens_insert_input!
+
+    """upsert condition"""
+    on_conflict: prices_tokens_on_conflict
+  ): prices_tokens
+
+  """
+  insert data into the table: "prices.tokenset_allocations"
+  """
+  insert_prices_tokenset_allocations(
+    """the rows to be inserted"""
+    objects: [prices_tokenset_allocations_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prices_tokenset_allocations_on_conflict
+  ): prices_tokenset_allocations_mutation_response
+
+  """
+  insert a single row into the table: "prices.tokenset_allocations"
+  """
+  insert_prices_tokenset_allocations_one(
+    """the row to be inserted"""
+    object: prices_tokenset_allocations_insert_input!
+
+    """upsert condition"""
+    on_conflict: prices_tokenset_allocations_on_conflict
+  ): prices_tokenset_allocations
+
+  """
+  update data of the table: "prices.daily"
+  """
+  update_prices_daily(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_daily_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_daily_set_input
+
+    """filter the rows which have to be updated"""
+    where: prices_daily_bool_exp!
+  ): prices_daily_mutation_response
+
+  """
+  update single row of the table: "prices.daily"
+  """
+  update_prices_daily_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_daily_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_daily_set_input
+    pk_columns: prices_daily_pk_columns_input!
+  ): prices_daily
+
+  """
+  update data of the table: "prices.hourly"
+  """
+  update_prices_hourly(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_hourly_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_hourly_set_input
+
+    """filter the rows which have to be updated"""
+    where: prices_hourly_bool_exp!
+  ): prices_hourly_mutation_response
+
+  """
+  update single row of the table: "prices.hourly"
+  """
+  update_prices_hourly_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_hourly_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_hourly_set_input
+    pk_columns: prices_hourly_pk_columns_input!
+  ): prices_hourly
+
+  """
+  update data of the table: "prices.minutes"
+  """
+  update_prices_minutes(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_minutes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_minutes_set_input
+
+    """filter the rows which have to be updated"""
+    where: prices_minutes_bool_exp!
+  ): prices_minutes_mutation_response
+
+  """
+  update single row of the table: "prices.minutes"
+  """
+  update_prices_minutes_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_minutes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_minutes_set_input
+    pk_columns: prices_minutes_pk_columns_input!
+  ): prices_minutes
+
+  """
+  update data of the table: "prices.networks"
+  """
+  update_prices_networks(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_networks_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_networks_set_input
+
+    """filter the rows which have to be updated"""
+    where: prices_networks_bool_exp!
+  ): prices_networks_mutation_response
+
+  """
+  update single row of the table: "prices.networks"
+  """
+  update_prices_networks_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_networks_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_networks_set_input
+    pk_columns: prices_networks_pk_columns_input!
+  ): prices_networks
+
+  """
+  update data of the table: "prices.token_infos"
+  """
+  update_prices_token_infos(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_token_infos_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_token_infos_set_input
+
+    """filter the rows which have to be updated"""
+    where: prices_token_infos_bool_exp!
+  ): prices_token_infos_mutation_response
+
+  """
+  update single row of the table: "prices.token_infos"
+  """
+  update_prices_token_infos_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_token_infos_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_token_infos_set_input
+    pk_columns: prices_token_infos_pk_columns_input!
+  ): prices_token_infos
+
+  """
+  update data of the table: "prices.tokens"
+  """
+  update_prices_tokens(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_tokens_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_tokens_set_input
+
+    """filter the rows which have to be updated"""
+    where: prices_tokens_bool_exp!
+  ): prices_tokens_mutation_response
+
+  """
+  update single row of the table: "prices.tokens"
+  """
+  update_prices_tokens_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_tokens_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_tokens_set_input
+    pk_columns: prices_tokens_pk_columns_input!
+  ): prices_tokens
+
+  """
+  update data of the table: "prices.tokenset_allocations"
+  """
+  update_prices_tokenset_allocations(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_tokenset_allocations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_tokenset_allocations_set_input
+
+    """filter the rows which have to be updated"""
+    where: prices_tokenset_allocations_bool_exp!
+  ): prices_tokenset_allocations_mutation_response
+
+  """
+  update single row of the table: "prices.tokenset_allocations"
+  """
+  update_prices_tokenset_allocations_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prices_tokenset_allocations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prices_tokenset_allocations_set_input
+    pk_columns: prices_tokenset_allocations_pk_columns_input!
+  ): prices_tokenset_allocations
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+daily price
+
+
+columns and relationships of "prices.daily"
+
+"""
+type prices_daily {
+  epoch: Int!
+  id: Int!
+  price: String!
+
+  """An object relationship"""
+  token: prices_tokens!
+  tokenId: Int!
+}
+
+"""
+aggregated selection of "prices.daily"
+"""
+type prices_daily_aggregate {
+  aggregate: prices_daily_aggregate_fields
+  nodes: [prices_daily!]!
+}
+
+"""
+aggregate fields of "prices.daily"
+"""
+type prices_daily_aggregate_fields {
+  avg: prices_daily_avg_fields
+  count(columns: [prices_daily_select_column!], distinct: Boolean): Int!
+  max: prices_daily_max_fields
+  min: prices_daily_min_fields
+  stddev: prices_daily_stddev_fields
+  stddev_pop: prices_daily_stddev_pop_fields
+  stddev_samp: prices_daily_stddev_samp_fields
+  sum: prices_daily_sum_fields
+  var_pop: prices_daily_var_pop_fields
+  var_samp: prices_daily_var_samp_fields
+  variance: prices_daily_variance_fields
+}
+
+"""
+order by aggregate values of table "prices.daily"
+"""
+input prices_daily_aggregate_order_by {
+  avg: prices_daily_avg_order_by
+  count: order_by
+  max: prices_daily_max_order_by
+  min: prices_daily_min_order_by
+  stddev: prices_daily_stddev_order_by
+  stddev_pop: prices_daily_stddev_pop_order_by
+  stddev_samp: prices_daily_stddev_samp_order_by
+  sum: prices_daily_sum_order_by
+  var_pop: prices_daily_var_pop_order_by
+  var_samp: prices_daily_var_samp_order_by
+  variance: prices_daily_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "prices.daily"
+"""
+input prices_daily_arr_rel_insert_input {
+  data: [prices_daily_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: prices_daily_on_conflict
+}
+
+"""aggregate avg on columns"""
+type prices_daily_avg_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by avg() on columns of table "prices.daily"
+"""
+input prices_daily_avg_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "prices.daily". All fields are combined with a logical 'AND'.
+"""
+input prices_daily_bool_exp {
+  _and: [prices_daily_bool_exp!]
+  _not: prices_daily_bool_exp
+  _or: [prices_daily_bool_exp!]
+  epoch: Int_comparison_exp
+  id: Int_comparison_exp
+  price: String_comparison_exp
+  token: prices_tokens_bool_exp
+  tokenId: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "prices.daily"
+"""
+enum prices_daily_constraint {
+  """unique or primary key constraint"""
+  daily_pkey
+
+  """unique or primary key constraint"""
+  daily_tokenId_price_epoch_key
+}
+
+"""
+input type for incrementing numeric columns in table "prices.daily"
+"""
+input prices_daily_inc_input {
+  epoch: Int
+  id: Int
+  tokenId: Int
+}
+
+"""
+input type for inserting data into table "prices.daily"
+"""
+input prices_daily_insert_input {
+  epoch: Int
+  id: Int
+  price: String
+  token: prices_tokens_obj_rel_insert_input
+  tokenId: Int
+}
+
+"""aggregate max on columns"""
+type prices_daily_max_fields {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""
+order by max() on columns of table "prices.daily"
+"""
+input prices_daily_max_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  tokenId: order_by
+}
+
+"""aggregate min on columns"""
+type prices_daily_min_fields {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""
+order by min() on columns of table "prices.daily"
+"""
+input prices_daily_min_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  tokenId: order_by
+}
+
+"""
+response of any mutation on the table "prices.daily"
+"""
+type prices_daily_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prices_daily!]!
+}
+
+"""
+on_conflict condition type for table "prices.daily"
+"""
+input prices_daily_on_conflict {
+  constraint: prices_daily_constraint!
+  update_columns: [prices_daily_update_column!]! = []
+  where: prices_daily_bool_exp
+}
+
+"""Ordering options when selecting data from "prices.daily"."""
+input prices_daily_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  token: prices_tokens_order_by
+  tokenId: order_by
+}
+
+"""primary key columns input for table: prices_daily"""
+input prices_daily_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prices.daily"
+"""
+enum prices_daily_select_column {
+  """column name"""
+  epoch
+
+  """column name"""
+  id
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+}
+
+"""
+input type for updating data in table "prices.daily"
+"""
+input prices_daily_set_input {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""aggregate stddev on columns"""
+type prices_daily_stddev_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev() on columns of table "prices.daily"
+"""
+input prices_daily_stddev_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type prices_daily_stddev_pop_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_pop() on columns of table "prices.daily"
+"""
+input prices_daily_stddev_pop_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type prices_daily_stddev_samp_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_samp() on columns of table "prices.daily"
+"""
+input prices_daily_stddev_samp_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate sum on columns"""
+type prices_daily_sum_fields {
+  epoch: Int
+  id: Int
+  tokenId: Int
+}
+
+"""
+order by sum() on columns of table "prices.daily"
+"""
+input prices_daily_sum_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+update columns of table "prices.daily"
+"""
+enum prices_daily_update_column {
+  """column name"""
+  epoch
+
+  """column name"""
+  id
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+}
+
+"""aggregate var_pop on columns"""
+type prices_daily_var_pop_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_pop() on columns of table "prices.daily"
+"""
+input prices_daily_var_pop_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate var_samp on columns"""
+type prices_daily_var_samp_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_samp() on columns of table "prices.daily"
+"""
+input prices_daily_var_samp_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate variance on columns"""
+type prices_daily_variance_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by variance() on columns of table "prices.daily"
+"""
+input prices_daily_variance_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+hourly price data
+
+
+columns and relationships of "prices.hourly"
+
+"""
+type prices_hourly {
+  epoch: Int!
+  id: Int!
+  price: String!
+
+  """An object relationship"""
+  token: prices_tokens!
+  tokenId: Int!
+}
+
+"""
+aggregated selection of "prices.hourly"
+"""
+type prices_hourly_aggregate {
+  aggregate: prices_hourly_aggregate_fields
+  nodes: [prices_hourly!]!
+}
+
+"""
+aggregate fields of "prices.hourly"
+"""
+type prices_hourly_aggregate_fields {
+  avg: prices_hourly_avg_fields
+  count(columns: [prices_hourly_select_column!], distinct: Boolean): Int!
+  max: prices_hourly_max_fields
+  min: prices_hourly_min_fields
+  stddev: prices_hourly_stddev_fields
+  stddev_pop: prices_hourly_stddev_pop_fields
+  stddev_samp: prices_hourly_stddev_samp_fields
+  sum: prices_hourly_sum_fields
+  var_pop: prices_hourly_var_pop_fields
+  var_samp: prices_hourly_var_samp_fields
+  variance: prices_hourly_variance_fields
+}
+
+"""
+order by aggregate values of table "prices.hourly"
+"""
+input prices_hourly_aggregate_order_by {
+  avg: prices_hourly_avg_order_by
+  count: order_by
+  max: prices_hourly_max_order_by
+  min: prices_hourly_min_order_by
+  stddev: prices_hourly_stddev_order_by
+  stddev_pop: prices_hourly_stddev_pop_order_by
+  stddev_samp: prices_hourly_stddev_samp_order_by
+  sum: prices_hourly_sum_order_by
+  var_pop: prices_hourly_var_pop_order_by
+  var_samp: prices_hourly_var_samp_order_by
+  variance: prices_hourly_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "prices.hourly"
+"""
+input prices_hourly_arr_rel_insert_input {
+  data: [prices_hourly_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: prices_hourly_on_conflict
+}
+
+"""aggregate avg on columns"""
+type prices_hourly_avg_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by avg() on columns of table "prices.hourly"
+"""
+input prices_hourly_avg_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "prices.hourly". All fields are combined with a logical 'AND'.
+"""
+input prices_hourly_bool_exp {
+  _and: [prices_hourly_bool_exp!]
+  _not: prices_hourly_bool_exp
+  _or: [prices_hourly_bool_exp!]
+  epoch: Int_comparison_exp
+  id: Int_comparison_exp
+  price: String_comparison_exp
+  token: prices_tokens_bool_exp
+  tokenId: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "prices.hourly"
+"""
+enum prices_hourly_constraint {
+  """unique or primary key constraint"""
+  hourly_pkey
+
+  """unique or primary key constraint"""
+  hourly_tokenId_price_epoch_key
+}
+
+"""
+input type for incrementing numeric columns in table "prices.hourly"
+"""
+input prices_hourly_inc_input {
+  epoch: Int
+  id: Int
+  tokenId: Int
+}
+
+"""
+input type for inserting data into table "prices.hourly"
+"""
+input prices_hourly_insert_input {
+  epoch: Int
+  id: Int
+  price: String
+  token: prices_tokens_obj_rel_insert_input
+  tokenId: Int
+}
+
+"""aggregate max on columns"""
+type prices_hourly_max_fields {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""
+order by max() on columns of table "prices.hourly"
+"""
+input prices_hourly_max_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  tokenId: order_by
+}
+
+"""aggregate min on columns"""
+type prices_hourly_min_fields {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""
+order by min() on columns of table "prices.hourly"
+"""
+input prices_hourly_min_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  tokenId: order_by
+}
+
+"""
+response of any mutation on the table "prices.hourly"
+"""
+type prices_hourly_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prices_hourly!]!
+}
+
+"""
+on_conflict condition type for table "prices.hourly"
+"""
+input prices_hourly_on_conflict {
+  constraint: prices_hourly_constraint!
+  update_columns: [prices_hourly_update_column!]! = []
+  where: prices_hourly_bool_exp
+}
+
+"""Ordering options when selecting data from "prices.hourly"."""
+input prices_hourly_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  token: prices_tokens_order_by
+  tokenId: order_by
+}
+
+"""primary key columns input for table: prices_hourly"""
+input prices_hourly_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prices.hourly"
+"""
+enum prices_hourly_select_column {
+  """column name"""
+  epoch
+
+  """column name"""
+  id
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+}
+
+"""
+input type for updating data in table "prices.hourly"
+"""
+input prices_hourly_set_input {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""aggregate stddev on columns"""
+type prices_hourly_stddev_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev() on columns of table "prices.hourly"
+"""
+input prices_hourly_stddev_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type prices_hourly_stddev_pop_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_pop() on columns of table "prices.hourly"
+"""
+input prices_hourly_stddev_pop_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type prices_hourly_stddev_samp_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_samp() on columns of table "prices.hourly"
+"""
+input prices_hourly_stddev_samp_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate sum on columns"""
+type prices_hourly_sum_fields {
+  epoch: Int
+  id: Int
+  tokenId: Int
+}
+
+"""
+order by sum() on columns of table "prices.hourly"
+"""
+input prices_hourly_sum_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+update columns of table "prices.hourly"
+"""
+enum prices_hourly_update_column {
+  """column name"""
+  epoch
+
+  """column name"""
+  id
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+}
+
+"""aggregate var_pop on columns"""
+type prices_hourly_var_pop_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_pop() on columns of table "prices.hourly"
+"""
+input prices_hourly_var_pop_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate var_samp on columns"""
+type prices_hourly_var_samp_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_samp() on columns of table "prices.hourly"
+"""
+input prices_hourly_var_samp_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate variance on columns"""
+type prices_hourly_variance_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by variance() on columns of table "prices.hourly"
+"""
+input prices_hourly_variance_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+price per minute data
+
+
+columns and relationships of "prices.minutes"
+
+"""
+type prices_minutes {
+  epoch: Int!
+  id: Int!
+  price: String!
+
+  """An object relationship"""
+  token: prices_tokens!
+  tokenId: Int!
+}
+
+"""
+aggregated selection of "prices.minutes"
+"""
+type prices_minutes_aggregate {
+  aggregate: prices_minutes_aggregate_fields
+  nodes: [prices_minutes!]!
+}
+
+"""
+aggregate fields of "prices.minutes"
+"""
+type prices_minutes_aggregate_fields {
+  avg: prices_minutes_avg_fields
+  count(columns: [prices_minutes_select_column!], distinct: Boolean): Int!
+  max: prices_minutes_max_fields
+  min: prices_minutes_min_fields
+  stddev: prices_minutes_stddev_fields
+  stddev_pop: prices_minutes_stddev_pop_fields
+  stddev_samp: prices_minutes_stddev_samp_fields
+  sum: prices_minutes_sum_fields
+  var_pop: prices_minutes_var_pop_fields
+  var_samp: prices_minutes_var_samp_fields
+  variance: prices_minutes_variance_fields
+}
+
+"""
+order by aggregate values of table "prices.minutes"
+"""
+input prices_minutes_aggregate_order_by {
+  avg: prices_minutes_avg_order_by
+  count: order_by
+  max: prices_minutes_max_order_by
+  min: prices_minutes_min_order_by
+  stddev: prices_minutes_stddev_order_by
+  stddev_pop: prices_minutes_stddev_pop_order_by
+  stddev_samp: prices_minutes_stddev_samp_order_by
+  sum: prices_minutes_sum_order_by
+  var_pop: prices_minutes_var_pop_order_by
+  var_samp: prices_minutes_var_samp_order_by
+  variance: prices_minutes_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "prices.minutes"
+"""
+input prices_minutes_arr_rel_insert_input {
+  data: [prices_minutes_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: prices_minutes_on_conflict
+}
+
+"""aggregate avg on columns"""
+type prices_minutes_avg_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by avg() on columns of table "prices.minutes"
+"""
+input prices_minutes_avg_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "prices.minutes". All fields are combined with a logical 'AND'.
+"""
+input prices_minutes_bool_exp {
+  _and: [prices_minutes_bool_exp!]
+  _not: prices_minutes_bool_exp
+  _or: [prices_minutes_bool_exp!]
+  epoch: Int_comparison_exp
+  id: Int_comparison_exp
+  price: String_comparison_exp
+  token: prices_tokens_bool_exp
+  tokenId: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "prices.minutes"
+"""
+enum prices_minutes_constraint {
+  """unique or primary key constraint"""
+  minutes_pkey
+
+  """unique or primary key constraint"""
+  minutes_tokenId_price_epoch_key
+}
+
+"""
+input type for incrementing numeric columns in table "prices.minutes"
+"""
+input prices_minutes_inc_input {
+  epoch: Int
+  id: Int
+  tokenId: Int
+}
+
+"""
+input type for inserting data into table "prices.minutes"
+"""
+input prices_minutes_insert_input {
+  epoch: Int
+  id: Int
+  price: String
+  token: prices_tokens_obj_rel_insert_input
+  tokenId: Int
+}
+
+"""aggregate max on columns"""
+type prices_minutes_max_fields {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""
+order by max() on columns of table "prices.minutes"
+"""
+input prices_minutes_max_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  tokenId: order_by
+}
+
+"""aggregate min on columns"""
+type prices_minutes_min_fields {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""
+order by min() on columns of table "prices.minutes"
+"""
+input prices_minutes_min_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  tokenId: order_by
+}
+
+"""
+response of any mutation on the table "prices.minutes"
+"""
+type prices_minutes_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prices_minutes!]!
+}
+
+"""
+on_conflict condition type for table "prices.minutes"
+"""
+input prices_minutes_on_conflict {
+  constraint: prices_minutes_constraint!
+  update_columns: [prices_minutes_update_column!]! = []
+  where: prices_minutes_bool_exp
+}
+
+"""Ordering options when selecting data from "prices.minutes"."""
+input prices_minutes_order_by {
+  epoch: order_by
+  id: order_by
+  price: order_by
+  token: prices_tokens_order_by
+  tokenId: order_by
+}
+
+"""primary key columns input for table: prices_minutes"""
+input prices_minutes_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prices.minutes"
+"""
+enum prices_minutes_select_column {
+  """column name"""
+  epoch
+
+  """column name"""
+  id
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+}
+
+"""
+input type for updating data in table "prices.minutes"
+"""
+input prices_minutes_set_input {
+  epoch: Int
+  id: Int
+  price: String
+  tokenId: Int
+}
+
+"""aggregate stddev on columns"""
+type prices_minutes_stddev_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev() on columns of table "prices.minutes"
+"""
+input prices_minutes_stddev_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type prices_minutes_stddev_pop_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_pop() on columns of table "prices.minutes"
+"""
+input prices_minutes_stddev_pop_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type prices_minutes_stddev_samp_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_samp() on columns of table "prices.minutes"
+"""
+input prices_minutes_stddev_samp_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate sum on columns"""
+type prices_minutes_sum_fields {
+  epoch: Int
+  id: Int
+  tokenId: Int
+}
+
+"""
+order by sum() on columns of table "prices.minutes"
+"""
+input prices_minutes_sum_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+update columns of table "prices.minutes"
+"""
+enum prices_minutes_update_column {
+  """column name"""
+  epoch
+
+  """column name"""
+  id
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+}
+
+"""aggregate var_pop on columns"""
+type prices_minutes_var_pop_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_pop() on columns of table "prices.minutes"
+"""
+input prices_minutes_var_pop_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate var_samp on columns"""
+type prices_minutes_var_samp_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_samp() on columns of table "prices.minutes"
+"""
+input prices_minutes_var_samp_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate variance on columns"""
+type prices_minutes_variance_fields {
+  epoch: Float
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by variance() on columns of table "prices.minutes"
+"""
+input prices_minutes_variance_order_by {
+  epoch: order_by
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+supported networks for tokens
+
+
+columns and relationships of "prices.networks"
+
+"""
+type prices_networks {
+  chainId: String!
+  id: Int!
+  name: String!
+
+  """An array relationship"""
+  tokens(
+    """distinct select on columns"""
+    distinct_on: [prices_tokens_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokens_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokens_bool_exp
+  ): [prices_tokens!]!
+
+  """An aggregate relationship"""
+  tokens_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_tokens_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokens_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokens_bool_exp
+  ): prices_tokens_aggregate!
+}
+
+"""
+aggregated selection of "prices.networks"
+"""
+type prices_networks_aggregate {
+  aggregate: prices_networks_aggregate_fields
+  nodes: [prices_networks!]!
+}
+
+"""
+aggregate fields of "prices.networks"
+"""
+type prices_networks_aggregate_fields {
+  avg: prices_networks_avg_fields
+  count(columns: [prices_networks_select_column!], distinct: Boolean): Int!
+  max: prices_networks_max_fields
+  min: prices_networks_min_fields
+  stddev: prices_networks_stddev_fields
+  stddev_pop: prices_networks_stddev_pop_fields
+  stddev_samp: prices_networks_stddev_samp_fields
+  sum: prices_networks_sum_fields
+  var_pop: prices_networks_var_pop_fields
+  var_samp: prices_networks_var_samp_fields
+  variance: prices_networks_variance_fields
+}
+
+"""aggregate avg on columns"""
+type prices_networks_avg_fields {
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "prices.networks". All fields are combined with a logical 'AND'.
+"""
+input prices_networks_bool_exp {
+  _and: [prices_networks_bool_exp!]
+  _not: prices_networks_bool_exp
+  _or: [prices_networks_bool_exp!]
+  chainId: String_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  tokens: prices_tokens_bool_exp
+}
+
+"""
+unique or primary key constraints on table "prices.networks"
+"""
+enum prices_networks_constraint {
+  """unique or primary key constraint"""
+  networks_chainId_key
+
+  """unique or primary key constraint"""
+  networks_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "prices.networks"
+"""
+input prices_networks_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "prices.networks"
+"""
+input prices_networks_insert_input {
+  chainId: String
+  id: Int
+  name: String
+  tokens: prices_tokens_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type prices_networks_max_fields {
+  chainId: String
+  id: Int
+  name: String
+}
+
+"""aggregate min on columns"""
+type prices_networks_min_fields {
+  chainId: String
+  id: Int
+  name: String
+}
+
+"""
+response of any mutation on the table "prices.networks"
+"""
+type prices_networks_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prices_networks!]!
+}
+
+"""
+input type for inserting object relation for remote table "prices.networks"
+"""
+input prices_networks_obj_rel_insert_input {
+  data: prices_networks_insert_input!
+
+  """upsert condition"""
+  on_conflict: prices_networks_on_conflict
+}
+
+"""
+on_conflict condition type for table "prices.networks"
+"""
+input prices_networks_on_conflict {
+  constraint: prices_networks_constraint!
+  update_columns: [prices_networks_update_column!]! = []
+  where: prices_networks_bool_exp
+}
+
+"""Ordering options when selecting data from "prices.networks"."""
+input prices_networks_order_by {
+  chainId: order_by
+  id: order_by
+  name: order_by
+  tokens_aggregate: prices_tokens_aggregate_order_by
+}
+
+"""primary key columns input for table: prices_networks"""
+input prices_networks_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prices.networks"
+"""
+enum prices_networks_select_column {
+  """column name"""
+  chainId
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "prices.networks"
+"""
+input prices_networks_set_input {
+  chainId: String
+  id: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type prices_networks_stddev_fields {
+  id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type prices_networks_stddev_pop_fields {
+  id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type prices_networks_stddev_samp_fields {
+  id: Float
+}
+
+"""aggregate sum on columns"""
+type prices_networks_sum_fields {
+  id: Int
+}
+
+"""
+update columns of table "prices.networks"
+"""
+enum prices_networks_update_column {
+  """column name"""
+  chainId
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type prices_networks_var_pop_fields {
+  id: Float
+}
+
+"""aggregate var_samp on columns"""
+type prices_networks_var_samp_fields {
+  id: Float
+}
+
+"""aggregate variance on columns"""
+type prices_networks_variance_fields {
+  id: Float
+}
+
+"""
+market data for token
+
+
+columns and relationships of "prices.token_infos"
+
+"""
+type prices_token_infos {
+  changePercentDay: String
+  currentPrice: String
+  id: Int!
+  marketCap: String
+
+  """An object relationship"""
+  token: prices_tokens!
+  tokenId: Int!
+  totalSupply: String
+  volumeDay: String
+}
+
+"""
+aggregated selection of "prices.token_infos"
+"""
+type prices_token_infos_aggregate {
+  aggregate: prices_token_infos_aggregate_fields
+  nodes: [prices_token_infos!]!
+}
+
+"""
+aggregate fields of "prices.token_infos"
+"""
+type prices_token_infos_aggregate_fields {
+  avg: prices_token_infos_avg_fields
+  count(columns: [prices_token_infos_select_column!], distinct: Boolean): Int!
+  max: prices_token_infos_max_fields
+  min: prices_token_infos_min_fields
+  stddev: prices_token_infos_stddev_fields
+  stddev_pop: prices_token_infos_stddev_pop_fields
+  stddev_samp: prices_token_infos_stddev_samp_fields
+  sum: prices_token_infos_sum_fields
+  var_pop: prices_token_infos_var_pop_fields
+  var_samp: prices_token_infos_var_samp_fields
+  variance: prices_token_infos_variance_fields
+}
+
+"""
+order by aggregate values of table "prices.token_infos"
+"""
+input prices_token_infos_aggregate_order_by {
+  avg: prices_token_infos_avg_order_by
+  count: order_by
+  max: prices_token_infos_max_order_by
+  min: prices_token_infos_min_order_by
+  stddev: prices_token_infos_stddev_order_by
+  stddev_pop: prices_token_infos_stddev_pop_order_by
+  stddev_samp: prices_token_infos_stddev_samp_order_by
+  sum: prices_token_infos_sum_order_by
+  var_pop: prices_token_infos_var_pop_order_by
+  var_samp: prices_token_infos_var_samp_order_by
+  variance: prices_token_infos_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "prices.token_infos"
+"""
+input prices_token_infos_arr_rel_insert_input {
+  data: [prices_token_infos_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: prices_token_infos_on_conflict
+}
+
+"""aggregate avg on columns"""
+type prices_token_infos_avg_fields {
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by avg() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_avg_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "prices.token_infos". All fields are combined with a logical 'AND'.
+"""
+input prices_token_infos_bool_exp {
+  _and: [prices_token_infos_bool_exp!]
+  _not: prices_token_infos_bool_exp
+  _or: [prices_token_infos_bool_exp!]
+  changePercentDay: String_comparison_exp
+  currentPrice: String_comparison_exp
+  id: Int_comparison_exp
+  marketCap: String_comparison_exp
+  token: prices_tokens_bool_exp
+  tokenId: Int_comparison_exp
+  totalSupply: String_comparison_exp
+  volumeDay: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "prices.token_infos"
+"""
+enum prices_token_infos_constraint {
+  """unique or primary key constraint"""
+  token_info_pkey
+
+  """unique or primary key constraint"""
+  token_info_tokenId_key
+}
+
+"""
+input type for incrementing numeric columns in table "prices.token_infos"
+"""
+input prices_token_infos_inc_input {
+  id: Int
+  tokenId: Int
+}
+
+"""
+input type for inserting data into table "prices.token_infos"
+"""
+input prices_token_infos_insert_input {
+  changePercentDay: String
+  currentPrice: String
+  id: Int
+  marketCap: String
+  token: prices_tokens_obj_rel_insert_input
+  tokenId: Int
+  totalSupply: String
+  volumeDay: String
+}
+
+"""aggregate max on columns"""
+type prices_token_infos_max_fields {
+  changePercentDay: String
+  currentPrice: String
+  id: Int
+  marketCap: String
+  tokenId: Int
+  totalSupply: String
+  volumeDay: String
+}
+
+"""
+order by max() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_max_order_by {
+  changePercentDay: order_by
+  currentPrice: order_by
+  id: order_by
+  marketCap: order_by
+  tokenId: order_by
+  totalSupply: order_by
+  volumeDay: order_by
+}
+
+"""aggregate min on columns"""
+type prices_token_infos_min_fields {
+  changePercentDay: String
+  currentPrice: String
+  id: Int
+  marketCap: String
+  tokenId: Int
+  totalSupply: String
+  volumeDay: String
+}
+
+"""
+order by min() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_min_order_by {
+  changePercentDay: order_by
+  currentPrice: order_by
+  id: order_by
+  marketCap: order_by
+  tokenId: order_by
+  totalSupply: order_by
+  volumeDay: order_by
+}
+
+"""
+response of any mutation on the table "prices.token_infos"
+"""
+type prices_token_infos_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prices_token_infos!]!
+}
+
+"""
+on_conflict condition type for table "prices.token_infos"
+"""
+input prices_token_infos_on_conflict {
+  constraint: prices_token_infos_constraint!
+  update_columns: [prices_token_infos_update_column!]! = []
+  where: prices_token_infos_bool_exp
+}
+
+"""Ordering options when selecting data from "prices.token_infos"."""
+input prices_token_infos_order_by {
+  changePercentDay: order_by
+  currentPrice: order_by
+  id: order_by
+  marketCap: order_by
+  token: prices_tokens_order_by
+  tokenId: order_by
+  totalSupply: order_by
+  volumeDay: order_by
+}
+
+"""primary key columns input for table: prices_token_infos"""
+input prices_token_infos_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prices.token_infos"
+"""
+enum prices_token_infos_select_column {
+  """column name"""
+  changePercentDay
+
+  """column name"""
+  currentPrice
+
+  """column name"""
+  id
+
+  """column name"""
+  marketCap
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  totalSupply
+
+  """column name"""
+  volumeDay
+}
+
+"""
+input type for updating data in table "prices.token_infos"
+"""
+input prices_token_infos_set_input {
+  changePercentDay: String
+  currentPrice: String
+  id: Int
+  marketCap: String
+  tokenId: Int
+  totalSupply: String
+  volumeDay: String
+}
+
+"""aggregate stddev on columns"""
+type prices_token_infos_stddev_fields {
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_stddev_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type prices_token_infos_stddev_pop_fields {
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_pop() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_stddev_pop_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type prices_token_infos_stddev_samp_fields {
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_samp() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_stddev_samp_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate sum on columns"""
+type prices_token_infos_sum_fields {
+  id: Int
+  tokenId: Int
+}
+
+"""
+order by sum() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_sum_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+update columns of table "prices.token_infos"
+"""
+enum prices_token_infos_update_column {
+  """column name"""
+  changePercentDay
+
+  """column name"""
+  currentPrice
+
+  """column name"""
+  id
+
+  """column name"""
+  marketCap
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  totalSupply
+
+  """column name"""
+  volumeDay
+}
+
+"""aggregate var_pop on columns"""
+type prices_token_infos_var_pop_fields {
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_pop() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_var_pop_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate var_samp on columns"""
+type prices_token_infos_var_samp_fields {
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by var_samp() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_var_samp_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""aggregate variance on columns"""
+type prices_token_infos_variance_fields {
+  id: Float
+  tokenId: Float
+}
+
+"""
+order by variance() on columns of table "prices.token_infos"
+"""
+input prices_token_infos_variance_order_by {
+  id: order_by
+  tokenId: order_by
+}
+
+"""
+token symbol and address
+
+
+columns and relationships of "prices.tokens"
+
+"""
+type prices_tokens {
+  address: String!
+  chainId: String!
+  creationEpoch: Int
+
+  """An array relationship"""
+  dailies(
+    """distinct select on columns"""
+    distinct_on: [prices_daily_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_daily_order_by!]
+
+    """filter the rows returned"""
+    where: prices_daily_bool_exp
+  ): [prices_daily!]!
+
+  """An aggregate relationship"""
+  dailies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_daily_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_daily_order_by!]
+
+    """filter the rows returned"""
+    where: prices_daily_bool_exp
+  ): prices_daily_aggregate!
+
+  """An array relationship"""
+  hourlies(
+    """distinct select on columns"""
+    distinct_on: [prices_hourly_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_hourly_order_by!]
+
+    """filter the rows returned"""
+    where: prices_hourly_bool_exp
+  ): [prices_hourly!]!
+
+  """An aggregate relationship"""
+  hourlies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_hourly_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_hourly_order_by!]
+
+    """filter the rows returned"""
+    where: prices_hourly_bool_exp
+  ): prices_hourly_aggregate!
+  id: Int!
+
+  """An array relationship"""
+  minutes(
+    """distinct select on columns"""
+    distinct_on: [prices_minutes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_minutes_order_by!]
+
+    """filter the rows returned"""
+    where: prices_minutes_bool_exp
+  ): [prices_minutes!]!
+
+  """An aggregate relationship"""
+  minutes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_minutes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_minutes_order_by!]
+
+    """filter the rows returned"""
+    where: prices_minutes_bool_exp
+  ): prices_minutes_aggregate!
+
+  """An object relationship"""
+  network: prices_networks!
+  symbol: String!
+
+  """An array relationship"""
+  token_infos(
+    """distinct select on columns"""
+    distinct_on: [prices_token_infos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_token_infos_order_by!]
+
+    """filter the rows returned"""
+    where: prices_token_infos_bool_exp
+  ): [prices_token_infos!]!
+
+  """An aggregate relationship"""
+  token_infos_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_token_infos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_token_infos_order_by!]
+
+    """filter the rows returned"""
+    where: prices_token_infos_bool_exp
+  ): prices_token_infos_aggregate!
+  tokenset: Boolean!
+
+  """An array relationship"""
+  tokensetAllocationsByTokenid(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): [prices_tokenset_allocations!]!
+
+  """An aggregate relationship"""
+  tokensetAllocationsByTokenid_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): prices_tokenset_allocations_aggregate!
+  tokensetComponent: Boolean!
+
+  """An array relationship"""
+  tokenset_allocations(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): [prices_tokenset_allocations!]!
+
+  """An aggregate relationship"""
+  tokenset_allocations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): prices_tokenset_allocations_aggregate!
+  tradable: Boolean!
+}
+
+"""
+aggregated selection of "prices.tokens"
+"""
+type prices_tokens_aggregate {
+  aggregate: prices_tokens_aggregate_fields
+  nodes: [prices_tokens!]!
+}
+
+"""
+aggregate fields of "prices.tokens"
+"""
+type prices_tokens_aggregate_fields {
+  avg: prices_tokens_avg_fields
+  count(columns: [prices_tokens_select_column!], distinct: Boolean): Int!
+  max: prices_tokens_max_fields
+  min: prices_tokens_min_fields
+  stddev: prices_tokens_stddev_fields
+  stddev_pop: prices_tokens_stddev_pop_fields
+  stddev_samp: prices_tokens_stddev_samp_fields
+  sum: prices_tokens_sum_fields
+  var_pop: prices_tokens_var_pop_fields
+  var_samp: prices_tokens_var_samp_fields
+  variance: prices_tokens_variance_fields
+}
+
+"""
+order by aggregate values of table "prices.tokens"
+"""
+input prices_tokens_aggregate_order_by {
+  avg: prices_tokens_avg_order_by
+  count: order_by
+  max: prices_tokens_max_order_by
+  min: prices_tokens_min_order_by
+  stddev: prices_tokens_stddev_order_by
+  stddev_pop: prices_tokens_stddev_pop_order_by
+  stddev_samp: prices_tokens_stddev_samp_order_by
+  sum: prices_tokens_sum_order_by
+  var_pop: prices_tokens_var_pop_order_by
+  var_samp: prices_tokens_var_samp_order_by
+  variance: prices_tokens_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "prices.tokens"
+"""
+input prices_tokens_arr_rel_insert_input {
+  data: [prices_tokens_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: prices_tokens_on_conflict
+}
+
+"""aggregate avg on columns"""
+type prices_tokens_avg_fields {
+  creationEpoch: Float
+  id: Float
+}
+
+"""
+order by avg() on columns of table "prices.tokens"
+"""
+input prices_tokens_avg_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "prices.tokens". All fields are combined with a logical 'AND'.
+"""
+input prices_tokens_bool_exp {
+  _and: [prices_tokens_bool_exp!]
+  _not: prices_tokens_bool_exp
+  _or: [prices_tokens_bool_exp!]
+  address: String_comparison_exp
+  chainId: String_comparison_exp
+  creationEpoch: Int_comparison_exp
+  dailies: prices_daily_bool_exp
+  hourlies: prices_hourly_bool_exp
+  id: Int_comparison_exp
+  minutes: prices_minutes_bool_exp
+  network: prices_networks_bool_exp
+  symbol: String_comparison_exp
+  token_infos: prices_token_infos_bool_exp
+  tokenset: Boolean_comparison_exp
+  tokensetAllocationsByTokenid: prices_tokenset_allocations_bool_exp
+  tokensetComponent: Boolean_comparison_exp
+  tokenset_allocations: prices_tokenset_allocations_bool_exp
+  tradable: Boolean_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "prices.tokens"
+"""
+enum prices_tokens_constraint {
+  """unique or primary key constraint"""
+  tokens_address_chainId_key
+
+  """unique or primary key constraint"""
+  tokens_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "prices.tokens"
+"""
+input prices_tokens_inc_input {
+  creationEpoch: Int
+  id: Int
+}
+
+"""
+input type for inserting data into table "prices.tokens"
+"""
+input prices_tokens_insert_input {
+  address: String
+  chainId: String
+  creationEpoch: Int
+  dailies: prices_daily_arr_rel_insert_input
+  hourlies: prices_hourly_arr_rel_insert_input
+  id: Int
+  minutes: prices_minutes_arr_rel_insert_input
+  network: prices_networks_obj_rel_insert_input
+  symbol: String
+  token_infos: prices_token_infos_arr_rel_insert_input
+  tokenset: Boolean
+  tokensetAllocationsByTokenid: prices_tokenset_allocations_arr_rel_insert_input
+  tokensetComponent: Boolean
+  tokenset_allocations: prices_tokenset_allocations_arr_rel_insert_input
+  tradable: Boolean
+}
+
+"""aggregate max on columns"""
+type prices_tokens_max_fields {
+  address: String
+  chainId: String
+  creationEpoch: Int
+  id: Int
+  symbol: String
+}
+
+"""
+order by max() on columns of table "prices.tokens"
+"""
+input prices_tokens_max_order_by {
+  address: order_by
+  chainId: order_by
+  creationEpoch: order_by
+  id: order_by
+  symbol: order_by
+}
+
+"""aggregate min on columns"""
+type prices_tokens_min_fields {
+  address: String
+  chainId: String
+  creationEpoch: Int
+  id: Int
+  symbol: String
+}
+
+"""
+order by min() on columns of table "prices.tokens"
+"""
+input prices_tokens_min_order_by {
+  address: order_by
+  chainId: order_by
+  creationEpoch: order_by
+  id: order_by
+  symbol: order_by
+}
+
+"""
+response of any mutation on the table "prices.tokens"
+"""
+type prices_tokens_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prices_tokens!]!
+}
+
+"""
+input type for inserting object relation for remote table "prices.tokens"
+"""
+input prices_tokens_obj_rel_insert_input {
+  data: prices_tokens_insert_input!
+
+  """upsert condition"""
+  on_conflict: prices_tokens_on_conflict
+}
+
+"""
+on_conflict condition type for table "prices.tokens"
+"""
+input prices_tokens_on_conflict {
+  constraint: prices_tokens_constraint!
+  update_columns: [prices_tokens_update_column!]! = []
+  where: prices_tokens_bool_exp
+}
+
+"""Ordering options when selecting data from "prices.tokens"."""
+input prices_tokens_order_by {
+  address: order_by
+  chainId: order_by
+  creationEpoch: order_by
+  dailies_aggregate: prices_daily_aggregate_order_by
+  hourlies_aggregate: prices_hourly_aggregate_order_by
+  id: order_by
+  minutes_aggregate: prices_minutes_aggregate_order_by
+  network: prices_networks_order_by
+  symbol: order_by
+  token_infos_aggregate: prices_token_infos_aggregate_order_by
+  tokenset: order_by
+  tokensetAllocationsByTokenid_aggregate: prices_tokenset_allocations_aggregate_order_by
+  tokensetComponent: order_by
+  tokenset_allocations_aggregate: prices_tokenset_allocations_aggregate_order_by
+  tradable: order_by
+}
+
+"""primary key columns input for table: prices_tokens"""
+input prices_tokens_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prices.tokens"
+"""
+enum prices_tokens_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  chainId
+
+  """column name"""
+  creationEpoch
+
+  """column name"""
+  id
+
+  """column name"""
+  symbol
+
+  """column name"""
+  tokenset
+
+  """column name"""
+  tokensetComponent
+
+  """column name"""
+  tradable
+}
+
+"""
+input type for updating data in table "prices.tokens"
+"""
+input prices_tokens_set_input {
+  address: String
+  chainId: String
+  creationEpoch: Int
+  id: Int
+  symbol: String
+  tokenset: Boolean
+  tokensetComponent: Boolean
+  tradable: Boolean
+}
+
+"""aggregate stddev on columns"""
+type prices_tokens_stddev_fields {
+  creationEpoch: Float
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "prices.tokens"
+"""
+input prices_tokens_stddev_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type prices_tokens_stddev_pop_fields {
+  creationEpoch: Float
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "prices.tokens"
+"""
+input prices_tokens_stddev_pop_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type prices_tokens_stddev_samp_fields {
+  creationEpoch: Float
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "prices.tokens"
+"""
+input prices_tokens_stddev_samp_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type prices_tokens_sum_fields {
+  creationEpoch: Int
+  id: Int
+}
+
+"""
+order by sum() on columns of table "prices.tokens"
+"""
+input prices_tokens_sum_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""
+update columns of table "prices.tokens"
+"""
+enum prices_tokens_update_column {
+  """column name"""
+  address
+
+  """column name"""
+  chainId
+
+  """column name"""
+  creationEpoch
+
+  """column name"""
+  id
+
+  """column name"""
+  symbol
+
+  """column name"""
+  tokenset
+
+  """column name"""
+  tokensetComponent
+
+  """column name"""
+  tradable
+}
+
+"""aggregate var_pop on columns"""
+type prices_tokens_var_pop_fields {
+  creationEpoch: Float
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "prices.tokens"
+"""
+input prices_tokens_var_pop_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type prices_tokens_var_samp_fields {
+  creationEpoch: Float
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "prices.tokens"
+"""
+input prices_tokens_var_samp_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type prices_tokens_variance_fields {
+  creationEpoch: Float
+  id: Float
+}
+
+"""
+order by variance() on columns of table "prices.tokens"
+"""
+input prices_tokens_variance_order_by {
+  creationEpoch: order_by
+  id: order_by
+}
+
+"""
+tokenset allocation data for tokenset tokens
+
+
+columns and relationships of "prices.tokenset_allocations"
+
+"""
+type prices_tokenset_allocations {
+  currentPrice: String
+  fullAmountInSet: String!
+  icon: String
+  id: Int!
+  percentOfSet: String!
+  priceChange24Hr: String
+  quantity: String!
+  setTokenId: Int!
+
+  """An object relationship"""
+  token: prices_tokens!
+
+  """An object relationship"""
+  tokenByTokenid: prices_tokens!
+  tokenId: Int!
+}
+
+"""
+aggregated selection of "prices.tokenset_allocations"
+"""
+type prices_tokenset_allocations_aggregate {
+  aggregate: prices_tokenset_allocations_aggregate_fields
+  nodes: [prices_tokenset_allocations!]!
+}
+
+"""
+aggregate fields of "prices.tokenset_allocations"
+"""
+type prices_tokenset_allocations_aggregate_fields {
+  avg: prices_tokenset_allocations_avg_fields
+  count(columns: [prices_tokenset_allocations_select_column!], distinct: Boolean): Int!
+  max: prices_tokenset_allocations_max_fields
+  min: prices_tokenset_allocations_min_fields
+  stddev: prices_tokenset_allocations_stddev_fields
+  stddev_pop: prices_tokenset_allocations_stddev_pop_fields
+  stddev_samp: prices_tokenset_allocations_stddev_samp_fields
+  sum: prices_tokenset_allocations_sum_fields
+  var_pop: prices_tokenset_allocations_var_pop_fields
+  var_samp: prices_tokenset_allocations_var_samp_fields
+  variance: prices_tokenset_allocations_variance_fields
+}
+
+"""
+order by aggregate values of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_aggregate_order_by {
+  avg: prices_tokenset_allocations_avg_order_by
+  count: order_by
+  max: prices_tokenset_allocations_max_order_by
+  min: prices_tokenset_allocations_min_order_by
+  stddev: prices_tokenset_allocations_stddev_order_by
+  stddev_pop: prices_tokenset_allocations_stddev_pop_order_by
+  stddev_samp: prices_tokenset_allocations_stddev_samp_order_by
+  sum: prices_tokenset_allocations_sum_order_by
+  var_pop: prices_tokenset_allocations_var_pop_order_by
+  var_samp: prices_tokenset_allocations_var_samp_order_by
+  variance: prices_tokenset_allocations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_arr_rel_insert_input {
+  data: [prices_tokenset_allocations_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: prices_tokenset_allocations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type prices_tokenset_allocations_avg_fields {
+  id: Float
+  setTokenId: Float
+  tokenId: Float
+}
+
+"""
+order by avg() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_avg_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "prices.tokenset_allocations". All fields are combined with a logical 'AND'.
+"""
+input prices_tokenset_allocations_bool_exp {
+  _and: [prices_tokenset_allocations_bool_exp!]
+  _not: prices_tokenset_allocations_bool_exp
+  _or: [prices_tokenset_allocations_bool_exp!]
+  currentPrice: String_comparison_exp
+  fullAmountInSet: String_comparison_exp
+  icon: String_comparison_exp
+  id: Int_comparison_exp
+  percentOfSet: String_comparison_exp
+  priceChange24Hr: String_comparison_exp
+  quantity: String_comparison_exp
+  setTokenId: Int_comparison_exp
+  token: prices_tokens_bool_exp
+  tokenByTokenid: prices_tokens_bool_exp
+  tokenId: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "prices.tokenset_allocations"
+"""
+enum prices_tokenset_allocations_constraint {
+  """unique or primary key constraint"""
+  tokenset_allocations_pkey
+
+  """unique or primary key constraint"""
+  tokenset_allocations_setTokenId_tokenId_key
+}
+
+"""
+input type for incrementing numeric columns in table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_inc_input {
+  id: Int
+  setTokenId: Int
+  tokenId: Int
+}
+
+"""
+input type for inserting data into table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_insert_input {
+  currentPrice: String
+  fullAmountInSet: String
+  icon: String
+  id: Int
+  percentOfSet: String
+  priceChange24Hr: String
+  quantity: String
+  setTokenId: Int
+  token: prices_tokens_obj_rel_insert_input
+  tokenByTokenid: prices_tokens_obj_rel_insert_input
+  tokenId: Int
+}
+
+"""aggregate max on columns"""
+type prices_tokenset_allocations_max_fields {
+  currentPrice: String
+  fullAmountInSet: String
+  icon: String
+  id: Int
+  percentOfSet: String
+  priceChange24Hr: String
+  quantity: String
+  setTokenId: Int
+  tokenId: Int
+}
+
+"""
+order by max() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_max_order_by {
+  currentPrice: order_by
+  fullAmountInSet: order_by
+  icon: order_by
+  id: order_by
+  percentOfSet: order_by
+  priceChange24Hr: order_by
+  quantity: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""aggregate min on columns"""
+type prices_tokenset_allocations_min_fields {
+  currentPrice: String
+  fullAmountInSet: String
+  icon: String
+  id: Int
+  percentOfSet: String
+  priceChange24Hr: String
+  quantity: String
+  setTokenId: Int
+  tokenId: Int
+}
+
+"""
+order by min() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_min_order_by {
+  currentPrice: order_by
+  fullAmountInSet: order_by
+  icon: order_by
+  id: order_by
+  percentOfSet: order_by
+  priceChange24Hr: order_by
+  quantity: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""
+response of any mutation on the table "prices.tokenset_allocations"
+"""
+type prices_tokenset_allocations_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prices_tokenset_allocations!]!
+}
+
+"""
+on_conflict condition type for table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_on_conflict {
+  constraint: prices_tokenset_allocations_constraint!
+  update_columns: [prices_tokenset_allocations_update_column!]! = []
+  where: prices_tokenset_allocations_bool_exp
+}
+
+"""
+Ordering options when selecting data from "prices.tokenset_allocations".
+"""
+input prices_tokenset_allocations_order_by {
+  currentPrice: order_by
+  fullAmountInSet: order_by
+  icon: order_by
+  id: order_by
+  percentOfSet: order_by
+  priceChange24Hr: order_by
+  quantity: order_by
+  setTokenId: order_by
+  token: prices_tokens_order_by
+  tokenByTokenid: prices_tokens_order_by
+  tokenId: order_by
+}
+
+"""primary key columns input for table: prices_tokenset_allocations"""
+input prices_tokenset_allocations_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prices.tokenset_allocations"
+"""
+enum prices_tokenset_allocations_select_column {
+  """column name"""
+  currentPrice
+
+  """column name"""
+  fullAmountInSet
+
+  """column name"""
+  icon
+
+  """column name"""
+  id
+
+  """column name"""
+  percentOfSet
+
+  """column name"""
+  priceChange24Hr
+
+  """column name"""
+  quantity
+
+  """column name"""
+  setTokenId
+
+  """column name"""
+  tokenId
+}
+
+"""
+input type for updating data in table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_set_input {
+  currentPrice: String
+  fullAmountInSet: String
+  icon: String
+  id: Int
+  percentOfSet: String
+  priceChange24Hr: String
+  quantity: String
+  setTokenId: Int
+  tokenId: Int
+}
+
+"""aggregate stddev on columns"""
+type prices_tokenset_allocations_stddev_fields {
+  id: Float
+  setTokenId: Float
+  tokenId: Float
+}
+
+"""
+order by stddev() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_stddev_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type prices_tokenset_allocations_stddev_pop_fields {
+  id: Float
+  setTokenId: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_pop() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_stddev_pop_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type prices_tokenset_allocations_stddev_samp_fields {
+  id: Float
+  setTokenId: Float
+  tokenId: Float
+}
+
+"""
+order by stddev_samp() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_stddev_samp_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""aggregate sum on columns"""
+type prices_tokenset_allocations_sum_fields {
+  id: Int
+  setTokenId: Int
+  tokenId: Int
+}
+
+"""
+order by sum() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_sum_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""
+update columns of table "prices.tokenset_allocations"
+"""
+enum prices_tokenset_allocations_update_column {
+  """column name"""
+  currentPrice
+
+  """column name"""
+  fullAmountInSet
+
+  """column name"""
+  icon
+
+  """column name"""
+  id
+
+  """column name"""
+  percentOfSet
+
+  """column name"""
+  priceChange24Hr
+
+  """column name"""
+  quantity
+
+  """column name"""
+  setTokenId
+
+  """column name"""
+  tokenId
+}
+
+"""aggregate var_pop on columns"""
+type prices_tokenset_allocations_var_pop_fields {
+  id: Float
+  setTokenId: Float
+  tokenId: Float
+}
+
+"""
+order by var_pop() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_var_pop_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""aggregate var_samp on columns"""
+type prices_tokenset_allocations_var_samp_fields {
+  id: Float
+  setTokenId: Float
+  tokenId: Float
+}
+
+"""
+order by var_samp() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_var_samp_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+"""aggregate variance on columns"""
+type prices_tokenset_allocations_variance_fields {
+  id: Float
+  setTokenId: Float
+  tokenId: Float
+}
+
+"""
+order by variance() on columns of table "prices.tokenset_allocations"
+"""
+input prices_tokenset_allocations_variance_order_by {
+  id: order_by
+  setTokenId: order_by
+  tokenId: order_by
+}
+
+type query_root {
+  """
+  fetch data from the table: "prices.daily"
+  """
+  prices_daily(
+    """distinct select on columns"""
+    distinct_on: [prices_daily_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_daily_order_by!]
+
+    """filter the rows returned"""
+    where: prices_daily_bool_exp
+  ): [prices_daily!]!
+
+  """
+  fetch aggregated fields from the table: "prices.daily"
+  """
+  prices_daily_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_daily_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_daily_order_by!]
+
+    """filter the rows returned"""
+    where: prices_daily_bool_exp
+  ): prices_daily_aggregate!
+
+  """fetch data from the table: "prices.daily" using primary key columns"""
+  prices_daily_by_pk(id: Int!): prices_daily
+
+  """
+  fetch data from the table: "prices.hourly"
+  """
+  prices_hourly(
+    """distinct select on columns"""
+    distinct_on: [prices_hourly_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_hourly_order_by!]
+
+    """filter the rows returned"""
+    where: prices_hourly_bool_exp
+  ): [prices_hourly!]!
+
+  """
+  fetch aggregated fields from the table: "prices.hourly"
+  """
+  prices_hourly_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_hourly_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_hourly_order_by!]
+
+    """filter the rows returned"""
+    where: prices_hourly_bool_exp
+  ): prices_hourly_aggregate!
+
+  """fetch data from the table: "prices.hourly" using primary key columns"""
+  prices_hourly_by_pk(id: Int!): prices_hourly
+
+  """
+  fetch data from the table: "prices.minutes"
+  """
+  prices_minutes(
+    """distinct select on columns"""
+    distinct_on: [prices_minutes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_minutes_order_by!]
+
+    """filter the rows returned"""
+    where: prices_minutes_bool_exp
+  ): [prices_minutes!]!
+
+  """
+  fetch aggregated fields from the table: "prices.minutes"
+  """
+  prices_minutes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_minutes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_minutes_order_by!]
+
+    """filter the rows returned"""
+    where: prices_minutes_bool_exp
+  ): prices_minutes_aggregate!
+
+  """fetch data from the table: "prices.minutes" using primary key columns"""
+  prices_minutes_by_pk(id: Int!): prices_minutes
+
+  """
+  fetch data from the table: "prices.networks"
+  """
+  prices_networks(
+    """distinct select on columns"""
+    distinct_on: [prices_networks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_networks_order_by!]
+
+    """filter the rows returned"""
+    where: prices_networks_bool_exp
+  ): [prices_networks!]!
+
+  """
+  fetch aggregated fields from the table: "prices.networks"
+  """
+  prices_networks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_networks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_networks_order_by!]
+
+    """filter the rows returned"""
+    where: prices_networks_bool_exp
+  ): prices_networks_aggregate!
+
+  """fetch data from the table: "prices.networks" using primary key columns"""
+  prices_networks_by_pk(id: Int!): prices_networks
+
+  """
+  fetch data from the table: "prices.token_infos"
+  """
+  prices_token_infos(
+    """distinct select on columns"""
+    distinct_on: [prices_token_infos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_token_infos_order_by!]
+
+    """filter the rows returned"""
+    where: prices_token_infos_bool_exp
+  ): [prices_token_infos!]!
+
+  """
+  fetch aggregated fields from the table: "prices.token_infos"
+  """
+  prices_token_infos_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_token_infos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_token_infos_order_by!]
+
+    """filter the rows returned"""
+    where: prices_token_infos_bool_exp
+  ): prices_token_infos_aggregate!
+
+  """
+  fetch data from the table: "prices.token_infos" using primary key columns
+  """
+  prices_token_infos_by_pk(id: Int!): prices_token_infos
+
+  """
+  fetch data from the table: "prices.tokens"
+  """
+  prices_tokens(
+    """distinct select on columns"""
+    distinct_on: [prices_tokens_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokens_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokens_bool_exp
+  ): [prices_tokens!]!
+
+  """
+  fetch aggregated fields from the table: "prices.tokens"
+  """
+  prices_tokens_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_tokens_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokens_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokens_bool_exp
+  ): prices_tokens_aggregate!
+
+  """fetch data from the table: "prices.tokens" using primary key columns"""
+  prices_tokens_by_pk(id: Int!): prices_tokens
+
+  """
+  fetch data from the table: "prices.tokenset_allocations"
+  """
+  prices_tokenset_allocations(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): [prices_tokenset_allocations!]!
+
+  """
+  fetch aggregated fields from the table: "prices.tokenset_allocations"
+  """
+  prices_tokenset_allocations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): prices_tokenset_allocations_aggregate!
+
+  """
+  fetch data from the table: "prices.tokenset_allocations" using primary key columns
+  """
+  prices_tokenset_allocations_by_pk(id: Int!): prices_tokenset_allocations
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "prices.daily"
+  """
+  prices_daily(
+    """distinct select on columns"""
+    distinct_on: [prices_daily_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_daily_order_by!]
+
+    """filter the rows returned"""
+    where: prices_daily_bool_exp
+  ): [prices_daily!]!
+
+  """
+  fetch aggregated fields from the table: "prices.daily"
+  """
+  prices_daily_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_daily_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_daily_order_by!]
+
+    """filter the rows returned"""
+    where: prices_daily_bool_exp
+  ): prices_daily_aggregate!
+
+  """fetch data from the table: "prices.daily" using primary key columns"""
+  prices_daily_by_pk(id: Int!): prices_daily
+
+  """
+  fetch data from the table: "prices.hourly"
+  """
+  prices_hourly(
+    """distinct select on columns"""
+    distinct_on: [prices_hourly_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_hourly_order_by!]
+
+    """filter the rows returned"""
+    where: prices_hourly_bool_exp
+  ): [prices_hourly!]!
+
+  """
+  fetch aggregated fields from the table: "prices.hourly"
+  """
+  prices_hourly_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_hourly_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_hourly_order_by!]
+
+    """filter the rows returned"""
+    where: prices_hourly_bool_exp
+  ): prices_hourly_aggregate!
+
+  """fetch data from the table: "prices.hourly" using primary key columns"""
+  prices_hourly_by_pk(id: Int!): prices_hourly
+
+  """
+  fetch data from the table: "prices.minutes"
+  """
+  prices_minutes(
+    """distinct select on columns"""
+    distinct_on: [prices_minutes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_minutes_order_by!]
+
+    """filter the rows returned"""
+    where: prices_minutes_bool_exp
+  ): [prices_minutes!]!
+
+  """
+  fetch aggregated fields from the table: "prices.minutes"
+  """
+  prices_minutes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_minutes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_minutes_order_by!]
+
+    """filter the rows returned"""
+    where: prices_minutes_bool_exp
+  ): prices_minutes_aggregate!
+
+  """fetch data from the table: "prices.minutes" using primary key columns"""
+  prices_minutes_by_pk(id: Int!): prices_minutes
+
+  """
+  fetch data from the table: "prices.networks"
+  """
+  prices_networks(
+    """distinct select on columns"""
+    distinct_on: [prices_networks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_networks_order_by!]
+
+    """filter the rows returned"""
+    where: prices_networks_bool_exp
+  ): [prices_networks!]!
+
+  """
+  fetch aggregated fields from the table: "prices.networks"
+  """
+  prices_networks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_networks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_networks_order_by!]
+
+    """filter the rows returned"""
+    where: prices_networks_bool_exp
+  ): prices_networks_aggregate!
+
+  """fetch data from the table: "prices.networks" using primary key columns"""
+  prices_networks_by_pk(id: Int!): prices_networks
+
+  """
+  fetch data from the table: "prices.token_infos"
+  """
+  prices_token_infos(
+    """distinct select on columns"""
+    distinct_on: [prices_token_infos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_token_infos_order_by!]
+
+    """filter the rows returned"""
+    where: prices_token_infos_bool_exp
+  ): [prices_token_infos!]!
+
+  """
+  fetch aggregated fields from the table: "prices.token_infos"
+  """
+  prices_token_infos_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_token_infos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_token_infos_order_by!]
+
+    """filter the rows returned"""
+    where: prices_token_infos_bool_exp
+  ): prices_token_infos_aggregate!
+
+  """
+  fetch data from the table: "prices.token_infos" using primary key columns
+  """
+  prices_token_infos_by_pk(id: Int!): prices_token_infos
+
+  """
+  fetch data from the table: "prices.tokens"
+  """
+  prices_tokens(
+    """distinct select on columns"""
+    distinct_on: [prices_tokens_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokens_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokens_bool_exp
+  ): [prices_tokens!]!
+
+  """
+  fetch aggregated fields from the table: "prices.tokens"
+  """
+  prices_tokens_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_tokens_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokens_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokens_bool_exp
+  ): prices_tokens_aggregate!
+
+  """fetch data from the table: "prices.tokens" using primary key columns"""
+  prices_tokens_by_pk(id: Int!): prices_tokens
+
+  """
+  fetch data from the table: "prices.tokenset_allocations"
+  """
+  prices_tokenset_allocations(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): [prices_tokenset_allocations!]!
+
+  """
+  fetch aggregated fields from the table: "prices.tokenset_allocations"
+  """
+  prices_tokenset_allocations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prices_tokenset_allocations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prices_tokenset_allocations_order_by!]
+
+    """filter the rows returned"""
+    where: prices_tokenset_allocations_bool_exp
+  ): prices_tokenset_allocations_aggregate!
+
+  """
+  fetch data from the table: "prices.tokenset_allocations" using primary key columns
+  """
+  prices_tokenset_allocations_by_pk(id: Int!): prices_tokenset_allocations
+}
+

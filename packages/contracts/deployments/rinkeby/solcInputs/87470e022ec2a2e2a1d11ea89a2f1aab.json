@@ -1,0 +1,41 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/mocks/UniswapV2ERC20.sol": {
+      "content": "// SPDX-License-Identifier: GPL-3.0\n\npragma solidity =0.6.12;\n\nimport \"../libraries/SafeMathUniswap.sol\";\n\ncontract UniswapV2ERC20 {\n  using SafeMathUniswap for uint256;\n\n  string public constant name = \"SushiSwap LP Token\";\n  string public constant symbol = \"SLP\";\n  uint8 public constant decimals = 18;\n  uint256 public totalSupply;\n  mapping(address => uint256) public balanceOf;\n  mapping(address => mapping(address => uint256)) public allowance;\n\n  bytes32 public DOMAIN_SEPARATOR;\n  // keccak256(\"Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)\");\n  bytes32 public constant PERMIT_TYPEHASH =\n    0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;\n  mapping(address => uint256) public nonces;\n\n  event Approval(address indexed owner, address indexed spender, uint256 value);\n  event Transfer(address indexed from, address indexed to, uint256 value);\n\n  constructor() public {\n    uint256 chainId;\n    assembly {\n      chainId := chainid()\n    }\n    DOMAIN_SEPARATOR = keccak256(\n      abi.encode(\n        keccak256(\n          \"EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)\"\n        ),\n        keccak256(bytes(name)),\n        keccak256(bytes(\"1\")),\n        chainId,\n        address(this)\n      )\n    );\n\n    _mint(msg.sender, 100 * 10 ** 18);\n  }\n\n  function _mint(address to, uint256 value) internal {\n    totalSupply = totalSupply.add(value);\n    balanceOf[to] = balanceOf[to].add(value);\n    emit Transfer(address(0), to, value);\n  }\n\n  function _burn(address from, uint256 value) internal {\n    balanceOf[from] = balanceOf[from].sub(value);\n    totalSupply = totalSupply.sub(value);\n    emit Transfer(from, address(0), value);\n  }\n\n  function _approve(\n    address owner,\n    address spender,\n    uint256 value\n  ) private {\n    allowance[owner][spender] = value;\n    emit Approval(owner, spender, value);\n  }\n\n  function _transfer(\n    address from,\n    address to,\n    uint256 value\n  ) private {\n    balanceOf[from] = balanceOf[from].sub(value);\n    balanceOf[to] = balanceOf[to].add(value);\n    emit Transfer(from, to, value);\n  }\n\n  function approve(address spender, uint256 value) external returns (bool) {\n    _approve(msg.sender, spender, value);\n    return true;\n  }\n\n  function transfer(address to, uint256 value) external returns (bool) {\n    _transfer(msg.sender, to, value);\n    return true;\n  }\n\n  function transferFrom(\n    address from,\n    address to,\n    uint256 value\n  ) external returns (bool) {\n    if (allowance[from][msg.sender] != uint256(-1)) {\n      allowance[from][msg.sender] = allowance[from][msg.sender].sub(value);\n    }\n    _transfer(from, to, value);\n    return true;\n  }\n\n  function permit(\n    address owner,\n    address spender,\n    uint256 value,\n    uint256 deadline,\n    uint8 v,\n    bytes32 r,\n    bytes32 s\n  ) external {\n    require(deadline >= block.timestamp, \"UniswapV2: EXPIRED\");\n    bytes32 digest = keccak256(\n      abi.encodePacked(\n        \"\\x19\\x01\",\n        DOMAIN_SEPARATOR,\n        keccak256(\n          abi.encode(\n            PERMIT_TYPEHASH,\n            owner,\n            spender,\n            value,\n            nonces[owner]++,\n            deadline\n          )\n        )\n      )\n    );\n    address recoveredAddress = ecrecover(digest, v, r, s);\n    require(\n      recoveredAddress != address(0) && recoveredAddress == owner,\n      \"UniswapV2: INVALID_SIGNATURE\"\n    );\n    _approve(owner, spender, value);\n  }\n}\n"
+    },
+    "contracts/libraries/SafeMathUniswap.sol": {
+      "content": "// SPDX-License-Identifier: GPL-3.0\n\npragma solidity =0.6.12;\n\n// a library for performing overflow-safe math, courtesy of DappHub (https://github.com/dapphub/ds-math)\n\nlibrary SafeMathUniswap {\n    function add(uint x, uint y) internal pure returns (uint z) {\n        require((z = x + y) >= x, 'ds-math-add-overflow');\n    }\n\n    function sub(uint x, uint y) internal pure returns (uint z) {\n        require((z = x - y) <= x, 'ds-math-sub-underflow');\n    }\n\n    function mul(uint x, uint y) internal pure returns (uint z) {\n        require(y == 0 || (z = x * y) / y == x, 'ds-math-mul-overflow');\n    }\n}"
+    },
+    "contracts/mocks/SushiSwapPairMock.sol": {
+      "content": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.6.12;\n\nimport \"./UniswapV2ERC20.sol\";\n\ncontract SushiSwapPairMock is UniswapV2ERC20 {\n    constructor() public UniswapV2ERC20() {}\n}"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

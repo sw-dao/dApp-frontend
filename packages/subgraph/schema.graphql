@@ -1,0 +1,69 @@
+# * fetching SWD specific holdings
+# * last n transactions (filtered for SWD)
+# * keep track of user balances. costs?
+
+type SwdUser @entity {
+  "SWD  user"
+  id: ID!
+  address: Bytes! # address
+  holdings: [TokenBalance!]! @derivedFrom(field: "user")
+  sellTransactions: [Transaction!]! @derivedFrom(field: "userFrom")
+  buyTransactions: [Transaction!]! @derivedFrom(field: "userTo")
+}
+
+# Keep record of transactions for token products
+type Transaction @entity {
+  "Transactions for the tradable tokens by the user"
+  id: ID!
+  hash: Bytes!
+  userFrom: SwdUser!
+  userTo: SwdUser!
+  transactionReceipt: TransactionReceipt!
+}
+type TransactionReceipt @entity {
+  "Receipt of tradable tokens transactions by user"
+  id: ID!
+  transaction: Transaction!
+  token: Token!
+  from: Bytes!
+  to: Bytes!
+  value: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  hash: Bytes!
+}
+
+# Maintain balances for token products
+type Token @entity {
+  "SW Capital tradable tokens"
+  id: ID!
+  address: Bytes!
+  name: String
+  symbel: String
+  tokenBalances: [TokenBalance!]! @derivedFrom(field: "token")
+  tokenPrices: [TokenPrice!] @derivedFrom(field: "tokenPair")
+}
+
+type TokenPair @entity {
+  id: ID!
+  token0: [Token!]! @derivedFrom(field: "address")
+  token1: [Token!]! @derviedFrom(field: "address")
+  tokenprices: [TokenPrice!]! @derivedFrom(field: "tokenPair")
+}
+
+type TokenPrice @entity {
+  id: ID!
+  tokenPair: TokenPair!
+  timestamp: BigInt!
+  ratio: BigDecimal!
+  transaction: Transaction!
+}
+
+type TokenBalance @entity {
+  "Balances for the SWD tradable tokens"
+  id: ID!
+  user: SwdUser!
+  balance: BigInt!
+  token: Token!
+  timestamp: BigInt!
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@project/subgraph",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "scripts": {
+    "auth": "graph auth https://api.thegraph.com/ $GRAPH_ACCESS_TOKEN",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "predeploy-hosted": "yarn prepare:mainnet",
+    "predeploy-hosted-ropsten": "yarn prepare:ropsten",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ swd-poc",
+    "deploy-hosted": "graph deploy --product hosted-service bitbeckers/swd-poc",
+    "deploy-hosted-dev": "graph deploy --product hosted-service bitbeckers/swd-poc-dev",
+    "deploy-hosted-ropsten": "graph deploy --product hosted-service bitbeckers/swd-poc-ropsten",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:ropsten": "mustache config/ropsten.json subgraph.template.yaml > subgraph.yaml",
+    "create-local": "graph create --node http://localhost:8020/ swd-poc",
+    "remove-local": "graph remove --node http://localhost:8020/ swd-poc",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 swd-poc",
+    "test" : "graph test mapping"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.22.4",
+    "@graphprotocol/graph-ts": "0.22.1",
+    "assemblyscript": "^0.19.18",
+    "matchstick-as": "^0.2.0",
+    "mustache": "^4.2.0"
+  }
+}

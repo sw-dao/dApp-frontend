@@ -1,0 +1,32 @@
+{
+  "network": "mainnet",
+  "token": {
+    "swd": {
+      "name": "SWD",
+      "address": "0x1fd154b4d0e3753b714b511a53fe1fb72dc7ae1c",
+      "abi": {
+        "name": "SWD",
+        "file": "./abis/SWD.json"
+      },
+      "startBlock": 13543668
+    },
+    "swap": {
+      "name": "SWAP",
+      "address": "0xb8a62d3df12755ac1722d934bd70aae82d842a43",
+      "abi": {
+        "name": "SetToken",
+        "file": "./abis/SetToken.json"
+      },
+      "startBlock": 13627846
+    },
+    "swyf": {
+      "name": "SWYF",
+      "address": "0xefa6903aa49cd539c079ac4b0a090db432615822",
+      "abi": {
+        "name": "ERC20",
+        "file": "./abis/ERC20.json"
+      },
+      "startBlock": 13653166 
+    }
+  }
+}

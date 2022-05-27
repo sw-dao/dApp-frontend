@@ -1,0 +1,78 @@
+import { ButtonStyleProps } from './types';
+
+export const BUTTON_STYLES: ButtonStyleProps = {
+	INDICES: {
+		label: 'Indices',
+		image: '/images/purple-gem.png',
+		active: {
+			color: '#E24EFF',
+			bgColor: '#301FA0',
+			borderColor: 'transparent',
+		},
+		inactive: {
+			color: 'alttext',
+			bgColor: 'transparent',
+			borderColor: 'alttext',
+		},
+	},
+	NFTS: {
+		label: 'NFT',
+		image: '/images/gem-nfts.png',
+		imageHeight: '3.2rem',
+		imageTop: '-0.5rem',
+		active: {
+			color: '#8EC7D2',
+			bgColor: '#301FA0',
+			borderColor: 'transparent',
+		},
+		inactive: {
+			color: 'alttext',
+			bgColor: 'transparent',
+			borderColor: 'alttext',
+		},
+	},
+	STRATEGIES: {
+		label: 'Strategies',
+		image: '/images/green-gem.png',
+		active: {
+			color: '#FFCC50',
+			bgColor: '#301FA0',
+			borderColor: 'transparent',
+		},
+		inactive: {
+			color: 'alttext',
+			bgColor: 'transparent',
+			borderColor: 'alttext',
+		},
+	},
+	YIELD: {
+		label: 'Yield',
+		image: '/images/token-swyf.png',
+		imageHeight: '3.1rem',
+		imageTop: '-0.5rem',
+		active: {
+			color: '#43A047',
+			bgColor: '#301FA0',
+			borderColor: 'transparent',
+		},
+		inactive: {
+			color: 'alttext',
+			bgColor: 'transparent',
+			borderColor: 'alttext',
+		},
+	},
+	ALL: {
+		label: 'All',
+		image: '/images/blue-gem.png',
+		active: {
+			color: '#23CBFF',
+			bgColor: '#301FA0',
+			borderColor: 'transparent',
+		},
+		inactive: {
+			color: 'alttext',
+			bgColor: 'transparent',
+			borderColor: 'alttext',
+		},
+	},
+};

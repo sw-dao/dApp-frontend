@@ -1,0 +1,47 @@
+{
+  "name": "@project/monorepo",
+  "version": "1.0.0",
+  "keywords": [
+    "ethereum",
+    "react",
+    "workspaces",
+    "yarn"
+  ],
+  "private": true,
+  "scripts": {
+    "subgraph:auth": "yarn workspace @project/subgraph auth",
+    "subgraph:codegen": "yarn workspace @project/subgraph codegen",
+    "subgraph:build": "yarn workspace @project/subgraph build",
+    "subgraph:deploy": "yarn workspace @project/subgraph deploy",
+    "react-app:build": "yarn workspace @project/react-app build",
+    "react-app:start": "yarn workspace @project/react-app start",
+    "react-app:test": "yarn workspace @project/react-app test",
+    "backend:test": "yarn workspace @project/backend test",
+    "clean": "rimraf build && yarn workspace @project/backend clean && yarn workspace @project/react-app clean",
+    "dist": "yarn clean && yarn workspace @project/backend dist && ncp packages/backend/build build",
+    "dist:dev": "yarn clean &&  yarn workspace @project/backend dist:dev && ncp packages/backend/build build",
+    "start": "env-cmd -f ./build/.env nodemon ./build/bin/www",
+    "start:dev": "yarn workspace mock-server start & env-cmd -f packages/backend/.env.test nodemon ./build/bin/www",
+    "startproxy": "yarn workspace dev-proxy start",
+    "startproxy:stage": "yarn workspace dev-proxy start:stage"
+  },
+  "workspaces": {
+    "nohoist": [
+      "**/@graphprotocol/graph-ts",
+      "**/@graphprotocol/graph-ts/**",
+      "**/graphql-hooks"
+    ],
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "dependencies": {
+    "env-cmd": "^10.1.0",
+    "nodemon": "^2.0.12"
+  },
+  "devDependencies": {
+    "ncp": "^2.0.0",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2"
+  }
+}

@@ -1,0 +1,321 @@
+openapi: '3.0.2'
+info:
+  title: SWDAO 
+  version: '1.0'
+servers:
+  - url: https://swdao.org/
+Paths:
+  /api/prices/{buyToken}/{sellToken}/{sellAmount}:
+    post:
+      description: Get price for a possible sale
+      parameters:
+        - in: path
+          name: buyToken
+          description: Address of token to buy
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: sellToken
+          description: Address of token to sell
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: sellAmount
+          description: Amount in wei to quote
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChainIdRequest'
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/schemas/QuoteResponse'
+        '400':
+          description: Client Error
+          $ref: '#/components/schemas/400Response'
+  /api/quotes/{buyToken}/{sellToken}/{sellAmount}:
+    post:
+      description: request a quote for a sale
+      parameters:
+        - in: path
+          name: buyToken
+          description: Address of token to buy
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: sellToken
+          description: Address of token to sell
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: sellAmount
+          description: Amount in wei to quote
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChainIdRequest'
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/schemas/QuoteResponse'
+        '400':
+          description: Client Error
+          $ref: '#/components/schemas/400Response'
+  /api/signup/:
+    post:
+      description: signup to mailing list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailSignupRequest'
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/schemas/200Response'
+        '400':
+          description: Client Error
+          $ref: '#/components/schemas/400Response'
+  /api/tokens/detail/{symbol}:
+    get:
+      description: Get Extended Details of a given token
+      parameters:
+        - in: path
+          name: symbol
+          description: The uppercase symbol
+          schema:
+            type: string
+          example: SWD
+        - in: query
+          name: chainId
+          description: Chain ID as "0xNN"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/schemas/ExtendedTokenDetailResponse'
+        '400':
+          description: Client Error
+          $ref: '#/components/schemas/400Response'
+        '404':
+          description: Not Found
+          $ref: '#/components/schemas/404Response'
+  /api/tokens/swappable/price/ethereum:
+    get:
+      description: Get current ETH price
+      parameters:
+        - in: query
+          name: chainId
+          description: Chain ID as "0xNN"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/schemas/ETHPriceResponse'
+        '400':
+          description: Client Error
+          $ref: '#/components/schemas/400Response'
+  /api/tokens/swappable/all:
+    get:
+      description: Get ERC20 and TokenProducts addresses
+      parameters:
+        - in: query
+          name: chainId
+          description: Chain ID as "0xNN"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/schemas/SwappableTokensResponse'
+        '400':
+          description: Client Error
+          $ref: '#/components/schemas/400Response'
+  /api/tokens/swappable/products/{token}/{currency}/{timeframe}:
+    get:
+      description: Get detailed information for Token, with prices in Currency, in requested timeframe.
+      parameters:
+        - in: path
+          name: token
+          description: token symbol, in uppercase, or "full" to get all symbols available
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: currency
+          description: base currency for pricing, eg. "USD"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: timeframe
+          required: true
+          schema:
+            type: string
+            enum: ["1D", "1W", "1M", "1Y"]
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/schemas/TokenDetailsResponse'
+Components:
+  schemas:
+    200Response:
+      type: object
+      additionalProperties: true
+    400Response:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: integer
+        message:
+          type: array
+          items:
+            type: string
+        validationErrors:
+          type: array
+          additionalProperties: true
+    404Response:
+      type: object
+    AddressMap:
+      type: object
+      additionalProperties:
+        type: string
+      example:
+        SWD: '0xaeE24d5296444c007a532696aaDa9dE5cE6caFD0'
+    ChainIdRequest:
+      type: object
+      required:
+        - chainId
+      properties:
+        chainId:
+          type: string
+    EmailSignupRequest:
+      type: object
+      properties:
+        email:
+          type: string
+    ExtendedTokenDetailResponse:
+      type: object
+      properties:
+        address:
+          type: string
+        symbol:
+          type: string
+        marketCap:
+          type: number
+        changePercent1Day:
+          type: number
+        volume1Day:
+          type: number
+        totalSupply:
+          type: number
+        currentPrice:
+          type: number
+        tokenset:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tokenset'
+    ETHPriceResponse:
+      type: object
+      properties:
+        ETH:
+          type: string
+    QuoteResponse:
+      type: object
+      properties:
+        price:
+          type: number
+        guaranteedPrice:
+          type: number
+        to:
+          type: string
+        data:
+          type: string
+        value:
+          type: integer
+        gasPrice:
+          type: integer
+        gas:
+          type: integer
+        estimatedGas:
+          type: integer
+        protocolFee:
+          type: integer
+        mimimumProtocolFee:
+          type: integer
+        buyAmount: 
+          type: integer
+        sellAmount:
+          type: integer
+        sources:
+          type: array
+          additionalProperties: true
+        buyTokenAddress:
+          type: string
+        sellTokenAddress:
+          type: string
+        allowanceTarget:
+          type: string
+    SwappableTokensResponse:
+      type: object
+      properties:
+        ERC20:
+          $ref: '#/components/schemas/AddressMap'
+        TokenProducts:
+          $ref: '#/components/schemas/AddressMap'
+    TokenDetail:
+      type: object
+      properties:
+        address:
+          type: string
+        symbol:
+          type: string
+        prices:
+          description: "Price array as [timestamp, price]"
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+            minItems: 2
+            maxItems: 2
+    TokenDetailsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/TokenDetail'
+    Tokenset:
+      type: object
+      properties:
+        symbol:
+          type: string
+        address:
+          type: string
+        image:
+          type: string
+        changePercent1Day:
+          type: string
+        currentPrice: 
+          type: string
+        percentOfSet: 
+          type: string
+        quantity:
+          type: string

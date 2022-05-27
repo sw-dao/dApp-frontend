@@ -1,0 +1,65 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SWD
+    network: {{network}} 
+    source:
+      address: '{{token.swd.address}}'
+      abi: {{token.swd.abi.name}}
+      startBlock: {{token.swd.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - SWDUser
+      abis:
+        - name: {{token.swd.abi.name}}
+          file: {{{token.swd.abi.file}}}
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: SW DAO Alpha Portfolio
+    network: {{network}}
+    source:
+      address: '{{token.swap.address}}'
+      abi: {{token.swap.abi.name}}
+      startBlock: {{token.swap.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: {{token.swap.abi.name}}
+          file: {{{token.swap.abi.file}}}
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: SW Yield Fund
+    network: {{network}}
+    source:
+      address: '{{token.swyf.address}}'
+      abi: {{token.swyf.abi.name}}
+      startBlock: {{token.swyf.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: {{token.swyf.abi.name}}
+          file: {{{token.swyf.abi.file}}}
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
