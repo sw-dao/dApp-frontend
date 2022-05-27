@@ -1,5 +1,6 @@
-# dapp
-SW DAOs open-source Polygon dApp along with community feedback.
+# SW DAOs open-source Polygon dApp.
+
+![dapp](https://user-images.githubusercontent.com/88291140/170786095-d74c17df-17ab-4f04-8880-f3aaceeedc36.png)
 
 At SW DAO, we're committed to being the leading industry provider of automated investing solutions.
 
