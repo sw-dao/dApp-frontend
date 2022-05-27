@@ -4,7 +4,7 @@
 
 At SW DAO, we're committed to being the industry leading provider of automated investing solutions and crypto structured products.
 
-We believe that open sourcing our platform will increase transparency, accountability, and trust with investors and developers who seek to us our products.
+We believe that open sourcing our platform will increase transparency, accountability, and trust with investors and developers who seek to use our products.
 
 By open sourcing our platform, we're inviting the community to provide feedback and suggestions to help us refine the user experience.
 
