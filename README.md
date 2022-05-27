@@ -12,6 +12,8 @@ We believe that this level of transparency and collaboration will be essential i
 
 Thank you for your interest in our work, and we look forward to hearing from you.
 
+contact@swdao.org
+
 https://swdao.org
 
 https://twitter.com/SW__DAO
