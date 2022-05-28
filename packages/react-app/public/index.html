@@ -46,5 +46,14 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      window.onUsersnapCXLoad = function (api) {
+        api.init();
+      }
+      var script = document.createElement('script');
+      script.defer = 1;
+      script.src = 'https://widget.usersnap.com/global/load/1880c1f4-2fe9-408f-b0a6-a96d7dc5d6b4?onload=onUsersnapCXLoad';
+      document.getElementsByTagName('head')[0].appendChild(script);
+    </script>
   </body>
 </html>
