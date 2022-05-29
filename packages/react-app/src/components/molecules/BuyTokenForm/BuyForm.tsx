@@ -85,10 +85,10 @@ export default function BuyForm(props: FormProps): JSX.Element {
 			};
 		}
 		let buyLabel = 'Buy';
-		let buyTooltip = 'Send the tokens to the contract';
+		let buyTooltip = 'Purchase tokens';
 		if (!approved) {
 			buyLabel = `Approve & Buy`;
-			buyTooltip = 'Approve the purchase token, and then send.';
+			buyTooltip = 'Approve and purchase tokens';
 		}
 		return {
 			buyLabel,

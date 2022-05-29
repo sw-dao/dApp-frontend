@@ -161,13 +161,13 @@ export function IssueForm(props: FormPanelProps): JSX.Element {
 	const { buyLabel, buyEnabled, buyTooltip } = useMemo(() => {
 		const buyEnabled = !disabled && loaded && buyVal > 0.000001;
 		let buyLabel = 'Buy';
-		let buyTooltip = 'Send the tokens to the contract';
+		let buyTooltip = 'Purchase tokens';
 		if (tokenCountNeedingApproval > 1) {
 			buyLabel = `Approve & Buy`;
-			buyTooltip = 'Approve the tokens to be sent to the contract, and then send.';
+			buyTooltip = 'Approve and purchase tokens';
 		} else if (tokenCountNeedingApproval === 1) {
 			buyLabel = 'Approve & Buy';
-			buyTooltip = 'Approve token to be sent to the contract.';
+			buyTooltip = 'Approve and purchase tokens';
 		}
 		if (buyVal <= 0.000001) {
 			buyTooltip = 'Amount must be greater than 0.000001';

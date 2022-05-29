@@ -78,10 +78,10 @@ export function IssueExactForm(props: FormPanelProps): JSX.Element {
 	const { buyLabel, buyEnabled, buyTooltip } = useMemo(() => {
 		const buyEnabled = !disabled && buttonEnabled && buyVal > 0.000001;
 		let buyLabel = 'Buy';
-		let buyTooltip = 'Send the tokens to the contract';
+		let buyTooltip = 'Purchase tokens';
 		if (!isApproved) {
 			buyLabel = `Approve & Buy`;
-			buyTooltip = 'Approve the purchase token, and then send.';
+			buyTooltip = 'Approve and purchase tokens';
 		}
 		if (buyVal <= 0.000001) {
 			buyTooltip = 'Amount must be greater than 0.000001';

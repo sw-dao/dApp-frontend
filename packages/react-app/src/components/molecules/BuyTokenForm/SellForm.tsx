@@ -80,10 +80,10 @@ export default function SellForm(props: FormProps): JSX.Element {
 			};
 		}
 		let sellLabel = 'Sell';
-		let sellTooltip = 'Send the tokens to the contract';
+		let sellTooltip = 'Purchase tokens';
 		if (!approved) {
 			sellLabel = `Approve & Sell`;
-			sellTooltip = 'Approve the purchase token, and then send.';
+			sellTooltip = 'Approve and purchase tokens';
 		}
 		return {
 			sellLabel,
