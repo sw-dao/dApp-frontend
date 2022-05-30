@@ -45,10 +45,10 @@ export function SwyfToken({ details, data }: TokenDetailPane): JSX.Element {
 					</ListItem>
 					<ListItem>Protocol insurance through Nexus Mutual and InsurAce when available</ListItem>
 				</List>
-				<Text>
+				{/* <Text>
 					All protocols that {details?.symbol ?? 'SWYF'} is providing liquidity for are investigated
 					and code-reviewed by a team of DeFi developers and quantitative analysts.
-				</Text>
+				</Text> */}
 			</Box>,
 			<Box>
 				<Heading>Features/Benefits</Heading>
