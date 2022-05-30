@@ -12,6 +12,7 @@ import {
   getPricesTokensHourly,
   getPricesTokensMinutes,
 } from "./prices";
+import { SwappableTokens } from "../settings";
 
 const getExtendedTokenDetails = async (
   symbol: string,
@@ -42,7 +43,7 @@ const getExtendedTokenDetails = async (
   }
   return {
     symbol,
-    address: "",
+    address: SwappableTokens.TokenProducts["0x89"][symbol],
     marketCap: 0,
     currentPrice: 0,
     changePercent1Day: 0,
