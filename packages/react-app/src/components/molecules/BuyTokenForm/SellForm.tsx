@@ -181,6 +181,8 @@ export default function SellForm(props: FormProps): JSX.Element {
 							padding="0"
 							disabled={disabled}
 							name="buyAmount"
+							placeholder="0"
+							type="number"
 							value={amounts[0]}
 							color="white"
 							bgColor="blue5"
@@ -231,6 +233,8 @@ export default function SellForm(props: FormProps): JSX.Element {
 							padding="0"
 							disabled={disabled}
 							name="buyAmount"
+							placeholder="0"
+							type="number"
 							value={amounts[1]}
 							color="white"
 							bgColor="blue5"

@@ -201,6 +201,8 @@ export function IssueExactForm(props: FormPanelProps): JSX.Element {
 							padding="0.5rem 0 0 0"
 							disabled={disabled}
 							name="buyAmount"
+							placeholder="0"
+							type="number"
 							value={toPrecision(buyAmount, 6)}
 							color="white"
 							bgColor="blue5"

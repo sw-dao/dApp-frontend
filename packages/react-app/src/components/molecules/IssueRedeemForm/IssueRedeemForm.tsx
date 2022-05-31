@@ -55,8 +55,8 @@ export function IssueRedeemForm({
 	width,
 	id = 'IssueRedeemForm',
 }: IssueRedeemFormProps): JSX.Element {
-	const [buyAmount, setBuyAmount] = useState('0');
-	const [sellAmount, setSellAmount] = useState('0');
+	const [buyAmount, setBuyAmount] = useState('');
+	const [sellAmount, setSellAmount] = useState('');
 	const [approvals, setApprovals] = useState<CoinBalances>({});
 	const [zeroExApprovals, setZeroExAprovals] = useState<CoinBalances>({});
 	const [balances, setBalances] = useRecoilState<CoinBalances>(coinBalancesState);
@@ -314,9 +314,9 @@ export function IssueRedeemForm({
 	]);
 
 	const clearAmounts = useCallback(() => {
-		setBuyAmount('0');
+		setBuyAmount('');
 		setExactTradeVal(0.0);
-		setSellAmount('0');
+		setSellAmount('');
 	}, [setBuyAmount, setSellAmount, setExactTradeVal]);
 
 	const handleBuyAmountChange = useCallback(

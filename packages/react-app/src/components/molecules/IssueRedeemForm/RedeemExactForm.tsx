@@ -214,6 +214,8 @@ export function RedeemExactForm(props: FormPanelProps): JSX.Element {
 							padding="0.5rem 0 0 0"
 							disabled={disabled}
 							name="redeemAmount"
+							placeholder="0"
+							type="number"
 							value={toPrecision(redeemAmount, 6)}
 							color="white"
 							bgColor="blue5"

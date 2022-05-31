@@ -219,6 +219,8 @@ export function IssueForm(props: FormPanelProps): JSX.Element {
 				<BigNumberInput
 					d="inline-block"
 					name="buyAmount"
+					placeholder="0"
+					type="number"
 					value={toPrecision(buyAmount, 6)}
 					color="white"
 					bgColor="blue5"

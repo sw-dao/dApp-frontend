@@ -161,6 +161,8 @@ export default function BuyForm(props: FormProps): JSX.Element {
 							padding="0"
 							disabled={disabled}
 							name="buyAmount"
+							placeholder="0"
+							type="number"
 							value={toPrecision(amounts[1], 6)}
 							color="white"
 							bgColor="blue5"
@@ -214,6 +216,8 @@ export default function BuyForm(props: FormProps): JSX.Element {
 							padding="0"
 							disabled={disabled}
 							name="buyAmount"
+							placeholder="0"
+							type="number"
 							value={toPrecision(amounts[0], 6)}
 							color="white"
 							bgColor="blue5"

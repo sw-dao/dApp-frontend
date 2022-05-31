@@ -9,6 +9,9 @@ export function getPrecision(x: number): number {
 }
 
 export function toPrecision(x: string, precision: number): string {
+	while (x.charAt(0) === '0' && x[1] != '.' && x[1]) {
+		x = x.substring(1);
+	}
 	const parts = x.split('.');
 	if (parts.length === 1) {
 		return parts[0];
