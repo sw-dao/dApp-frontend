@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { DateTime } from "luxon";
-import { SwappableTokens } from "src/settings";
+import { SwappableTokens } from "../settings";
 
 import {
   AddressMap,
