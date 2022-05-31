@@ -28,12 +28,10 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 	const [product, setProduct] = useState<TokenDetails | null>(null);
 
 	useEffect(() => {
-		if (tokenPrices) {
-			const sym = symbol.toUpperCase();
-			const token = tokenPrices[sym];
-			if (token) {
-				setProduct(token);
-			}
+		const sym = symbol.toUpperCase();
+		const token = tokenPrices[sym];
+		if (token) {
+			setProduct(token);
 		}
 	}, [tokenPrices, symbol, periodVal, tokenDetails]);
 
