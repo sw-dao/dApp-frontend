@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { DateTime } from "luxon";
+import { SwappableTokens } from "src/settings";
 
 import {
   AddressMap,
@@ -42,7 +43,7 @@ const getExtendedTokenDetails = async (
   }
   return {
     symbol,
-    address: "",
+    address: SwappableTokens.TokenProducts["0x89"][symbol],
     marketCap: 0,
     currentPrice: 0,
     changePercent1Day: 0,
