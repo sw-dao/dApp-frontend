@@ -10,10 +10,18 @@ import { getOverriddenDetails } from '../../utils';
 import { HoveringArrowLink } from '../molecules/HoveringArrowLink';
 import { PriceAndDateHeader } from '../molecules/PriceAndDateHeader';
 import { ProductDetailHeader } from '../molecules/ProductDetailHeader';
+import { TokenDetailBox } from '../molecules/TokenDetailBox';
+import { StyledGrid } from '../molecules/StyledGrid';
 import { StyledSection } from '../molecules/StyledSection';
 import { AboutTokenSet } from '../organisms/AboutTokenSet';
 import { ChartAndBuy } from '../organisms/ChartAndBuy';
 import { FullHeightPage } from '../templates/FullHeightPage';
+
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+	maximumFractionDigits: 0,
+});
 
 export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element {
 	const [query, setQuery] = useQueryParams();
@@ -50,15 +58,26 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 
 	const { image: icon, name } = getOverriddenDetails(symbol);
 
-	const currentPrice = useMemo(() => {
-		if (detailMap[symbol]) {
-			return detailMap[symbol].currentPrice;
+	const { currentPrice, marketCap, priceChange, volume, totalSupply } = useMemo(() => {
+		if (!detailMap[symbol]) {
+			return {
+				currentPrice: 0,
+				marketCap: 0,
+				priceChange: 0,
+				volume: 0,
+				totalSupply: 0,
+			};
 		}
-		if (product && product.prices.length > 0) {
-			return parseFloat(product.prices[product.prices.length - 1][1]);
-		}
-		return 0;
-	}, [detailMap, symbol, product]);
+		const product = detailMap[symbol];
+
+		return {
+			currentPrice: product.currentPrice,
+			marketCap: currencyFormatter.format(product.marketCap),
+			priceChange: product.changePercent1Day,
+			volume: currencyFormatter.format(product.volume1Day),
+			totalSupply: new Intl.NumberFormat('en-US').format(product.totalSupply),
+		};
+	}, [detailMap, symbol]);
 
 	const extendedTokenDetails = useMemo(() => detailMap[symbol] || {}, [detailMap, symbol]);
 
@@ -72,6 +91,30 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 	);
 
 	const change = useMemo(() => product?.changePercent1Day || 0, [product]);
+
+	const swdDetailCells = [
+		<TokenDetailBox
+			height="7rem"
+			key="MCAP"
+			keyName="mcap"
+			title="Market Cap"
+			value={marketCap.toString()}
+		/>,
+		<TokenDetailBox
+			height="7rem"
+			key="VOL"
+			keyName="volume"
+			title="24Hr Volume"
+			value={volume.toString()}
+		/>,
+		<TokenDetailBox
+			height="7rem"
+			key="MAX_SUPPLY"
+			keyName="supply"
+			title="Max Supply"
+			value={totalSupply.toString()}
+		/>,
+	];
 
 	return (
 		<FullHeightPage pageKey="details">
@@ -91,6 +134,12 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 						</VStack>
 						<VStack spacing="2rem" margin="0 auto">
 							<ChartAndBuy symbol={symbol} handleDateChange={setPeriod} period={periodVal} />
+							<StyledGrid
+								cells={swdDetailCells}
+								display="table"
+								width="100%"
+								className="swdabout"
+							/>
 							<AboutTokenSet
 								align="left"
 								mt="3rem"
