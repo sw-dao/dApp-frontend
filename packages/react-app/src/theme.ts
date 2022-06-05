@@ -442,17 +442,17 @@ const config = {
 					flex: 1,
 				},
 			},
-			'#token': {
-				'.gridrow': {
-					width: '100%',
-				},
-				ul: {
-					a: {
-						color: 'white',
-						textDecoration: 'underline',
-					},
+
+			'.gridrow': {
+				width: '100%',
+			},
+			ul: {
+				a: {
+					color: 'white',
+					textDecoration: 'underline',
 				},
 			},
+
 			// get rid of blue outline for clicked elements
 			'.js-focus-visible :focus:not([data-focus-visible-added]), :focus, .focus-visible': {
 				outline: 'none !important',

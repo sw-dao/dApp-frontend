@@ -70,8 +70,8 @@ export default function FeeBox({ data, details, symbol, ...rest }: FeeBoxProps):
 
 	const labels: JSX.Element[] = [];
 	const values: JSX.Element[] = [];
-	addValues('Market Cap', marketCap, currencyFormatter.format(marketCap || 0), labels, values);
-	addValues('Total Supply', totalSupply, commaFormatter.format(totalSupply || 0), labels, values);
+	// addValues('Market Cap', marketCap, currencyFormatter.format(marketCap || 0), labels, values);
+	// addValues('Total Supply', totalSupply, commaFormatter.format(totalSupply || 0), labels, values);
 	addValues('Low', low, currencyFormatter.format(low || 0), labels, values);
 	addValues('High', high, currencyFormatter.format(high || 0), labels, values);
 	addValues('Open Price', openPrice, currencyFormatter.format(openPrice || 0), labels, values);
