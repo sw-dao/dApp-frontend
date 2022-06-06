@@ -83,8 +83,9 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 	const period = useRecoilValue(periodState);
 	const [contract, setContract] = useState<Contract | null>(null);
 	const [updated, setUpdated] = useState(0);
+	const [updatedTokens, setUpdatedTokens] = useState(0);
 	const [updating, setUpdating] = useState(false);
-	const [loadedExtended, setLoadedExtended] = useState('');
+	// const [loadedExtended, setLoadedExtended] = useState('');
 	const setBreakpoint = useSetRecoilState(breakpointState);
 	const breakpoint = useSiteBreakpoint();
 
@@ -102,10 +103,12 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 			setSwdBalance(swdBalance);
 		}
 	}, [swdBalance, setSwdBalance]);
-
 	useEffect(() => {
 		const cId = chainId || DEFAULT_CHAIN_ID;
-		if (loadedExtended !== cId) {
+		// if (loadedExtended !== cId) {
+		console.log(new Date().getTime() - updatedTokens > 10000);
+		if (new Date().getTime() - updatedTokens > 10000) {
+			setUpdatedTokens(new Date().getTime());
 			const tokenKeys = Object.keys(PRODUCTS_BY_SYMBOL);
 			const promiseThrottle = new PromiseThrottle({
 				requestsPerSecond: 1,
@@ -120,14 +123,14 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 				),
 			);
 			Promise.all(detailReqs).then(() => {
-				setLoadedExtended(cId);
+				// setLoadedExtended(cId);
 				setExtendedTokensMap(xMap);
 			});
 		}
 	}, [
 		allSwappableTokens.TokenProducts,
 		chainId,
-		loadedExtended,
+		// loadedExtended,
 		setExtendedTokensMap,
 		tokensLoaded,
 	]);
