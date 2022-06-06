@@ -111,7 +111,7 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 			height="7rem"
 			key="MAX_SUPPLY"
 			keyName="supply"
-			title="Max Supply"
+			title="Supply"
 			value={totalSupply.toString()}
 		/>,
 	];
