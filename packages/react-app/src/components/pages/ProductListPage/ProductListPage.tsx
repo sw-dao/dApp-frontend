@@ -28,7 +28,7 @@ function fakeTokenDetails(product: ProductSetupDescription, chainId: string): To
 		currentPrice: 0,
 		changePercent1Day: 0,
 		prices: [],
-		isFake: true,
+		isFake: false,
 	};
 }
 
