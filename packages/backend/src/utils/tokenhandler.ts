@@ -29,19 +29,6 @@ const getExtendedTokenDetails = async (
       console.error(`[TokenHandler] getExtendedTokenDetails ${e.message}`);
       return {};
     });
-
-  if (tokenData) {
-    return {
-      address: tokenData.token.address,
-      symbol: tokenData.token.symbol,
-      marketCap: tokenData.marketCap,
-      changePercent1Day: tokenData.changePercentDay,
-      volume1Day: tokenData.volumeDay,
-      totalSupply: tokenData.totalSupply,
-      currentPrice: tokenData.currentPrice,
-      tokenset: tokenData.token.tokensetAllocationsByTokenid || [],
-    } as ExtendedTokenDetailResponse;
-  }
   const address = SwappableTokens.TokenProducts["0x89"][symbol];
   let price = 0;
   price = await getTokenSetPrice(address)
@@ -52,6 +39,19 @@ const getExtendedTokenDetails = async (
       console.error(`[TokenHandler-0x] getExtendedTokenDetails ${e.message}`);
       return 0;
     });
+
+  if (tokenData) {
+    return {
+      address: tokenData.token.address,
+      symbol: tokenData.token.symbol,
+      marketCap: tokenData.marketCap,
+      changePercent1Day: tokenData.changePercentDay,
+      volume1Day: tokenData.volumeDay,
+      totalSupply: tokenData.totalSupply,
+      currentPrice: price,
+      tokenset: tokenData.token.tokensetAllocationsByTokenid || [],
+    } as ExtendedTokenDetailResponse;
+  }
   return {
     address,
     symbol,
