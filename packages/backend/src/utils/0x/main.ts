@@ -157,6 +157,9 @@ const getTokenPrice = async (
     // )
     .post(`http://localhost:3002/swap/v1/history`, {
       buyTokens: data,
+      // startBlock: <number>, // Optional
+      // stepSize: <number>, // Optional
+      // stepCount: <number>, // Optional
     })
     .then((response) => {
       return response.data; // return price and decimals
