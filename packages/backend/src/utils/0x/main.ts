@@ -95,9 +95,12 @@ const getTokenPrice = async (addr: string): Promise<any> => {
     });
   const n = 10 ** decimals;
   const price = axios
-    .get(
-      `https://polygon.api.0x.org/swap/v1/price?buyToken=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&sellToken=${addr}&sellAmount=${n}`
-    )
+    // .get(
+    //   `https://polygon.api.0x.org/swap/v1/price?buyToken=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&sellToken=${addr}&sellAmount=${n}`
+    // )
+    .post(`http://localhost:3002/swap/v1/history`, {
+      buyTokens: [{ decimals: parseInt(decimals), tokenAddress: addr }],
+    })
     .then((response) => {
       const res = response;
       return [res.data.price, n]; // return price and decimals
