@@ -43,7 +43,7 @@ const getExtendedTokenDetails = async (
     } as ExtendedTokenDetailResponse;
   }
   const address = SwappableTokens.TokenProducts["0x89"][symbol];
-  var price = 0;
+  let price = 0;
   price = await getTokenSetPrice(address)
     .then((res) => {
       return res;
