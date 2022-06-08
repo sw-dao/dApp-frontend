@@ -4,6 +4,7 @@ import Web3 from "web3";
 import { AbiItem } from "web3-utils";
 import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
+import { baseUrl0x } from "../../settings";
 // const TOKENSET_ADDRESS = "0xf2aa5ccea80c246a71e97b418173fcc956408d3f";
 const WSS_PROVIDER =
   "wss://rpc.ankr.com/polygon/ws/4bacdd2101497335fad3edece2dfef08b2dbf1a88a57b4764761590bb3fa1544";
@@ -174,7 +175,7 @@ const getTokenPrice = async (
     // .get(
     //   `https://polygon.api.0x.org/swap/v1/price?buyToken=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&sellToken=${addr}&sellAmount=${n}`
     // )
-    .post(`http://localhost:8080/swap/v1/history`, {
+    .post(baseUrl0x + `/history`, {
       buyTokens: data,
       startBlock,
     })
