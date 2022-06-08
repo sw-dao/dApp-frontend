@@ -7,7 +7,7 @@ import {
   ExtendedTokenDetailResponse,
   TokenDetails,
 } from "../types";
-import getTokenSetPrice from "./0x/main";
+import getPrices from "./0x/main";
 import { Operations, graphClient } from "./graph";
 import {
   getPricesTokensDaily,
@@ -30,25 +30,27 @@ const getExtendedTokenDetails = async (
       return {};
     });
   const address = SwappableTokens.TokenProducts["0x89"][symbol];
-  let price = 0;
-  price = await getTokenSetPrice(address)
+  const prices = await getPrices(address)
     .then((res) => {
       return res;
     })
     .catch((e) => {
       console.error(`[TokenHandler-0x] getExtendedTokenDetails ${e.message}`);
-      return 0;
+      return { changePercentDay: 0, currentPrice: 0 };
     });
-
+  var changePercentDay =
+    ((prices.currentPrice - prices.changePercentDay) /
+      prices.changePercentDay) *
+    100; //((220 - 200)/200)*100
   if (tokenData) {
     return {
       address: tokenData.token.address,
       symbol: tokenData.token.symbol,
       marketCap: tokenData.marketCap,
-      changePercent1Day: tokenData.changePercentDay,
+      changePercent1Day: changePercentDay,
       volume1Day: tokenData.volumeDay,
       totalSupply: tokenData.totalSupply,
-      currentPrice: price,
+      currentPrice: prices.currentPrice,
       tokenset: tokenData.token.tokensetAllocationsByTokenid || [],
     } as ExtendedTokenDetailResponse;
   }
@@ -56,10 +58,10 @@ const getExtendedTokenDetails = async (
     address,
     symbol,
     marketCap: 0,
-    changePercent1Day: 0,
+    changePercent1Day: changePercentDay,
     volume1Day: 0,
     totalSupply: 0,
-    currentPrice: price,
+    currentPrice: prices.currentPrice,
     tokenset: [],
   } as ExtendedTokenDetailResponse;
 };

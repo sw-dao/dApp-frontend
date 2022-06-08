@@ -2,11 +2,13 @@
 import axios from "axios";
 import Web3 from "web3";
 import { AbiItem } from "web3-utils";
-const TokenSetABI = require("../../abi/TokenSetABI.json");
-const ERC20ABI = require("../../abi/ERC20.json");
+import TokenSetABI from "../../abi/TokenSetABI.json";
+import ERC20ABI from "../../abi/ERC20.json";
 // const TOKENSET_ADDRESS = "0xf2aa5ccea80c246a71e97b418173fcc956408d3f";
 const WSS_PROVIDER =
   "wss://rpc.ankr.com/polygon/ws/4bacdd2101497335fad3edece2dfef08b2dbf1a88a57b4764761590bb3fa1544";
+const INFURA =
+  "https://polygon-mainnet.infura.io/v3/ef6d47c7a19b436598140a2c4e1fe642";
 const ADDRESSES = [
   "0x25ad32265c9354c29e145c902ae876f6b69806f2", // # Alpha Portfolio
   "0x71b41b3b19aac53ca4063aec2d17fc3caeb38026", // # Macro Trend BTC
@@ -59,10 +61,18 @@ const COMMON_DECIMALS: common_decimals = {
 
 // Init new web3 Client with Ankr
 const web3 = new Web3(new Web3.providers.WebsocketProvider(WSS_PROVIDER));
+const web3_infura = new Web3(INFURA);
 const checkConnection = () => {
+  web3_infura.eth.net
+    .isListening()
+    .then(() => console.log("[WSS] Infura is connected"))
+    .catch((e) => {
+      console.log("[ - ] Lost connection to the node, reconnecting");
+      web3.setProvider(WSS_PROVIDER);
+    });
   web3.eth.net
     .isListening()
-    .then(() => console.log("[WSS] is connected"))
+    .then(() => console.log("[WSS] Ankr is connected"))
     .catch((e) => {
       console.log("[ - ] Lost connection to the node, reconnecting");
       web3.setProvider(WSS_PROVIDER);
@@ -71,15 +81,27 @@ const checkConnection = () => {
 checkConnection();
 
 // Get curent TokenSet Psitions
-const getTokenSetPositions = (contractAddr: string) => {
-  const token = new web3.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
-
-  const result = token.methods.getPositions().call((err: any, res: any) => {
-    if (err) {
-      console.log("An error occurred", err);
-    }
-    return res;
-  });
+const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
+  var pastBlock: number | null = null;
+  var token;
+  if (past) {
+    token = new web3_infura.eth.Contract(
+      TokenSetABI as AbiItem[],
+      contractAddr
+    );
+    const latest: number = await web3_infura.eth.getBlockNumber();
+    pastBlock = latest - 37565;
+  } else {
+    token = new web3.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
+  }
+  const result = await token.methods
+    .getPositions()
+    .call(pastBlock, (err: any, res: any) => {
+      if (err) {
+        console.log("An error occurred", err);
+      }
+      return res;
+    });
   return result;
 };
 
@@ -97,7 +119,7 @@ const getDecimals = async (addr: string): Promise<string> => {
 };
 
 // Loop trough TokenSets Positions, get size and address of asset
-const processTSRes = async (res: any): Promise<number> => {
+const processTSRes = async (res: any, past: boolean): Promise<number> => {
   let total = 0;
   if (res.length === 0) {
     return 0;
@@ -127,11 +149,12 @@ const processTSRes = async (res: any): Promise<number> => {
     }
   }
   if (data.length != 0) {
-    let prices: { price: number }[] = await getTokenPrice(data);
+    // console.log(data);
+    let prices: { prices: number[] }[] = await getTokenPrice(data, past);
     for (var index = 0; index < prices.length; index++) {
       let address = data[index];
       let size = sizes[index];
-      let price = prices[index]["price"];
+      let price = prices[0]["prices"][index];
       total += price * (size / 10 ** address.decimals);
     }
   }
@@ -140,7 +163,8 @@ const processTSRes = async (res: any): Promise<number> => {
 
 // Get TokenPrice for address
 const getTokenPrice = async (
-  data: string | { decimals: number; tokenAddress: string }[]
+  data: string | { decimals: number; tokenAddress: string }[],
+  past: boolean
 ): Promise<any> => {
   if (typeof data == "string") {
     if (data in COMMON_DECIMALS) {
@@ -150,16 +174,18 @@ const getTokenPrice = async (
     }
     data = [{ decimals: parseInt(decimals), tokenAddress: data }];
   }
-  // const n = 10 ** decimals;
+  var startBlock: number | null = null;
+  if (past) {
+    const latest: number = await web3_infura.eth.getBlockNumber();
+    startBlock = latest - 37565;
+  }
   const price = await axios
     // .get(
     //   `https://polygon.api.0x.org/swap/v1/price?buyToken=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&sellToken=${addr}&sellAmount=${n}`
     // )
     .post(`http://localhost:3002/swap/v1/history`, {
       buyTokens: data,
-      // startBlock: <number>, // Optional
-      // stepSize: <number>, // Optional
-      // stepCount: <number>, // Optional
+      startBlock: startBlock,
     })
     .then((response) => {
       return response.data; // return price and decimals
@@ -169,33 +195,30 @@ const getTokenPrice = async (
 };
 
 // Main function => Get TokenSet Positions, parse to processTSRes and then print result
-const getTokenSetPrice = async (address: string) => {
+const getTokenSetPrice = async (address: string, past: boolean) => {
   checkConnection();
   if (ADDRESSES.includes(address)) {
     // for (const address of ADDRESSES) {
-    const result = await getTokenSetPositions(address)
+    const result = await getTokenSetPositions(address, past)
       .then(async (res: any) => {
-        const resultInternal = await processTSRes(res);
+        const resultInternal = await processTSRes(res, past);
         return Promise.resolve(resultInternal);
       })
       .catch((err: any) => console.log(err));
     return Promise.resolve(result);
   } else {
-    const price = await getTokenPrice(address).then((res) => {
-      return res[0]["price"];
+    const price = await getTokenPrice(address, past).then((res) => {
+      return res[0]["prices"][0];
     });
     return Promise.resolve(price);
   }
 };
-
-// (async () => {
-//   // for (const address of ADDRESSES) {
-//   var a = performance.now();
-//   console.log(
-//     await getTokenSetPrice("0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6")
-//   );
-//   var b = performance.now();
-//   console.log("It took " + (b - a) + " ms.");
-//   // }
-// })();
-export default getTokenSetPrice;
+const getPrices = async (address: string) => {
+  const currentPrice = await getTokenSetPrice(address, false);
+  const changePercentDay = await getTokenSetPrice(address, true);
+  return Promise.resolve({
+    currentPrice: currentPrice,
+    changePercentDay: changePercentDay,
+  });
+};
+export default getPrices;
