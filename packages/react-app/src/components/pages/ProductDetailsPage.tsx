@@ -116,6 +116,10 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 		/>,
 	];
 
+	const metaTitle = 'SW DAO - ' + symbol;
+	const metaDesc = 'Buy ' + name;
+	const metaImage = '/images/meta/meta_' + symbol + '.png';
+
 	return (
 		<FullHeightPage pageKey="details">
 			<Center>
@@ -153,6 +157,21 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 					</Box>
 				</StyledSection>
 			</Center>
+			<title>{metaTitle}</title>
+			<meta name="description" content={metaDesc} />
+
+			<meta property="og:url" content="https://app.swdao.org/" />
+			<meta property="og:type" content="website" />
+			<meta property="og:title" content={metaTitle} />
+			<meta property="og:description" content={metaDesc} />
+			<meta property="og:image" content={metaImage} />
+
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta property="twitter:domain" content="app.swdao.org" />
+			<meta property="twitter:url" content="https://app.swdao.org/" />
+			<meta name="twitter:title" content={metaTitle} />
+			<meta name="twitter:description" content={metaDesc} />
+			<meta name="twitter:image" content={metaImage} />
 		</FullHeightPage>
 	);
 }

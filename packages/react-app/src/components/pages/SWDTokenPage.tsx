@@ -197,6 +197,21 @@ export function SWDTokenPage(): JSX.Element {
 					</Box>
 				</StyledSection>
 			</Center>
+			<title>SW DAO - SWD</title>
+			<meta name="description" content="Buy SWD" />
+
+			<meta property="og:url" content="https://app.swdao.org/" />
+			<meta property="og:type" content="website" />
+			<meta property="og:title" content="SW DAO - SWD" />
+			<meta property="og:description" content="Buy SWD" />
+			<meta property="og:image" content="/images/meta/meta_SWD.png" />
+
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta property="twitter:domain" content="app.swdao.org" />
+			<meta property="twitter:url" content="https://app.swdao.org/" />
+			<meta name="twitter:title" content="SW DAO - SWD" />
+			<meta name="twitter:description" content="Buy SWD" />
+			<meta name="twitter:image" content="/images/meta/meta_SWD.png" />
 		</FullHeightPage>
 	);
 }

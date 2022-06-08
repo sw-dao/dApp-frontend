@@ -112,6 +112,21 @@ export function ProductListPage(): JSX.Element {
 					</Box>
 				</StyledSection>
 			</Center>
+			<title>SW DAO</title>
+			<meta name="description" content="Quantitative Crypto Asset Investing" />
+
+			<meta property="og:url" content="https://app.swdao.org/" />
+			<meta property="og:type" content="website" />
+			<meta property="og:title" content="SW DAO" />
+			<meta property="og:description" content="Quantitative Crypto Asset Investing" />
+			<meta property="og:image" content="/images/meta/meta_DAPPBANNER.png" />
+
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta property="twitter:domain" content="app.swdao.org" />
+			<meta property="twitter:url" content="https://app.swdao.org/" />
+			<meta name="twitter:title" content="SW DAO" />
+			<meta name="twitter:description" content="Quantitative Crypto Asset Investing" />
+			<meta name="twitter:image" content="/images/meta/meta_DAPPBANNER.png" />
 		</FullHeightPage>
 	);
 }
