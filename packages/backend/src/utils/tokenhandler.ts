@@ -38,10 +38,10 @@ const getExtendedTokenDetails = async (
       console.error(`[TokenHandler-0x] getExtendedTokenDetails ${e.message}`);
       return { changePercentDay: 0, currentPrice: 0 };
     });
-  var changePercentDay =
+  const changePercentDay =
     ((prices.currentPrice - prices.changePercentDay) /
       prices.changePercentDay) *
-    100; //((220 - 200)/200)*100
+    100; // ((220 - 200)/200)*100
   if (tokenData) {
     return {
       address: tokenData.token.address,

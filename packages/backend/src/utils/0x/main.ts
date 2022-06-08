@@ -30,10 +30,10 @@ const ADDRESSES = [
   "0xad2b726fd2bd3a7f8f4b3929152438eba637ef19", // # SWD Momentum Index
   "0x55a40b33CFf2eb062e7aa76506B7De711F2B2aff", // # Polygon Ecosystem Index
 ]; // # contract addresS
-interface common_decimals {
+interface CommonDecimals {
   [addr: string]: string;
 }
-const COMMON_DECIMALS: common_decimals = {
+const COMMON_DECIMALS: CommonDecimals = {
   "0xaeE24d5296444c007a532696aaDa9dE5cE6caFD0": "18",
   "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270": "18",
   "0xd6cA869a4EC9eD2C7E618062Cdc45306d8dBBc14": "18",
@@ -61,9 +61,9 @@ const COMMON_DECIMALS: common_decimals = {
 
 // Init new web3 Client with Ankr
 const web3 = new Web3(new Web3.providers.WebsocketProvider(WSS_PROVIDER));
-const web3_infura = new Web3(INFURA);
+const web3Infura = new Web3(INFURA);
 const checkConnection = () => {
-  web3_infura.eth.net
+  web3Infura.eth.net
     .isListening()
     .then(() => console.log("[WSS] Infura is connected"))
     .catch((e) => {
@@ -80,16 +80,16 @@ const checkConnection = () => {
 };
 checkConnection();
 
-// Get curent TokenSet Psitions
+// Get current TokenSet Positions
 const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
-  var pastBlock: number | null = null;
-  var token;
+  let pastBlock: number | null = null;
+  let token;
   if (past) {
-    token = new web3_infura.eth.Contract(
+    token = new web3Infura.eth.Contract(
       TokenSetABI as AbiItem[],
       contractAddr
     );
-    const latest: number = await web3_infura.eth.getBlockNumber();
+    const latest: number = await web3Infura.eth.getBlockNumber();
     pastBlock = latest - 37565;
   } else {
     token = new web3.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
@@ -107,7 +107,7 @@ const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
 
 const getDecimals = async (addr: string): Promise<string> => {
   const contract = new web3.eth.Contract(ERC20ABI as AbiItem[], addr);
-  var decimals: string = await contract.methods
+  const decimals: string = await contract.methods
     .decimals()
     .call((err: any, res: string) => {
       if (err) {
@@ -124,37 +124,32 @@ const processTSRes = async (res: any, past: boolean): Promise<number> => {
   if (res.length === 0) {
     return 0;
   }
-  let data = [];
-  let sizes: number[] = [];
+  const data = [];
+  const sizes: number[] = [];
   for (const t of res) {
-    const addr: string = t[0];
     const size: number = t[2];
     // Getting price for said asset
-    if (size === 0) {
-      total = total; // DO NOTHING? WAS EMPTY BEFORE. ADDED TO AVOID ERROR
-    } else if (addr === "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174") {
+    if (size === 0) { continue; }
+    const addr: string = t[0];
+    if (addr === "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174") {
       // if addr == USDC... No need to catch USDC price
       total += size / 10 ** 6;
-    } else {
-      if (addr in COMMON_DECIMALS) {
-        var decimals = COMMON_DECIMALS[addr];
-      } else {
-        var decimals = await getDecimals(addr);
-      }
-      data.push({
-        decimals: parseInt(decimals),
-        tokenAddress: addr,
-      });
-      sizes.push(size);
+      continue;
     }
+    const decimals = addr in COMMON_DECIMALS ? COMMON_DECIMALS[addr] : await getDecimals(addr);
+    data.push({
+      decimals: parseInt(decimals, 10),
+      tokenAddress: addr,
+    });
+    sizes.push(size);
   }
-  if (data.length != 0) {
+  if (data.length !== 0) {
     // console.log(data);
-    let prices: { prices: number[] }[] = await getTokenPrice(data, past);
-    for (var index = 0; index < prices.length; index++) {
-      let address = data[index];
-      let size = sizes[index];
-      let price = prices[0]["prices"][index];
+    const prices: { prices: number[] }[] = await getTokenPrice(data, past);
+    for (let index = 0; index < prices.length; index++) {
+      const address = data[index];
+      const size = sizes[index];
+      const price = prices[0].prices[index];
       total += price * (size / 10 ** address.decimals);
     }
   }
@@ -166,26 +161,22 @@ const getTokenPrice = async (
   data: string | { decimals: number; tokenAddress: string }[],
   past: boolean
 ): Promise<any> => {
-  if (typeof data == "string") {
-    if (data in COMMON_DECIMALS) {
-      var decimals = COMMON_DECIMALS[data];
-    } else {
-      var decimals = await getDecimals(data);
-    }
-    data = [{ decimals: parseInt(decimals), tokenAddress: data }];
+  if (typeof data === "string") {
+    const decimals = data in COMMON_DECIMALS ? COMMON_DECIMALS[data] : await getDecimals(data);
+    data = [{ decimals: parseInt(decimals, 10), tokenAddress: data }];
   }
-  var startBlock: number | null = null;
+  let startBlock: number | null = null;
   if (past) {
-    const latest: number = await web3_infura.eth.getBlockNumber();
+    const latest: number = await web3Infura.eth.getBlockNumber();
     startBlock = latest - 37565;
   }
   const price = await axios
     // .get(
     //   `https://polygon.api.0x.org/swap/v1/price?buyToken=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&sellToken=${addr}&sellAmount=${n}`
     // )
-    .post(`http://localhost:3002/swap/v1/history`, {
+    .post(`http://localhost:8080/swap/v1/history`, {
       buyTokens: data,
-      startBlock: startBlock,
+      startBlock,
     })
     .then((response) => {
       return response.data; // return price and decimals
@@ -208,7 +199,7 @@ const getTokenSetPrice = async (address: string, past: boolean) => {
     return Promise.resolve(result);
   } else {
     const price = await getTokenPrice(address, past).then((res) => {
-      return res[0]["prices"][0];
+      return res[0].prices[0];
     });
     return Promise.resolve(price);
   }
@@ -217,8 +208,8 @@ const getPrices = async (address: string) => {
   const currentPrice = await getTokenSetPrice(address, false);
   const changePercentDay = await getTokenSetPrice(address, true);
   return Promise.resolve({
-    currentPrice: currentPrice,
-    changePercentDay: changePercentDay,
+    currentPrice,
+    changePercentDay,
   });
 };
 export default getPrices;
