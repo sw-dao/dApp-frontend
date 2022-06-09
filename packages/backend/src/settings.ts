@@ -42,6 +42,7 @@ export const providerConfig: {
 };
 export const infuraProjectId = process.env.INFURA_PROJECT_ID;
 export const infuraApiKey = process.env.INFURA_API_KEY;
+export const ankrApiKey = process.env.ANKR_API_SECRERT;
 export const alchemyApiKey = process.env.ALCHEMY_API_KEY || "";
 export const coingeckoApiKey = process.env.COINGECKO_API_KEY;
 export const mailChimpUrl: string =

@@ -5,11 +5,11 @@ import { AbiItem } from "web3-utils";
 import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
 import { baseUrl0x } from "../../settings";
+import { infuraProjectId } from "../../settings";
+import { ankrApiKey } from "../../settings";
 // const TOKENSET_ADDRESS = "0xf2aa5ccea80c246a71e97b418173fcc956408d3f";
-const WSS_PROVIDER =
-  "wss://rpc.ankr.com/polygon/ws/4bacdd2101497335fad3edece2dfef08b2dbf1a88a57b4764761590bb3fa1544";
-const INFURA =
-  "https://polygon-mainnet.infura.io/v3/ef6d47c7a19b436598140a2c4e1fe642";
+const WSS_PROVIDER = `wss://rpc.ankr.com/polygon/ws/` + ankrApiKey;
+const INFURA = `https://polygon-mainnet.infura.io/v3/` + infuraProjectId;
 const ADDRESSES = [
   "0x25ad32265c9354c29e145c902ae876f6b69806f2", // # Alpha Portfolio
   "0x71b41b3b19aac53ca4063aec2d17fc3caeb38026", // # Macro Trend BTC
@@ -86,10 +86,7 @@ const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
   let pastBlock: number | null = null;
   let token;
   if (past) {
-    token = new web3Infura.eth.Contract(
-      TokenSetABI as AbiItem[],
-      contractAddr
-    );
+    token = new web3Infura.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
     const latest: number = await web3Infura.eth.getBlockNumber();
     pastBlock = latest - 37565;
   } else {
@@ -130,14 +127,17 @@ const processTSRes = async (res: any, past: boolean): Promise<number> => {
   for (const t of res) {
     const size: number = t[2];
     // Getting price for said asset
-    if (size === 0) { continue; }
+    if (size === 0) {
+      continue;
+    }
     const addr: string = t[0];
     if (addr === "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174") {
       // if addr == USDC... No need to catch USDC price
       total += size / 10 ** 6;
       continue;
     }
-    const decimals = addr in COMMON_DECIMALS ? COMMON_DECIMALS[addr] : await getDecimals(addr);
+    const decimals =
+      addr in COMMON_DECIMALS ? COMMON_DECIMALS[addr] : await getDecimals(addr);
     data.push({
       decimals: parseInt(decimals, 10),
       tokenAddress: addr,
@@ -163,7 +163,8 @@ const getTokenPrice = async (
   past: boolean
 ): Promise<any> => {
   if (typeof data === "string") {
-    const decimals = data in COMMON_DECIMALS ? COMMON_DECIMALS[data] : await getDecimals(data);
+    const decimals =
+      data in COMMON_DECIMALS ? COMMON_DECIMALS[data] : await getDecimals(data);
     data = [{ decimals: parseInt(decimals, 10), tokenAddress: data }];
   }
   let startBlock: number | null = null;
