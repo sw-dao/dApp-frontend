@@ -213,12 +213,26 @@ const getTokenSetPrice = async (address: string, past: boolean) => {
     return Promise.resolve(price);
   }
 };
+const getTotalSupply = async (address: string) => {
+  const token = new web3.eth.Contract(TokenSetABI as AbiItem[], address);
+  const res = await token.methods.totalSupply().call((err: any, res: any) => {
+    if (err) {
+      console.log("An error occurred", err);
+    }
+    return res;
+  });
+  return res;
+};
 const getPrices = async (address: string) => {
+  checkConnection(false);
   const currentPrice = await getTokenSetPrice(address, false);
   const changePercentDay = await getTokenSetPrice(address, true);
+  const totalSupply = await getTotalSupply(address);
   return Promise.resolve({
-    currentPrice,
-    changePercentDay,
+    currentPrice: currentPrice,
+    changePercentDay: changePercentDay,
+    totalSupply: totalSupply / 10 ** 18,
+    marketCap: (totalSupply / 10 ** 18) * currentPrice,
   });
 };
 export default getPrices;

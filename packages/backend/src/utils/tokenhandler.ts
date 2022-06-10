@@ -36,7 +36,12 @@ const getExtendedTokenDetails = async (
     })
     .catch((e) => {
       console.error(`[TokenHandler-0x] getExtendedTokenDetails ${e.message}`);
-      return { changePercentDay: 0, currentPrice: 0 };
+      return {
+        changePercentDay: 0,
+        currentPrice: 0,
+        marketCap: 0,
+        totalSupply: 0,
+      };
     });
   const changePercentDay =
     ((prices.currentPrice - prices.changePercentDay) /
@@ -44,12 +49,12 @@ const getExtendedTokenDetails = async (
     100; // ((220 - 200)/200)*100
   if (tokenData) {
     return {
-      address: tokenData.token.address,
-      symbol: tokenData.token.symbol,
-      marketCap: tokenData.marketCap,
+      address: address,
+      symbol: symbol,
+      marketCap: prices.marketCap,
       changePercent1Day: changePercentDay,
       volume1Day: tokenData.volumeDay,
-      totalSupply: tokenData.totalSupply,
+      totalSupply: prices.totalSupply,
       currentPrice: prices.currentPrice,
       tokenset: tokenData.token.tokensetAllocationsByTokenid || [],
     } as ExtendedTokenDetailResponse;
@@ -57,10 +62,10 @@ const getExtendedTokenDetails = async (
   return {
     address,
     symbol,
-    marketCap: 0,
+    marketCap: prices.marketCap,
     changePercent1Day: changePercentDay,
     volume1Day: 0,
-    totalSupply: 0,
+    totalSupply: prices.totalSupply,
     currentPrice: prices.currentPrice,
     tokenset: [],
   } as ExtendedTokenDetailResponse;
