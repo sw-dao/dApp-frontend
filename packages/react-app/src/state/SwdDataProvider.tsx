@@ -106,7 +106,6 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 	useEffect(() => {
 		const cId = chainId || DEFAULT_CHAIN_ID;
 		// if (loadedExtended !== cId) {
-		console.log(new Date().getTime() - updatedTokens > 10000);
 		if (new Date().getTime() - updatedTokens > 10000) {
 			setUpdatedTokens(new Date().getTime());
 			const tokenKeys = Object.keys(PRODUCTS_BY_SYMBOL);
@@ -194,14 +193,15 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 		};
 
 		if (!updating) {
-			let periodsNeeded = Object.keys(tokensByPeriod);
-			let needsUpdate = new Date().getTime() - updated > 10000;
-			if (!needsUpdate) {
-				periodsNeeded = periodsNeeded.filter((p: string) => tokensByPeriod[p].length === 0);
-				needsUpdate = periodsNeeded.length > 0;
-			}
+			const periodsNeeded = Object.keys(tokensByPeriod);
+			const needsUpdate = new Date().getTime() - updated > 100000;
+			// if (!needsUpdate) {
+			// 	periodsNeeded = periodsNeeded.filter((p: string) => tokensByPeriod[p].length === 0);
+			// 	needsUpdate = periodsNeeded.length > 0;
+			// }
 			if (needsUpdate) {
 				setUpdating(true);
+				setUpdated(new Date().getTime());
 				const promiseThrottle = new PromiseThrottle({
 					requestsPerSecond: 1,
 					promiseImplementation: Promise,
@@ -224,7 +224,6 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 				Promise.all(promises).then(() => {
 					// console.log(`Updated ${periodsNeeded.join(', ')}`);
 					setUpdating(false);
-					setUpdated(new Date().getTime());
 				});
 			}
 		}
