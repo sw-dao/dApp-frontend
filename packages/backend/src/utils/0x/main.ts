@@ -63,23 +63,31 @@ const COMMON_DECIMALS: CommonDecimals = {
 // Init new web3 Client with Ankr
 const web3 = new Web3(new Web3.providers.WebsocketProvider(WSS_PROVIDER));
 const web3Infura = new Web3(INFURA);
-const checkConnection = () => {
+const checkConnection = (snd: boolean) => {
   web3Infura.eth.net
     .isListening()
-    .then(() => console.log("[WSS] Infura is connected"))
+    .then(() => {
+      if (snd) {
+        console.log("[WSS] Infura is connected");
+      }
+    })
     .catch((e) => {
       console.log("[ - ] Lost connection to the node, reconnecting");
       web3.setProvider(WSS_PROVIDER);
     });
   web3.eth.net
     .isListening()
-    .then(() => console.log("[WSS] Ankr is connected"))
+    .then(() => {
+      if (snd) {
+        console.log("[WSS] Ankr is connected");
+      }
+    })
     .catch((e) => {
       console.log("[ - ] Lost connection to the node, reconnecting");
       web3.setProvider(WSS_PROVIDER);
     });
 };
-checkConnection();
+checkConnection(true);
 
 // Get current TokenSet Positions
 const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
@@ -92,6 +100,7 @@ const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
   } else {
     token = new web3.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
   }
+  checkConnection(false);
   const result = await token.methods
     .getPositions()
     .call(pastBlock, (err: any, res: any) => {
@@ -189,7 +198,6 @@ const getTokenPrice = async (
 
 // Main function => Get TokenSet Positions, parse to processTSRes and then print result
 const getTokenSetPrice = async (address: string, past: boolean) => {
-  checkConnection();
   if (ADDRESSES.includes(address)) {
     // for (const address of ADDRESSES) {
     const result = await getTokenSetPositions(address, past)
