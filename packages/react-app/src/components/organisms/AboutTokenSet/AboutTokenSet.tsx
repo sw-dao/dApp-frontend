@@ -117,6 +117,7 @@ export function AboutTokenSet(props: AboutTokenSetProps): JSX.Element {
 			<Heading fontSize="1.5rem" textAlign="center">
 				About {symbol}
 			</Heading>
+			{allocations}
 			<TokenPane
 				data={tokenData}
 				details={tokenDetails}
@@ -124,7 +125,6 @@ export function AboutTokenSet(props: AboutTokenSetProps): JSX.Element {
 				margin={margin}
 				symbol={symbol}
 			/>
-			{allocations}
 		</VStack>
 	);
 
