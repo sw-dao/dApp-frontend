@@ -100,7 +100,6 @@ const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
   } else {
     token = new web3.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
   }
-  checkConnection(false);
   const result = await token.methods
     .getPositions()
     .call(pastBlock, (err: any, res: any) => {
