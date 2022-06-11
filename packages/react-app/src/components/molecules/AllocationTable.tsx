@@ -73,6 +73,7 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 
 	const [loading, setLoading] = useState<boolean>(false);
 	const [loaded, setLoaded] = useState<boolean>(false);
+	const [updated, setUpdated] = useState(0);
 	const { isConnected, provider, chainId } = useWallet();
 	const swappable = useRecoilValue(allSwappableTokensState);
 	const allowedTokens = useMemo(
@@ -81,7 +82,15 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 	);
 
 	useEffect(() => {
-		if (isConnected && provider && Object.keys(componentTokens).length > 0 && !loading && !loaded) {
+		if (
+			isConnected &&
+			provider &&
+			Object.keys(componentTokens).length > 0 &&
+			!loading &&
+			!loaded &&
+			new Date().getTime() - updated > 10000
+		) {
+			setUpdated(new Date().getTime());
 			setLoading(true);
 			getPrices(componentTokens, chainId || DEFAULT_CHAIN_ID)
 				.then((prices) => {
