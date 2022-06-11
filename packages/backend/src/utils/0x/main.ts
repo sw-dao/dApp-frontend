@@ -60,10 +60,7 @@ const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
   let pastBlock: number | null = null;
   let token;
   if (past) {
-    token = new web3Infura.eth.Contract(
-      TokenSetABI as AbiItem[],
-      contractAddr
-    );
+    token = new web3Infura.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
     const latest: number = await web3Infura.eth.getBlockNumber();
     pastBlock = latest - 37565;
   } else {
@@ -125,7 +122,7 @@ const processTSRes = async (res: any, past: boolean): Promise<number> => {
   if (data.length !== 0) {
     // console.log(data);
     const prices: { prices: number[] }[] = await getTokenPrice(data, past);
-    for (let index = 0; index < prices.length; index++) {
+    for (let index = 0; index < prices[0].prices.length; index++) {
       const address = data[index];
       const size = sizes[index];
       const price = prices[0].prices[index];
