@@ -1,10 +1,35 @@
+import axios from "axios";
+import { baseUrl0x } from "../../settings";
 import { Operations, Subscriptions, graphClient } from "../graph";
+import { ADDRESSES, COMMON_DECIMALS } from "../0x/main";
+import {
+  AddressMap
+} from "../../types";
+import { web3, web3Infura } from "../../bin/www";
+import { AbiItem } from "web3-utils";
+import TokenSetABI from "../../abi/TokenSetABI.json";
+import ERC20ABI from "../../abi/ERC20.json";
+import { DateTime } from "luxon";
+import { isEmpty, isUndefined } from "lodash";
 
 // document: DocumentNode | TypedDocumentNode<TSubscriptionData, TSubscriptionVariables>;
 // variables?: TSubscriptionVariables;
 // updateQuery?: UpdateQueryFn<TData, TSubscriptionVariables, TSubscriptionData>;
 // onError?: (error: Error) => void;
 // context?: DefaultContext;
+
+const getDecimals = async (addr: string): Promise<string> => {
+  const contract = new web3.eth.Contract(ERC20ABI as AbiItem[], addr);
+  const decimals: string = await contract.methods
+    .decimals()
+    .call((err: any, res: string) => {
+      if (err) {
+        console.log("An error occured", err);
+      }
+      return res;
+    });
+  return decimals;
+};
 
 const getPricesTokensDaily = async (
   symbols: string[],
@@ -30,25 +55,178 @@ const getPricesTokensDaily = async (
     });
 };
 
+interface TokenInfo {
+  address: string;
+  symbol: string;
+}
+
+interface TokenInfoZeroX {
+  symbol: string;
+  decimals: number;
+  tokenAddress: string;
+}
+
+interface ZeroXReturn {
+  symbol: string;
+  prices: number[];
+}
+
+interface HourlyData {
+  __typename: string;
+  price: string;
+  epoch: number;
+}
+
+interface HourlyDataObj {
+  __typename: string;
+  symbol: string;
+  tokenset: boolean;
+  hourlies: HourlyData[];
+}
+
 const getPricesTokensHourly = async (
-  symbols: string[],
-  fromEpoch: number,
-  toEpoch: number,
-  chainId: string
+  tokens: AddressMap,
+  days: number,
 ) => {
-  console.log(`Getting hourly price data for ${symbols.toString()}`);
-  return await graphClient
-    .query({
-      query: Operations.getTokenPricesHourly,
-      variables: { symbols, from: fromEpoch, to: toEpoch, chainId },
+  // Separate tokens into groups.
+  const tokensSet: TokenInfo[] = [];
+  const tokensRaw: TokenInfo[] = [];
+  const addresses: string[] = Object.values(tokens).map((a) => a.toLowerCase());
+  const symbols: string[] = Object.keys(tokens);
+  addresses.forEach((a: string, i: number) => {
+    const token: TokenInfo = { address: a, symbol: symbols[i] };
+    if (ADDRESSES.includes(a)) {
+      tokensSet.push(token);
+    } else {
+      tokensRaw.push(token);
+    }
+  });
+  const tokensRawData: TokenInfoZeroX[] = await Promise.all<TokenInfoZeroX>(
+    tokensRaw.map(async (t) => {
+      const a = t.address;
+      const decimals: number = a in COMMON_DECIMALS ?
+        parseInt(COMMON_DECIMALS[a], 10) :
+        parseInt(await getDecimals(a), 10);
+      return { symbol: t.symbol, decimals, tokenAddress: a } as TokenInfoZeroX;
+    }),
+  );
+  // Get info on timing/blocks.
+  const now = DateTime.now();
+  const nowSeconds: number = Math.round(now.toSeconds());
+  const endSeconds: number = Math.round(now.minus({ day: +days }).toSeconds());
+  const stepCount: number = 25;
+  let stepTime: number = (nowSeconds - endSeconds) / stepCount;
+  const stepSize: number = Math.round(stepTime / 2.3);
+  stepTime = Math.round(stepTime);
+  const timestamps: number[] = [];
+  for (let i: number = 0; i <= stepCount; i++) {
+    timestamps.push(nowSeconds - (stepTime * i));
+  }
+  // Handle tokensets separately, and get prices for all raw tokens at once.
+  return await Promise.all(
+    await axios.post(baseUrl0x + `/history`, {
+      buyTokens: tokensRawData,
+      startBlock: undefined,
+      stepSize,
+      stepCount
+    }).then((res) => { return res.data as ZeroXReturn[] }),
+  )
+    .then((res: ZeroXReturn[]) => {
+      return res.map((t: ZeroXReturn) => {
+        return {
+          __typename: "prices_tokens",
+          symbol: t.symbol,
+          tokenset: !isEmpty(tokensSet.filter((ts) => ts.symbol === t.symbol)),
+          hourlies: t.prices.map((p: number, i: number) => {
+            if (p === 0 && !isUndefined(t.prices[i - 1])) {
+              p = t.prices[i - 1];
+              t.prices[i] = p;
+            }
+            return {
+              __typename: 'prices_hourlies',
+              price: p.toString(),
+              epoch: timestamps[i]
+            };
+          }) as HourlyData[]
+        } as HourlyDataObj;
+      });
     })
-    .then((res) => res.data.prices_tokens)
     .catch((e) => {
-      console.error(
-        `[pricesGraph] error getting hourly price data ${e.message}`
-      );
+      console.error("Hourly call failed with: " + e.message);
       return undefined;
     });
+  /*
+  console.log("[NUMBER DAYS]: " + days.toString());
+  const now = DateTime.now();
+  const nowSeconds: number = Math.round(now.toSeconds());
+  const endSeconds: number = Math.round(now.minus({ day: +days }).toSeconds());
+  const stepCount: number = 14;
+  let stepTime: number = (nowSeconds - endSeconds) / stepCount;
+  const stepSize: number = Math.round(stepTime / 2.3);
+  stepTime = Math.round(stepTime);
+  const timestamps: number[] = [];
+  for (let i: number = 0; i <= stepCount; i++) {
+    timestamps.push(nowSeconds - (stepTime * i));
+  }
+  const symbols = Object.keys(tokens);
+  console.log(`Getting hourly price data for ${symbols.toString()}`);
+  const addresses: string[] = Object.values(tokens);
+  const addrRecurs: any =
+    async (addrArr: string[], symbolArr: string[], startBlock: number | undefined) => {
+      const prices: any[] = [];
+      await Promise.all(
+        addrArr.map(async (a: string, i: number) => {
+          a = a.toLowerCase();
+          console.log("[ " + a + " ]:" + ADDRESSES.includes(a));
+          if (ADDRESSES.includes(a)) {
+            const WETH: string = "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619";
+            const recurs = await addrRecurs([WETH], [symbolArr[i]], undefined);
+            if (!isUndefined(recurs[0])) {
+              recurs.forEach((x: any) => prices.push(x))
+            }
+          } else {
+            console.log("[IN DECIMALS?]: " + (a in COMMON_DECIMALS));
+            const decimals: number = a in COMMON_DECIMALS ?
+              parseInt(COMMON_DECIMALS[a], 10) :
+              parseInt(await getDecimals(a), 10);
+            const data = [{ symbol: symbolArr[i], decimals, tokenAddress: a }];
+            await axios.post(baseUrl0x + `/history`, {
+                buyTokens: data,
+                startBlock: undefined,
+                stepSize,
+                stepCount
+              })
+              .then((response) => {
+                (response.data as any[]).forEach((d) => prices.push(d));
+              })
+              .catch((err) => console.log(err.response.data));
+          }
+        }),
+      );
+      return prices;
+    };
+  const pricesEnd = await addrRecurs(addresses, symbols, undefined);
+  console.log(pricesEnd);
+  */
+/* RETURNS:
+    [
+      {
+        __typename: 'prices_tokens',
+        symbol: 'BTBTC',
+        tokenset: true,
+        minutes: [
+          [Object],
+        ]
+      },
+    ]
+
+    [Object] =
+    {
+      __typename: 'prices_minutes',
+      price: '104.56494563980499',
+      epoch: 1654644780
+    }
+*/
 };
 
 const getPricesTokensMinutes = async (

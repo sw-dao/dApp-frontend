@@ -6,6 +6,8 @@
 import app from "../app";
 import Debug from "debug";
 import { createServer, Server } from "http";
+import Web3 from "web3";
+import { infuraProjectId, ankrApiKey } from "../settings";
 const debugModule = Debug("backend:server");
 
 const onError = (error: any) => {
@@ -56,6 +58,44 @@ const normalizePort = (val: string) => {
 
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
+
+const ANKR =
+  `wss://rpc.ankr.com/polygon/ws/` + ankrApiKey;
+const INFURA =
+  `https://polygon-mainnet.infura.io/v3/` + infuraProjectId;
+
+// Init new web3 clients with Ankr. and Infura
+const ANKR_WSS = new Web3.providers.WebsocketProvider(ANKR, {
+  reconnect: {
+    auto: true,
+    delay: 5000, // ms
+    onTimeout: true,
+    maxAttempts: 10,
+  },
+  clientConfig: {
+    maxReceivedFrameSize: 10000000000,
+    maxReceivedMessageSize: 10000000000,
+  }
+});
+export const web3 = new Web3(ANKR_WSS);
+export const web3Infura = new Web3(INFURA);
+export const checkConnection = (snd: boolean) => {
+  web3Infura.eth.net
+    .isListening()
+    .then(() => { if (snd) console.log("[HTTP] Infura is connected"); })
+    .catch((e) => {
+      console.log("[HTTP] Lost connection to the node, reconnecting");
+      web3.setProvider(INFURA);
+    });
+  web3.eth.net
+    .isListening()
+    .then(() => { if (snd) console.log("[WSS] Ankr is connected"); })
+    .catch((e) => {
+      console.log("[WSS] Lost connection to the node, reconnecting");
+      web3.setProvider(ANKR_WSS);
+    });
+};
+checkConnection(true);
 
 /**
  * Create HTTP server.

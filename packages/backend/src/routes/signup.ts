@@ -10,7 +10,7 @@ import {
 } from "express-validator";
 import { URL } from "url";
 
-import { axiosInstance } from "../utils/axios";
+import axios from "axios";
 import { handleError } from "../utils/error";
 import { mailChimpApiKey, mailChimpListId, mailChimpUrl } from "../settings";
 
@@ -37,7 +37,7 @@ router.post(
 
     console.log(`signing up ${email} at ${url}`);
 
-    const emailResponse = await axiosInstance
+    const emailResponse = await axios
       .get(url.toString())
       .then((response: AxiosResponse) => {
         return response.data;

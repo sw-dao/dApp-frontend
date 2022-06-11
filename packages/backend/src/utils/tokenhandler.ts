@@ -49,8 +49,8 @@ const getExtendedTokenDetails = async (
     100; // ((220 - 200)/200)*100
   if (tokenData) {
     return {
-      address: address,
-      symbol: symbol,
+      address,
+      symbol,
       marketCap: prices.marketCap,
       changePercent1Day: changePercentDay,
       volume1Day: tokenData.volumeDay,
@@ -121,17 +121,15 @@ const getTokenPriceData = async (
     return [];
   } else if (+days === 7 || +days === 30) {
     const hourlyPrices = await getPricesTokensHourly(
-      symbols,
-      Math.round(now.minus({ day: +days }).toSeconds()),
-      Math.round(now.toSeconds()),
-      chainId
+      tokens,
+      parseInt(days, 10)
     );
 
     if (hourlyPrices) {
       return _.chain(hourlyPrices)
         .groupBy("symbol")
         .map((pricesBySymbol) => {
-          let aggregatePricesForSymbol = [];
+          let aggregatePricesForSymbol: any[] | undefined = [];
           if (pricesBySymbol) {
             aggregatePricesForSymbol = pricesBySymbol
               .map((pricesTypes) => pricesTypes?.hourlies)
