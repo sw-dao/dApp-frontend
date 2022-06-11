@@ -114,7 +114,7 @@ const getPricesTokensHourly = async (
   const now = DateTime.now();
   const nowSeconds: number = Math.round(now.toSeconds());
   const endSeconds: number = Math.round(now.minus({ day: +days }).toSeconds());
-  const stepCount: number = 25;
+  const stepCount: number = 20;
   let stepTime: number = (nowSeconds - endSeconds) / stepCount;
   const stepSize: number = Math.round(stepTime / 2.3);
   stepTime = Math.round(stepTime);
@@ -155,59 +155,6 @@ const getPricesTokensHourly = async (
       console.error("Hourly call failed with: " + e.message);
       return undefined;
     });
-  /*
-  console.log("[NUMBER DAYS]: " + days.toString());
-  const now = DateTime.now();
-  const nowSeconds: number = Math.round(now.toSeconds());
-  const endSeconds: number = Math.round(now.minus({ day: +days }).toSeconds());
-  const stepCount: number = 14;
-  let stepTime: number = (nowSeconds - endSeconds) / stepCount;
-  const stepSize: number = Math.round(stepTime / 2.3);
-  stepTime = Math.round(stepTime);
-  const timestamps: number[] = [];
-  for (let i: number = 0; i <= stepCount; i++) {
-    timestamps.push(nowSeconds - (stepTime * i));
-  }
-  const symbols = Object.keys(tokens);
-  console.log(`Getting hourly price data for ${symbols.toString()}`);
-  const addresses: string[] = Object.values(tokens);
-  const addrRecurs: any =
-    async (addrArr: string[], symbolArr: string[], startBlock: number | undefined) => {
-      const prices: any[] = [];
-      await Promise.all(
-        addrArr.map(async (a: string, i: number) => {
-          a = a.toLowerCase();
-          console.log("[ " + a + " ]:" + ADDRESSES.includes(a));
-          if (ADDRESSES.includes(a)) {
-            const WETH: string = "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619";
-            const recurs = await addrRecurs([WETH], [symbolArr[i]], undefined);
-            if (!isUndefined(recurs[0])) {
-              recurs.forEach((x: any) => prices.push(x))
-            }
-          } else {
-            console.log("[IN DECIMALS?]: " + (a in COMMON_DECIMALS));
-            const decimals: number = a in COMMON_DECIMALS ?
-              parseInt(COMMON_DECIMALS[a], 10) :
-              parseInt(await getDecimals(a), 10);
-            const data = [{ symbol: symbolArr[i], decimals, tokenAddress: a }];
-            await axios.post(baseUrl0x + `/history`, {
-                buyTokens: data,
-                startBlock: undefined,
-                stepSize,
-                stepCount
-              })
-              .then((response) => {
-                (response.data as any[]).forEach((d) => prices.push(d));
-              })
-              .catch((err) => console.log(err.response.data));
-          }
-        }),
-      );
-      return prices;
-    };
-  const pricesEnd = await addrRecurs(addresses, symbols, undefined);
-  console.log(pricesEnd);
-  */
 /* RETURNS:
     [
       {

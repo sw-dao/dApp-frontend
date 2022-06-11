@@ -9,7 +9,7 @@ const defaultCache = {
   maxAge: 60 * 1000,
 };
 
-axiosThrottle.use(axios, { requestsPerSecond: 50 });
+axiosThrottle.use(axios, { requestsPerSecond: 90 });
 
 const getCallToUrl = (
   url: URL,
