@@ -155,7 +155,7 @@ const processTSRes = async (res: any, past: boolean): Promise<number> => {
   if (data.length !== 0) {
     // console.log(data);
     const prices: { prices: number[] }[] = await getTokenPrice(data, past);
-    for (let index = 0; index < prices.length; index++) {
+    for (var index = 0; index < prices[0].prices.length; index++) {
       const address = data[index];
       const size = sizes[index];
       const price = prices[0].prices[index];
