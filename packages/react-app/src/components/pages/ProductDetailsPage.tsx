@@ -130,7 +130,7 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 							<PriceAndDateHeader
 								symbol={symbol}
 								address={product?.address}
-								change={change}
+								change={priceChange}
 								price={currentPrice}
 								date={Date.now()}
 								showZero={true}
