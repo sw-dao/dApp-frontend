@@ -30,6 +30,12 @@ export function PriceAndDateHeader(props: PriceAndDateHeaderProps): JSX.Element 
 		...rest
 	} = props;
 
+	function AddToMetamaskButton() {
+		if (address) {
+			return <AddToWalletButton address={address} symbol={symbol} />;
+		}
+		return null;
+	}
 	const dateFormat = showTime ? DATE_FORMAT_WITH_TIME : DATE_FORMAT;
 	const formattedDate = new Date(date).toLocaleDateString(undefined, dateFormat);
 
@@ -47,7 +53,7 @@ export function PriceAndDateHeader(props: PriceAndDateHeaderProps): JSX.Element 
 						<ChangeDisplay change={change} />
 					</Box>
 				)}
-				<AddToWalletButton address={address} symbol={symbol} />
+				<AddToMetamaskButton />
 			</Flex>
 		</Box>
 	);
