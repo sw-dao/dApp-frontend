@@ -123,8 +123,7 @@ export function SWDTokenPage(): JSX.Element {
 				<Heading>Passive Income</Heading>
 				<Text>
 					Holding SWD entitles the bearer to a share of SW DAO's profits &mdash; airdropped straight
-					to their wallets in USDC. The SWD dividend targets a 60% APY through on-chain management
-					fees.
+					to their wallets in USDC.
 				</Text>
 				<Text>
 					Holding SWD for extended periods will increase your share of the monthly dividend pool.
