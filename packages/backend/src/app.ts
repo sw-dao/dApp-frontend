@@ -16,6 +16,7 @@ import pricesRouter from "./routes/prices";
 import quotesRouter from "./routes/quotes";
 import signupRouter from "./routes/signup";
 import tokensRouter from "./routes/tokens";
+import portfolioRouter from "./routes/portfolio";
 import {
   subscribeToPricesTokensDailyUpdates,
   subscribeToPricesTokensHourlyUpdates,
@@ -68,7 +69,7 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   // Express Static just loves to cache, but this stops it.
-  res.set('Cache-Control', 'public, max-age=600');
+  res.set("Cache-Control", "public, max-age=600");
   next();
 });
 
@@ -80,6 +81,7 @@ app.use("/api/quotes", quotesRouter);
 app.use("/api/prices", pricesRouter);
 app.use("/api/tokens", tokensRouter);
 app.use("/api/signup", signupRouter);
+app.use("/api/portfolio", portfolioRouter);
 
 // catch all and send to React app
 app.use((req: Request, res: Response, next: NextFunction) => {
