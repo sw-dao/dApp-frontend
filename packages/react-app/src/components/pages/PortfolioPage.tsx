@@ -18,6 +18,7 @@ import { useQuery } from 'graphql-hooks';
 import { useQueryParams } from 'hookrouter';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { PRODUCTS } from '../../config/products';
 
 import { tokenDetailsForCurrentPeriod } from '../../state';
 import {
@@ -335,6 +336,7 @@ export function PortfolioPage(): JSX.Element {
 
 	const holdingsParams = useMemo(() => {
 		const skip = !userAddress;
+		console.log(userAddress);
 		return {
 			skip,
 			variables: {
