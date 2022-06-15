@@ -83,7 +83,7 @@ export function TokenHeader({
 				Price{sorts.price}
 			</Box>
 			<Box {...props} {...styles.change} cursor="pointer" onClick={() => onSort('change')}>
-				24h Change{sorts.change}
+				Change{sorts.change}
 			</Box>
 			<Box {...props} {...styles.chart}>
 				Chart

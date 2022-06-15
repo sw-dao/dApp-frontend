@@ -54,7 +54,6 @@ export default function PriceTableRow({
 	}, [isLarge, last]);
 
 	const details = useMemo(() => tokenDetails[symbol], [tokenDetails, symbol]);
-
 	const currentPrice: string = useMemo(() => {
 		let price = tokenDetails[symbol]?.currentPrice;
 		if (!price && row.prices.length > 0) {
@@ -73,6 +72,11 @@ export default function PriceTableRow({
 	}, [symbol]);
 
 	const change = useMemo(() => {
+		if (prices.length > 0) {
+			const cP = parseInt(currentPrice);
+			const p = parseInt(prices[0][1]);
+			return ((cP - p) / p) * 100;
+		}
 		return row?.changePercent1Day || details?.changePercent1Day || 0;
 	}, [details, row]);
 
