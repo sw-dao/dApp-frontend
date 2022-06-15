@@ -262,7 +262,7 @@ const getPricesTokensHourly = async (
               price: p.toString(),
               epoch: timestamps[i]
             };
-          }) as HourlyData[]
+          }).reverse() as HourlyData[]
         } as HourlyDataObj;
       });
     })
@@ -270,25 +270,6 @@ const getPricesTokensHourly = async (
       console.error("Hourly call failed with: " + e.message);
       return undefined;
     });
-/* RETURNS:
-    [
-      {
-        __typename: 'prices_tokens',
-        symbol: 'BTBTC',
-        tokenset: true,
-        minutes: [
-          [Object],
-        ]
-      },
-    ]
-
-    [Object] =
-    {
-      __typename: 'prices_minutes',
-      price: '104.56494563980499',
-      epoch: 1654644780
-    }
-*/
 };
 
 const getPricesTokensMinutes = async (
