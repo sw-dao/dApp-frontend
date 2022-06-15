@@ -1,11 +1,11 @@
 import axios from "axios";
 import { baseUrl0x } from "../../settings";
 import { Operations, Subscriptions, graphClient } from "../graph";
-import { ADDRESSES, COMMON_DECIMALS } from "../0x/main";
+import { ADDRESSES, COMMON_DECIMALS, getDecimals } from "../0x/main";
 import {
   AddressMap
 } from "../../types";
-import { web3, web3Infura } from "../../bin/www";
+import { web3 } from "../../bin/www";
 import { AbiItem } from "web3-utils";
 import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
@@ -17,19 +17,6 @@ import { isEmpty, isUndefined } from "lodash";
 // updateQuery?: UpdateQueryFn<TData, TSubscriptionVariables, TSubscriptionData>;
 // onError?: (error: Error) => void;
 // context?: DefaultContext;
-
-const getDecimals = async (addr: string): Promise<string> => {
-  const contract = new web3.eth.Contract(ERC20ABI as AbiItem[], addr);
-  const decimals: string = await contract.methods
-    .decimals()
-    .call((err: any, res: string) => {
-      if (err) {
-        console.log("An error occured", err);
-      }
-      return res;
-    });
-  return decimals;
-};
 
 const getPricesTokensDaily = async (
   symbols: string[],
@@ -69,6 +56,12 @@ interface TokenInfoZeroX {
 interface ZeroXReturn {
   symbol: string;
   prices: number[];
+}
+
+interface BlockStep {
+  block: number;
+  steps: number;
+  positions: any[] | undefined;
 }
 
 interface HourlyData {
@@ -111,28 +104,150 @@ const getPricesTokensHourly = async (
     }),
   );
   // Get info on timing/blocks.
-  const now = DateTime.now();
+  const thisBlock: number = Math.floor((await web3.eth.getBlockNumber()) / 1800) * 1800;
+  const now = DateTime.now().startOf('hour');
   const nowSeconds: number = Math.round(now.toSeconds());
-  const endSeconds: number = Math.round(now.minus({ day: +days }).toSeconds());
-  const stepCount: number = 20;
-  let stepTime: number = (nowSeconds - endSeconds) / stepCount;
-  const stepSize: number = Math.round(stepTime / 2.3);
+  const endSeconds: number = Math.round(now.minus({ day: days }).toSeconds());
+  const stepCount: number = 15;
+  let stepTime: number = (nowSeconds - endSeconds) / (stepCount - 1);
+  const stepSize: number = Math.round(stepTime / 2);
   stepTime = Math.round(stepTime);
   const timestamps: number[] = [];
   for (let i: number = 0; i <= stepCount; i++) {
     timestamps.push(nowSeconds - (stepTime * i));
   }
+  // TokenSets function.
+  const setPricing = async () => {
+    const fromBlock: number = thisBlock - (stepSize * stepCount);
+    return await Promise.all(
+      tokensSet.map(async (t) => {
+        const setContract = new web3.eth.Contract(TokenSetABI as AbiItem[], t.address);
+        let positionsCurrent = await setContract.methods.getPositions().call(thisBlock);
+        let blockLast: number;
+        const positionsMap = new Map<number, any[]>();
+        positionsMap.set(thisBlock, positionsCurrent);
+        // Find blocks where rebalances occur.
+        const changes: number[] = (await setContract.getPastEvents("Invoked", { fromBlock }))
+          .map((l) => { return l.blockNumber + 1 })
+          .filter((b, i: number) => {
+            if (i === 0) {
+              blockLast = b;
+              return true;
+            }
+            const blockDifferent: boolean = b !== blockLast;
+            blockLast = b;
+            if (b >= thisBlock) {
+              return false;
+            }
+            return blockDifferent;
+          })
+          .reverse()
+          .filter((b) => {
+            const p = setContract.methods.getPositions().call(b);
+            const positionsChanged: boolean = p !== positionsCurrent;
+            positionsCurrent = p;
+            if (positionsChanged) {
+              positionsMap.set(b, p);
+            }
+            return positionsChanged;
+          });
+        // Map rebalances to 0x calls.
+        const blockSteps: BlockStep[] = [];
+        let blockUnchanged: number = thisBlock;
+        let stepsSubtract: number = 0;
+        let j: number = 0;
+        changes.push(0);
+        let positions: any[] | undefined = positionsMap.get(thisBlock);
+        for (let i = 0; i <= stepCount; i++) {
+          const block: number = thisBlock - (i * stepSize);
+          if (changes[j] >= block) {
+            positions =
+              j === 0 ? positionsMap.get(thisBlock) : await positionsMap.get(changes[j - 1]);
+            blockSteps.push({
+              block: blockUnchanged,
+              steps: i - 1 - stepsSubtract,
+              positions
+            });
+            stepsSubtract = i;
+            while (changes[j] >= block) { j++; }
+            blockUnchanged = block;
+          }
+        }
+        blockSteps.push({
+          block: blockUnchanged,
+          steps: stepCount - stepsSubtract,
+          positions
+        });
+        const setPrices: ZeroXReturn = { symbol: t.symbol, prices: [] };
+        for (const step of blockSteps) {
+          const positionsLocal = step.positions as any[];
+          let hasUSDC: boolean = false;
+          const USDC: string = "0x2791bca1f2de4661ed88a30c99a7a9449aa84174";
+          const tokensDataPromise: Promise<TokenInfoZeroX>[] = positionsLocal
+            .filter((p: string[]) => {
+              const isUSDC: boolean = p[0].toLowerCase() === USDC;
+              if (isUSDC) { hasUSDC = true; }
+              return isUSDC ? false : true;
+            })
+            .map(async (p: string[], i: number) => {
+              const addr = p[0].toLowerCase();
+              const decimals: number = parseInt(addr in COMMON_DECIMALS ? COMMON_DECIMALS[addr] : await getDecimals(addr), 10);
+              return { symbol: i.toString(), decimals, tokenAddress: addr } as TokenInfoZeroX;
+            });
+          const tokensData = await Promise.all(tokensDataPromise);
+          const results: ZeroXReturn[] = await axios.post(baseUrl0x + `/history`, {
+            buyTokens: tokensData,
+            stepSize: step.steps !== 0 ? stepSize : undefined,
+            stepCount: step.steps !== 0 ? step.steps : undefined,
+            startBlock: step.block
+          }).then((res) => { return res.data as ZeroXReturn[] });
+          let amountUSDC: number = 0;
+          if (hasUSDC) {
+            const index = positionsLocal.findIndex((p) => p[0].toLowerCase() === USDC)
+            amountUSDC = positionsLocal[index][2] / 1e6;
+            const pricesUSDC: number[] = [];
+            for (let y = 0; y <= step.steps; y++) {
+              pricesUSDC.push(1);
+            }
+            results.push({symbol: "USDC", prices: pricesUSDC});
+          }
+          const localPrices: number[] = [];
+          results.forEach((r) => {
+            const isUSDC: boolean = r.symbol === "USDC";
+            const pi: number = isUSDC ? 0 : parseInt(r.symbol, 10);
+            const pd: number = isUSDC ? 6 : tokensData[pi].decimals;
+            const amount: number = isUSDC ?
+              amountUSDC :
+              positionsLocal.find((pl) => pl[0].toLowerCase() === tokensData[pi].tokenAddress)[2] / 10 ** pd;
+            r.prices.forEach((p, k: number) => {
+              const pf: number = p * amount;
+              if (isUndefined(localPrices[k])) {
+                localPrices[k] = pf;
+              } else {
+                localPrices[k] += pf;
+              }
+            })
+          });
+          localPrices.forEach((p) => setPrices.prices.push(p));
+        }
+        return setPrices;
+      })
+    );
+  };
   // Handle tokensets separately, and get prices for all raw tokens at once.
   return await Promise.all(
-    await axios.post(baseUrl0x + `/history`, {
-      buyTokens: tokensRawData,
-      startBlock: undefined,
-      stepSize,
-      stepCount
-    }).then((res) => { return res.data as ZeroXReturn[] }),
+    [
+      await axios.post(baseUrl0x + `/history`, {
+        buyTokens: tokensRawData,
+        stepSize,
+        stepCount,
+        startBlock: thisBlock
+      }).then((res) => { return res.data as ZeroXReturn[] }),
+      await setPricing()
+    ]
   )
-    .then((res: ZeroXReturn[]) => {
-      return res.map((t: ZeroXReturn) => {
+    .then((res: ZeroXReturn[][]) => {
+      return res.flat().filter((t) => !isEmpty(t)).map((t: ZeroXReturn) => {
         return {
           __typename: "prices_tokens",
           symbol: t.symbol,

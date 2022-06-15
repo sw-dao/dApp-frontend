@@ -23,7 +23,7 @@ if (
 
 console.log(`Setting port: ${PORT}`);
 export const serverPort: number = Number(PORT);
-export const defaultTimeOut: number = 2000;
+export const defaultTimeOut: number = 10000;
 export const defaultHeaders: OutgoingHttpHeaders = {
   "Content-Type": "application/json;charset=utf-8",
 };

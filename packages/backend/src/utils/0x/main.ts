@@ -4,7 +4,7 @@ import { AbiItem } from "web3-utils";
 import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
 import { baseUrl0x } from "../../settings";
-import { web3, web3Infura, checkConnection } from "../../bin/www";
+import { web3 } from "../../bin/www";
 export const ADDRESSES = [
   "0x25ad32265c9354c29e145c902ae876f6b69806f2", // # alpha portfolio
   "0x71b41b3b19aac53ca4063aec2d17fc3caeb38026", // # macro trend btc
@@ -60,8 +60,8 @@ const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
   let pastBlock: number | null = null;
   let token;
   if (past) {
-    token = new web3Infura.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
-    const latest: number = await web3Infura.eth.getBlockNumber();
+    token = new web3.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
+    const latest: number = await web3.eth.getBlockNumber();
     pastBlock = latest - 37565;
   } else {
     token = new web3.eth.Contract(TokenSetABI as AbiItem[], contractAddr);
@@ -77,7 +77,7 @@ const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
   return result;
 };
 
-const getDecimals = async (addr: string): Promise<string> => {
+export const getDecimals = async (addr: string): Promise<string> => {
   const contract = new web3.eth.Contract(ERC20ABI as AbiItem[], addr);
   const decimals: string = await contract.methods
     .decimals()
@@ -145,7 +145,7 @@ const getTokenPrice = async (
   }
   let startBlock: number | null = null;
   if (past) {
-    const latest: number = await web3Infura.eth.getBlockNumber();
+    const latest: number = await web3.eth.getBlockNumber();
     startBlock = latest - 37565;
   }
   const price = await axios
@@ -165,7 +165,6 @@ const getTokenPrice = async (
 
 // Main function => Get TokenSet Positions, parse to processTSRes and then print result
 const getTokenSetPrice = async (address: string, past: boolean) => {
-  checkConnection(false);
   if (ADDRESSES.includes(address.toLowerCase())) {
     // for (const address of ADDRESSES) {
     const result = await getTokenSetPositions(address, past)
@@ -192,7 +191,6 @@ const getTotalSupply = async (address: string) => {
   });
 };
 const getPrices = async (address: string) => {
-  checkConnection(false);
   const currentPrice = await getTokenSetPrice(address, false);
   const changePercentDay = await getTokenSetPrice(address, true);
   const totalSupply = await getTotalSupply(address);

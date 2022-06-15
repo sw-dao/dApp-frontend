@@ -93,7 +93,7 @@ export const DATE_FORMAT_WITH_TIME: DateFormat = {
 	minute: 'numeric',
 };
 
-export const TIMEOUT = 10000;
+export const TIMEOUT = 60000;
 
 export const TOAST_TIMEOUT_ALERT = 6000;
 export const TOAST_TIMEOUT_INFO = 3000;

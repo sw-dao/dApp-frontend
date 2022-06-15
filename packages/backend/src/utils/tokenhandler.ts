@@ -122,7 +122,7 @@ const getTokenPriceData = async (
   } else if (+days === 7 || +days === 30) {
     const hourlyPrices = await getPricesTokensHourly(
       tokens,
-      parseInt(days, 10)
+      +days
     );
 
     if (hourlyPrices) {
