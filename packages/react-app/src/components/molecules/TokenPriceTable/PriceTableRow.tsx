@@ -73,8 +73,8 @@ export default function PriceTableRow({
 
 	const change = useMemo(() => {
 		if (prices.length > 0) {
-			const cP = parseInt(currentPrice);
-			const p = parseInt(prices[0][1]);
+			const cP = parseFloat(currentPrice);
+			const p = parseFloat(prices[0][1]);
 			return ((cP - p) / p) * 100;
 		}
 		return row?.changePercent1Day || details?.changePercent1Day || 0;

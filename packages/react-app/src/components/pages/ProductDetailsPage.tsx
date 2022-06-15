@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useWindowSize } from '../../hooks/useWindowSize';
 import { extendedTokenDetailsState, periodState, tokenDetailsForCurrentPeriod } from '../../state';
-import { TokenDetails } from '../../types';
+import { ChartData, TokenDetails } from '../../types';
 import { getOverriddenDetails } from '../../utils';
 import { HoveringArrowLink } from '../molecules/HoveringArrowLink';
 import { PriceAndDateHeader } from '../molecules/PriceAndDateHeader';
@@ -33,7 +33,18 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const detailMap = useRecoilValue(extendedTokenDetailsState);
 
+	const [prices, setPrices] = useState<ChartData>([]); // SWD prices
+
 	const [product, setProduct] = useState<TokenDetails | null>(null);
+
+	useEffect(() => {
+		if (tokenDetails) {
+			const product = tokenDetails[symbol];
+			if (product) {
+				setPrices(product.prices);
+			}
+		}
+	}, [period, prices, symbol, tokenDetails]);
 
 	useEffect(() => {
 		if (tokenPrices) {
@@ -90,7 +101,15 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 		[windowSize],
 	);
 
-	const change = useMemo(() => product?.changePercent1Day || 0, [product]);
+	const change = useMemo(() => {
+		if (prices.length > 0) {
+			const cP = currentPrice;
+			const p = parseFloat(prices[0][1]);
+			console.log(symbol, cP, p);
+			return ((cP - p) / p) * 100;
+		}
+		return priceChange || product?.changePercent1Day || 0;
+	}, [product, currentPrice, prices]);
 
 	const swdDetailCells = [
 		<TokenDetailBox
@@ -130,7 +149,7 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 							<PriceAndDateHeader
 								symbol={symbol}
 								address={product?.address}
-								change={priceChange}
+								change={change}
 								price={currentPrice}
 								date={Date.now()}
 								showZero={true}
