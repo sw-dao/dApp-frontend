@@ -30,10 +30,7 @@ const getPricesTokensDaily = async (
       query: Operations.getTokenPricesDaily,
       variables: { symbols, from: fromEpoch, to: toEpoch, chainId },
     })
-    .then((res) => {
-      console.log(res);
-      return res.data.prices_tokens;
-    })
+    .then((res) => res.data.prices_tokens)
     .catch((e) => {
       console.error(
         `[pricesGraph] error getting daily price data ${e.message}`

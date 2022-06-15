@@ -101,7 +101,8 @@ const getTokenPriceData = async (
             aggregatePricesForSymbol = pricesBySymbol
               .map((pricesTypes) => pricesTypes?.minutes)
               .reduce((result, item) => result.concat(item), [])
-              .map((price: any) => fixPriceValues(price));
+              .map((price: any) => fixPriceValues(price))
+              .reverse();
           }
 
           console.log(
