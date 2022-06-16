@@ -10,6 +10,7 @@ import express, {
   static as staticExpress,
   urlencoded,
 } from "express";
+import compression from "compression";
 import { join } from "path";
 
 import pricesRouter from "./routes/prices";
@@ -51,6 +52,7 @@ const app = express();
 // Adding in the middleware
 // TODO clean up middlewares
 app.use(logger("dev")); // Logging framework
+app.use(compression());
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -68,7 +70,7 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   // Express Static just loves to cache, but this stops it.
-  res.set('Cache-Control', 'public, max-age=600');
+  res.set("Cache-Control", "no-store");
   next();
 });
 
