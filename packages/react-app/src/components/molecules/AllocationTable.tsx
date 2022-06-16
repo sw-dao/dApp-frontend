@@ -229,7 +229,13 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 	}, [breakpoint, isConnected, positionMap]);
 
 	return (
-		<Table variant="unstyled" bgColor="transparent" className="token" fontSize="0.9rem">
+		<Table
+			variant="unstyled"
+			bgColor="blue5"
+			className="token"
+			fontSize="0.9rem"
+			borderRadius="2em"
+		>
 			<Thead>
 				<Tr color="alttext" textAlign="center">
 					<Th textAlign="center" bgColor="bodydark" borderRadius="2em 0 0 0">

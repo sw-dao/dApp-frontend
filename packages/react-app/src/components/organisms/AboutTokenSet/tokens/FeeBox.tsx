@@ -79,7 +79,17 @@ export default function FeeBox({ data, details, symbol, ...rest }: FeeBoxProps):
 
 	return (
 		<Box {...rest}>
-			<Heading>Fees</Heading>
+			<Heading
+				secondary
+				textAlign="center"
+				ref={(node: any) => {
+					if (node) {
+						node.style.setProperty('text-align', 'center', 'important');
+					}
+				}}
+			>
+				Fees
+			</Heading>
 			<Center>
 				<HStack>
 					<Box width="8rem" maxWidth="8rem" minWidth="8rem" color="white">
