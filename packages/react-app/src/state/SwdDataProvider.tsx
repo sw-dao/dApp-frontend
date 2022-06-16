@@ -114,12 +114,13 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 				promiseImplementation: Promise,
 			});
 			const xMap: ExtendedTokenDetailsMap = {};
-			const detailReqs = tokenKeys.map((symbol) =>
-				promiseThrottle.add(() =>
+			const detailReqs = tokenKeys.map(
+				(symbol) =>
+					// promiseThrottle.add(() =>
 					getExtendedTokenDetails(cId, symbol).then((detail) => {
 						xMap[symbol] = detail;
 					}),
-				),
+				// ),
 			);
 			Promise.all(detailReqs).then(() => {
 				// setLoadedExtended(cId);
@@ -219,9 +220,9 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 						}
 					});
 				});
-				const promises = jobs.map((job) => promiseThrottle.add(() => job));
+				// const promises = jobs.map((job) => promiseThrottle.add(() => job));
 
-				Promise.all(promises).then(() => {
+				Promise.all(jobs).then(() => {
 					// console.log(`Updated ${periodsNeeded.join(', ')}`);
 					setUpdating(false);
 				});
