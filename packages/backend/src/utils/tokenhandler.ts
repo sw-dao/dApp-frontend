@@ -102,7 +102,7 @@ const getTokenPriceData = async (
               .map((pricesTypes) => pricesTypes?.minutes)
               .reduce((result, item) => result.concat(item), [])
               .map((price: any) => fixPriceValues(price))
-              .reverse();
+              .sort((a: any, b: any) => a[0] - b[0]);
           }
 
           console.log(
@@ -170,7 +170,8 @@ const getTokenPriceData = async (
             aggregatePricesForSymbol = pricesBySymbol
               .map((pricesTypes) => pricesTypes?.dailies)
               .reduce((result, item) => result.concat(item), [])
-              .map((price: any) => fixPriceValues(price));
+              .map((price: any) => fixPriceValues(price))
+              .sort((a: any, b: any) => a[0] - b[0]);
           }
 
           console.log(
