@@ -50,8 +50,8 @@ async function getPrices(componentTokens: TokenSummaryInfoMap, chainId: string) 
 			if (data && data.success) {
 				const { market_data } = data.data;
 				const pair: [number, number] = [
-					market_data.current_price.usd,
-					market_data.price_change_percentage_24h,
+					market_data.current_price.usd | 0,
+					market_data.price_change_percentage_24h | 0,
 				];
 				prices[sym] = pair;
 			}

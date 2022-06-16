@@ -125,7 +125,7 @@ const getPricesTokensHourly = async (
         positionsMap.set(thisBlock, positionsCurrent);
         // Find blocks where rebalances occur.
         const changes: number[] = (await setContract.getPastEvents("Invoked", { fromBlock }))
-          .map((l) => { return l.blockNumber + 1 })
+          .map((l) => { return l.blockNumber - 1 })
           .filter((b, i: number) => {
             if (i === 0) {
               blockLast = b;
@@ -170,6 +170,8 @@ const getPricesTokensHourly = async (
             blockUnchanged = block;
           }
         }
+        positions =
+          j === 0 ? positionsMap.get(thisBlock) : await positionsMap.get(changes[j - 1]);
         blockSteps.push({
           block: blockUnchanged,
           steps: stepCount - stepsSubtract,
