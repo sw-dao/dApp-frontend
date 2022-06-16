@@ -55,10 +55,10 @@ export default function PriceTableRow({
 
 	const details = useMemo(() => tokenDetails[symbol], [tokenDetails, symbol]);
 	const currentPrice: string = useMemo(() => {
-		let price = tokenDetails[symbol]?.currentPrice;
-		if (!price && row.prices.length > 0) {
-			price = parseFloat(row.prices[row.prices.length - 1][1]);
-		}
+		const price = tokenDetails[symbol]?.currentPrice;
+		// if (!price && row.prices.length > 0) {
+		// 	price = parseFloat(row.prices[row.prices.length - 1][1]);
+		// }
 		return price ? price.toFixed(2) : '0.0';
 	}, [row.prices, symbol, tokenDetails]);
 
@@ -72,6 +72,9 @@ export default function PriceTableRow({
 	}, [symbol]);
 
 	const change = useMemo(() => {
+		if (currentPrice == '0.0') {
+			return 0;
+		}
 		if (prices.length > 0) {
 			const cP = parseFloat(currentPrice);
 			const p = parseFloat(prices[0][1]);
@@ -95,9 +98,20 @@ export default function PriceTableRow({
 
 	const noData = useMemo(
 		() =>
-			breakpoint === 'sm' || breakpoint === 'md' ? <></> : <Tooltip label="no data">---</Tooltip>,
+			breakpoint === 'sm' || breakpoint === 'md' ? (
+				<></>
+			) : (
+				<Tooltip label="Loading...">---</Tooltip>
+			),
 		[breakpoint],
 	);
+
+	const isZero = (input: string | number) => {
+		if (input == 0 || input == '0.0') {
+			return true;
+		}
+		return false;
+	};
 
 	return (
 		<Flex
@@ -120,10 +134,10 @@ export default function PriceTableRow({
 				{row.symbol}
 			</Box>
 			<Box textAlign="center" {...styles.price}>
-				{row.isFake ? noData : `$${currentPrice}`}
+				{isZero(currentPrice) ? noData : `$${currentPrice}`}
 			</Box>
 			<Box {...styles.change}>
-				<ChangeWrapper>{row.isFake ? noData : <ChangeDisplay change={change} />}</ChangeWrapper>
+				<ChangeWrapper>{isZero(change) ? noData : <ChangeDisplay change={change} />}</ChangeWrapper>
 			</Box>
 			<Box p="0" {...chartStyles}>
 				{prices ? (
