@@ -114,12 +114,13 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 				promiseImplementation: Promise,
 			});
 			const xMap: ExtendedTokenDetailsMap = {};
-			const detailReqs = tokenKeys.map((symbol) =>
-				promiseThrottle.add(() =>
+			const detailReqs = tokenKeys.map(
+				(symbol) =>
+					// promiseThrottle.add(() =>
 					getExtendedTokenDetails(cId, symbol).then((detail) => {
 						xMap[symbol] = detail;
 					}),
-				),
+				// ),
 			);
 			Promise.all(detailReqs).then(() => {
 				// setLoadedExtended(cId);

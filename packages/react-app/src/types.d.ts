@@ -227,6 +227,10 @@ export interface PortfolioTokenDetails {
 	icon?: string;
 }
 
+export interface PortfolioHoldings {
+	[addr: string]: number;
+}
+
 export interface ExtendedTokenDetails {
 	symbol: string;
 	address: string;

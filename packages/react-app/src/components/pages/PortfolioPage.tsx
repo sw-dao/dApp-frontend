@@ -19,10 +19,12 @@ import { useQueryParams } from 'hookrouter';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
+import { getPositions } from '../../services/backend';
 
-import { tokenDetailsForCurrentPeriod } from '../../state';
+import { extendedTokenDetailsState, tokenDetailsForCurrentPeriod } from '../../state';
 import {
 	ChartData,
+	ExtendedTokenDetailsMap,
 	Holding,
 	PortfolioTokenDetails,
 	TokenDetails,
@@ -174,21 +176,6 @@ function holdingsListToMap(holdings: Holding[]) {
 	return map;
 }
 
-const valueOfHolding = (
-	symbol: string,
-	amount: number,
-	timestamp: string,
-	tokens: TokenDetailsMap,
-) => {
-	const prices = tokens[symbol].prices;
-	if (!prices) {
-		console.warn(`No prices for token: ${symbol}`);
-	}
-	const price = findBestPrice(prices, timestamp);
-	const total = amount * price;
-	return total;
-};
-
 interface HoldingsHistory {
 	[key: string]: number;
 }
@@ -199,11 +186,11 @@ interface HoldingsHistoryMap {
 
 type HoldingsHistoryArray = [string, HoldingsHistory][];
 
-function holdingsToHistory(holdings: HoldingsMap, tokens: TokenDetailsMap): ChartData {
+function holdingsToHistory(holdings: HoldingsMap, detailMap: ExtendedTokenDetailsMap): ChartData {
 	const history: HoldingsHistoryMap = {};
 
 	Object.keys(holdings).forEach((key) => {
-		const token = tokens[key];
+		const token = detailMap[key];
 		const { symbol } = token;
 		holdings[key].forEach((holding) => {
 			const { timestamp, balance } = holding;
@@ -254,7 +241,7 @@ function holdingsToHistory(holdings: HoldingsMap, tokens: TokenDetailsMap): Char
 	const fullTotals: ChartData = full.map((h) => {
 		const [timestamp, holdings] = h;
 		const total = Object.keys(holdings).reduce(
-			(acc, key) => acc + valueOfHolding(key, holdings[key], timestamp, tokens),
+			(acc, key) => acc + valueOfHolding(key, holdings[key], detailMap),
 			0,
 		);
 		return [parseInt(timestamp), total + ''];
@@ -317,12 +304,57 @@ interface HoldingsQueryResults {
 	refetch: () => void;
 }
 
+const valueOfHolding = (
+	symbol: string,
+	amount: number,
+	// timestamp: string,
+	detailMap: ExtendedTokenDetailsMap,
+) => {
+	const price = detailMap[symbol].currentPrice;
+	if (!price) {
+		console.warn(`No prices for token: ${symbol}`);
+	}
+	// const price = findBestPrice(prices, timestamp);
+	const total = amount * price;
+	return total;
+};
+
 export function PortfolioPage(): JSX.Element {
 	const [query] = useQueryParams();
 	const { address } = query; // TODO: remove after testing
-
+	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>([]);
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
+	const [timeout, setTimeout] = useState(0);
+	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
+
 	const { address: walletAddress } = useWallet();
+
+	const userHoldings: PortfolioTokenDetails[] = [];
+	if (walletAddress && new Date().getTime() - timeout > 10000) {
+		setTimeout(new Date().getTime());
+		getPositions(walletAddress).then((holdings) => {
+			for (const e in holdings) {
+				// console.log(holdings, holdings[e], detailMap);
+				userHoldings.push({
+					amount: holdings[e].toString(),
+					price: '0', //detailMap[e].currentPrice.toString()
+					total: 0, //holdings[e] * detailMap[e].currentPrice
+					name: '',
+					symbol: e,
+					timestamp: '',
+				});
+			}
+			setUserHolding(userHoldings);
+		});
+	}
+	let balance = 0;
+	if (detailMap.SWD) {
+		userHolding.forEach((h) => {
+			h.price = detailMap[h.symbol].currentPrice.toString();
+			h.total = parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
+			balance += parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
+		});
+	}
 
 	const [loadDate, setLoadDate] = useState(Date.now());
 	const priceChange = 0;
@@ -336,7 +368,6 @@ export function PortfolioPage(): JSX.Element {
 
 	const holdingsParams = useMemo(() => {
 		const skip = !userAddress;
-		console.log(userAddress);
 		return {
 			skip,
 			variables: {
@@ -345,6 +376,7 @@ export function PortfolioPage(): JSX.Element {
 		};
 	}, [userAddress]);
 
+	console.log(tokenDetails, walletAddress);
 	const {
 		data: holdingsData,
 		loading: holdingsLoading,
@@ -439,19 +471,19 @@ export function PortfolioPage(): JSX.Element {
 						<Box textAlign="left">
 							<Heading fontSize="2rem">
 								Portfolio Balance
-								<ReloadIcon
+								{/* <ReloadIcon
 									color="bodytext"
 									onClick={handleReload}
 									d="inline-block"
 									ml="1rem"
 									fontSize="1.25rem"
 									cursor="pointer"
-								/>
+								/> */}
 							</Heading>
 						</Box>
 						<PriceAndDateHeader
 							symbol="PORTFOLIO"
-							price={currentBalance}
+							price={balance}
 							change={priceChange}
 							date={loadDate}
 							showTime={true}
@@ -492,7 +524,7 @@ export function PortfolioPage(): JSX.Element {
 								borderColor="#120046"
 							>
 								<TabPanel p="0">
-									<HoldingsTable first={false} loading={holdingsLoading} holdings={holdings} />
+									<HoldingsTable first={false} loading={holdingsLoading} holdings={userHolding} />
 								</TabPanel>
 								<TabPanel p="0">
 									<TransactionsTable
