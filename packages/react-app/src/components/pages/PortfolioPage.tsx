@@ -19,7 +19,7 @@ import { useQueryParams } from 'hookrouter';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
-import { getPositions } from '../../services/backend';
+import { getPositions, getTxHistory } from '../../services/backend';
 
 import { extendedTokenDetailsState, tokenDetailsForCurrentPeriod } from '../../state';
 import {
@@ -29,6 +29,7 @@ import {
 	PortfolioTokenDetails,
 	TokenDetails,
 	TokenDetailsMap,
+	Transaction,
 } from '../../types';
 import { getOverriddenDetails, timestampSorter } from '../../utils';
 import { findBestPrice } from '../../utils';
@@ -323,6 +324,7 @@ export function PortfolioPage(): JSX.Element {
 	const [query] = useQueryParams();
 	const { address } = query; // TODO: remove after testing
 	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>([]);
+	const [txHistory, setTxHistory] = useState<Transaction[]>([]);
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const [timeout, setTimeout] = useState(0);
 	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
@@ -332,6 +334,9 @@ export function PortfolioPage(): JSX.Element {
 	const userHoldings: PortfolioTokenDetails[] = [];
 	if (walletAddress && new Date().getTime() - timeout > 10000) {
 		setTimeout(new Date().getTime());
+		getTxHistory(walletAddress).then((h) => {
+			setTxHistory(h);
+		});
 		getPositions(walletAddress).then((holdings) => {
 			for (const e in holdings) {
 				// console.log(holdings, holdings[e], detailMap);
@@ -544,7 +549,7 @@ export function PortfolioPage(): JSX.Element {
 								<TabPanel p="0">
 									<TransactionsTable
 										first={false}
-										transactions={transactions}
+										transactions={txHistory}
 										loading={holdingsLoading}
 									/>
 								</TabPanel>

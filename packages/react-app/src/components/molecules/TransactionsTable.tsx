@@ -1,4 +1,5 @@
 import { Box, Image, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { A } from 'hookrouter';
 import React from 'react';
 
 import { getTokenUrl, timestampSorter } from '../../utils';
@@ -12,13 +13,12 @@ const formatDate = (timestamp: string): string => {
 };
 
 interface RowProps {
-	symbol: string;
-	txId: string;
-	to: string;
-	from: string;
-	timestamp: string;
-	amount: number;
-	icon: string;
+	timestamp: string | number;
+	fromSymbol: string;
+	fromAmount: number;
+	toSymbol: string;
+	toAmount: number;
+	transactionHash: string;
 }
 
 interface TableRowProps {
@@ -38,20 +38,27 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 	if (!last) {
 		props.borderBottom = '2px solid #120046';
 	}
-	const icon = row.icon || getTokenUrl(row.symbol)[0];
+	const icon = getTokenUrl(row.toSymbol)[0];
+	const url = `https://polygonscan.com/tx/` + row.transactionHash;
 	return (
 		<Tr {...props}>
-			<Td>{formatDate(row.timestamp)}</Td>
 			<Td>
-				<EtherscanLink tx={row.txId} />
+				<a href={url} target="_blank">
+					<Text as="span" color={'#2089fd'}>
+						{formatDate(row.timestamp.toString())}
+					</Text>
+				</a>
 			</Td>
 			<Td>
-				<EtherscanLink address={row.to} />
+				{safeFixed(row.fromAmount, 4)} {row.fromSymbol}
 			</Td>
 			<Td>
+				{safeFixed(row.toAmount, 4)} {row.toSymbol}
+			</Td>
+			{/* <Td>
 				<EtherscanLink address={row.from} />
-			</Td>
-			<Td>
+			</Td> */}
+			{/* <Td>
 				<Image
 					d="inline-block"
 					h="1.8rem"
@@ -59,10 +66,9 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 					fontSize="0.9rem"
 					align="left center"
 					src={icon}
-					alt={`${row.symbol} logo`}
+					alt={`${row.toSymbol} logo`}
 				/>
-				{safeFixed(row.amount, 8)} {row.symbol}
-			</Td>
+			</Td> */}
 		</Tr>
 	);
 }
@@ -90,17 +96,17 @@ function TokenHeader({ first = true }): JSX.Element {
 				Date
 			</Th>
 			<Th bgColor="lightline" {...middleProps}>
-				Transaction
+				From
 			</Th>
 			<Th bgColor="lightline" {...middleProps}>
 				To
 			</Th>
-			<Th bgColor="lightline" {...middleProps}>
+			{/* <Th bgColor="lightline" {...middleProps}>
 				From
 			</Th>
 			<Th bgColor="lightline" {...lastProps}>
 				Value
-			</Th>
+			</Th> */}
 		</Tr>
 	);
 }
@@ -135,7 +141,7 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		);
 	} else {
 		const lastIx = transactions.length - 1;
-		transactions.sort((a, b) => timestampSorter(b.timestamp, a.timestamp));
+		transactions.sort((a, b) => timestampSorter(b.timestamp.toString(), a.timestamp.toString()));
 		rows = transactions.map((row, ix) => <TableRow key={ix} row={row} last={ix === lastIx} />);
 	}
 

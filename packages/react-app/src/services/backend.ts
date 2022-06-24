@@ -171,7 +171,7 @@ export const getTxHistory = async (address: string): Promise<Transaction[]> => {
 	return request
 		.get(`/api/portfolio/history/${address}`)
 		.then((res) => {
-			return res;
+			return res['data'];
 		})
 		.catch(handleError);
 };
