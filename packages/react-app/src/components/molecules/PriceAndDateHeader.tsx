@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { utils } from 'ethers';
 import React from 'react';
 
 import { DATE_FORMAT, DATE_FORMAT_WITH_TIME } from '../../config';
@@ -46,7 +47,7 @@ export function PriceAndDateHeader(props: PriceAndDateHeaderProps): JSX.Element 
 			</Text>
 			<Flex direction="row" spacing="1rem" width="100%" pos="relative">
 				<Text alignSelf="flex-end" color="white" fontSize="2rem">
-					${safeFixed(price, 2)}
+					${utils.commify(safeFixed(price, 2))}
 				</Text>
 				{(change > 0 || change < 0 || showZero) && (
 					<Box className={change > 0.0 ? 'change positive' : 'change negative'}>
