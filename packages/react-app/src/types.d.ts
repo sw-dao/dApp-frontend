@@ -231,6 +231,15 @@ export interface PortfolioHoldings {
 	[addr: string]: number;
 }
 
+export interface Transaction {
+	timestamp: string | number;
+	fromSymbol: string;
+	fromAmount: number;
+	toSymbol: string;
+	toAmount: number;
+	transactionHash: string;
+}
+
 export interface ExtendedTokenDetails {
 	symbol: string;
 	address: string;
