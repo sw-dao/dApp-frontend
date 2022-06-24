@@ -348,16 +348,31 @@ export function PortfolioPage(): JSX.Element {
 		});
 	}
 	let balance = 0;
-	if (detailMap.SWD) {
+	let oldBalance = 0;
+	let priceChange = 0;
+	if (detailMap.SWD && tokenDetails.SWD) {
 		userHolding.forEach((h) => {
 			h.price = detailMap[h.symbol].currentPrice.toString();
 			h.total = parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
 			balance += parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
+			oldBalance += parseFloat(h.amount) * parseFloat(tokenDetails[h.symbol].prices[0][1]);
 		});
+		const cP = balance;
+		const p = oldBalance;
+		priceChange = ((cP - p) / p) * 100;
 	}
 
+	// const priceChange = useMemo(() => {
+	// 	if (prices.length > 0) {
+	// 		const cP = parseInt(currentPrice);
+	// 		const p = parseInt(prices[0][1]);
+	// 		return ((cP - p) / p) * 100;
+	// 	}
+	// 	return row?.changePercent1Day || details?.changePercent1Day || 0;
+	// }, [details, row]);
+
 	const [loadDate, setLoadDate] = useState(Date.now());
-	const priceChange = 0;
+	// const priceChange = 0;
 
 	const userAddress = useMemo(() => {
 		if (address) {
@@ -487,7 +502,7 @@ export function PortfolioPage(): JSX.Element {
 							change={priceChange}
 							date={loadDate}
 							showTime={true}
-							showZero={false}
+							showZero={true}
 						/>
 						<TokenChart
 							symbol="Total"
@@ -495,7 +510,7 @@ export function PortfolioPage(): JSX.Element {
 							onDateChange={noop}
 							size={[100, 500]}
 							heading={{ textAlign: 'center', id: 'chartHead' }}
-							period="1Y"
+							period="1D"
 							allowChangePeriod={false}
 							showComparison={false}
 						/>
