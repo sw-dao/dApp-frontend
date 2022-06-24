@@ -99,6 +99,7 @@ const TokenProducts: ProductAddressMap = {
     SWEYF: "0x8fcdd8372b5bcd27524546ad02b198c899d8ab2a",
     SWMYF: "0x2C9227bf5FC806f94601eCAf5BC027CAd801b3B6",
     SWYF: "0xdc8d88d9e57cc7be548f76e5e413c4838f953018",
+    SWX: "0x24ec3c300ff53b96937c39b686844db9e471421e",
   },
   "0x13881": {
     SWAP: "0x1",

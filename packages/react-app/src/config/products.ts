@@ -9,6 +9,7 @@ import { NftCollections } from '../components/organisms/AboutTokenSet/tokens/Nft
 import { PeiToken } from '../components/organisms/AboutTokenSet/tokens/PeiToken';
 import { QmTokens } from '../components/organisms/AboutTokenSet/tokens/QmTokens';
 import { SwapToken } from '../components/organisms/AboutTokenSet/tokens/SwapToken';
+import { SwxToken } from '../components/organisms/AboutTokenSet/tokens/SwxToken';
 import { SwyfToken } from '../components/organisms/AboutTokenSet/tokens/SwyfToken';
 import { ProductSetupDescription } from '../types';
 
@@ -114,7 +115,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// {
 	// 	name: 'Discretionary ETH',
 	// 	symbol: 'DETH',
-	// 	addresses: { '0x89': '0x72b467cacbdbec5918d8eec0371ca33e6fd42421' },
+	// 	addresses: { '0x89': '0x72b467cacbdbec5918d8eec0371ca33e6xfd42421' },
 	// 	is_tokenset: true,
 	// 	category: 'STRATEGIES',
 	// 	yearly_fee: '10',
@@ -183,6 +184,15 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// 	yearly_fee: '3',
 	// 	detail_pane: MiTokens,
 	// },
+	{
+		name: 'SW Index',
+		symbol: 'SWX',
+		addresses: { '0x89': '0x24ec3c300ff53b96937c39b686844db9e471421e' },
+		is_tokenset: true,
+		category: 'INDICES',
+		yearly_fee: '1',
+		detail_pane: SwxToken,
+	},
 	// {
 	// 	name: 'Polygon Ecosystem Index',
 	// 	symbol: 'PEI',
