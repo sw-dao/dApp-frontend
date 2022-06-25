@@ -40,21 +40,69 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 	}
 	const icon = getTokenUrl(row.toSymbol)[0];
 	const url = `https://polygonscan.com/tx/` + row.transactionHash;
+	let t = '';
+	let action = '';
+	let tIcon = '';
+	if (row.fromAmount > 0 && row.toAmount > 0) {
+		t = 'Exchange';
+		tIcon = '/images/portfolio/exchange-circle.png';
+		action = `${safeFixed(row.fromAmount, 4)} ${row.fromSymbol} for ${safeFixed(row.toAmount, 4)} ${
+			row.toSymbol
+		} `;
+	}
+	if (row.fromSymbol === 'SWX') {
+		t = 'Bond Issuance';
+		tIcon = '/images/portfolio/plus-circle.png';
+		action = `Deposited ${safeFixed(row.fromAmount, 4)} ${row.fromSymbol}`;
+	}
+	if (t === '' && row.fromAmount > 0 && row.toAmount <= 0) {
+		t = 'Transfer';
+		tIcon = '/images/portfolio/send.png';
+		action = `Send ${safeFixed(row.fromAmount, 4)} ${row.fromSymbol}`;
+	}
+	if (t === '' && row.fromAmount <= 0 && row.toAmount > 0) {
+		t = 'Transfer';
+		tIcon = '/images/portfolio/recieve.png';
+		action = `Recieved ${safeFixed(row.toAmount, 4)} ${row.toSymbol}`;
+	}
 	return (
 		<Tr {...props}>
 			<Td>
-				<a href={url} target="_blank">
-					<Text as="span" color={'#2089fd'}>
-						{formatDate(row.timestamp.toString())}
-					</Text>
+				<Text as="span">{formatDate(row.timestamp.toString())}</Text>
+			</Td>
+			<Td>
+				{tIcon != '' ? (
+					<Image
+						d="inline-block"
+						h="1.8rem"
+						pr=".5rem"
+						fontSize="0.3rem"
+						align="left center"
+						src={tIcon}
+						alt={`${t} Icon`}
+					/>
+				) : (
+					''
+				)}
+			</Td>
+			<Td>{t}</Td>
+			<Td>{action}</Td>
+			<Td>
+				<a color={'#2089fd'} href={url} target="_blank">
+					<Image
+						d="inline-block"
+						h="1.8rem"
+						pr=".5rem"
+						fontSize="0.3rem"
+						align="left center"
+						src="/images/portfolio/link.png"
+						alt={`Tx-link Icon`}
+					/>
 				</a>
 			</Td>
-			<Td>
-				{safeFixed(row.fromAmount, 4)} {row.fromSymbol}
-			</Td>
-			<Td>
-				{safeFixed(row.toAmount, 4)} {row.toSymbol}
-			</Td>
+			{/* <Td>
+				{row.toAmount > 0 ? safeFixed(row.toAmount, 4) : 'Send'} {row.toSymbol}
+			</Td> */}
 			{/* <Td>
 				<EtherscanLink address={row.from} />
 			</Td> */}
@@ -96,11 +144,20 @@ function TokenHeader({ first = true }): JSX.Element {
 				Date
 			</Th>
 			<Th bgColor="lightline" {...middleProps}>
-				From
+				{' '}
 			</Th>
 			<Th bgColor="lightline" {...middleProps}>
-				To
+				Type
 			</Th>
+			<Th bgColor="lightline" {...middleProps}>
+				Action
+			</Th>
+			<Th bgColor="lightline" {...lastProps}>
+				{' '}
+			</Th>
+			{/* <Th bgColor="lightline" {...lastProps}>
+				To
+			</Th> */}
 			{/* <Th bgColor="lightline" {...middleProps}>
 				From
 			</Th>
