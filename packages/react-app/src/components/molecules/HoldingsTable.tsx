@@ -1,6 +1,8 @@
 import { Box, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { utils } from 'ethers';
+import { A } from 'hookrouter';
 import React from 'react';
+import { PRODUCTS } from '../../config/products';
 
 import { PortfolioTokenDetails } from '../../types';
 import { getTokenUrl } from '../../utils';
@@ -29,11 +31,19 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 		props.borderBottom = '2px solid #120046';
 	}
 	const icon = row.icon || getTokenUrl(row.symbol)[0];
-
+	let name = '';
+	PRODUCTS.forEach((e) => {
+		if (e.symbol == row.symbol) name = e.name;
+	});
 	return (
 		<Tr {...props}>
-			<CoinLabelCell icon={icon} symbol={row.symbol} name={row.name} url={productUrl} />
-			<Td>{utils.commify(safeFixed(row.amount, 8))}</Td>
+			<CoinLabelCell icon={icon} symbol={row.symbol} name={name} url={productUrl} />
+			<Td>
+				<A href={productUrl}>
+					<Text className="symbol">{row.symbol.toUpperCase()}</Text>
+				</A>
+			</Td>
+			<Td>{utils.commify(safeFixed(row.amount, 4))}</Td>
 			<Td>${utils.commify(safeFixed(row.price, 2))}</Td>
 			<Td>${utils.commify(safeFixed(row.total, 2))}</Td>
 		</Tr>
@@ -61,6 +71,9 @@ function TokenHeader({ first = true }) {
 		<Tr>
 			<Th bgColor="lightline" {...firstProps}>
 				Name
+			</Th>
+			<Th bgColor="lightline" {...middleProps}>
+				Ticker
 			</Th>
 			<Th bgColor="lightline" {...middleProps}>
 				Amount
