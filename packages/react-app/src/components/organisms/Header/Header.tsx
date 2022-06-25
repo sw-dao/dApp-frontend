@@ -57,7 +57,8 @@ export function Header(props: { breakpoint: string; mobile: boolean }): JSX.Elem
 						<Spacer key="spc2" />,
 						<HeaderLink key="token" page="Token" isActive={pathKey === 'token'} />,
 						<Spacer key="spc" />,
-						// <HeaderLink key="portfolio" page="Portfolio" isActive={pathKey === 'portfolio'} />,
+						<HeaderLink key="portfolio" page="Portfolio" isActive={pathKey === 'portfolio'} />,
+						<Spacer key="spc" />,
 				  ]
 				: [];
 		if (['lg', 'xl'].includes(breakpoint)) {
