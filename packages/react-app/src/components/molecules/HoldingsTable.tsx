@@ -6,7 +6,7 @@ import { PRODUCTS } from '../../config/products';
 
 import { PortfolioTokenDetails } from '../../types';
 import { getTokenUrl } from '../../utils';
-import { safeFixed } from '../../utils/contracts';
+import { commify, safeFixed } from '../../utils/contracts';
 import { CoinLabelCell } from '../atoms/CoinLabelCell';
 
 interface HoldingsRow {
@@ -43,9 +43,9 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 					<Text className="symbol">{row.symbol.toUpperCase()}</Text>
 				</A>
 			</Td>
-			<Td>{utils.commify(safeFixed(row.amount, 4))}</Td>
-			<Td>${utils.commify(safeFixed(row.price, 2))}</Td>
-			<Td>${utils.commify(safeFixed(row.total, 2))}</Td>
+			<Td>{commify(safeFixed(row.amount, 4))}</Td>
+			<Td>${commify(safeFixed(row.price, 2))}</Td>
+			<Td>${commify(safeFixed(row.total, 2))}</Td>
 		</Tr>
 	);
 }
