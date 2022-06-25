@@ -69,6 +69,7 @@ export const COMMON_DECIMALS: CommonDecimals = {
   "0x8fcdd8372b5bcd27524546ad02b198c899d8ab2a": "18",
   "0x2C9227bf5FC806f94601eCAf5BC027CAd801b3B6": "18",
   "0xdc8d88d9e57cc7be548f76e5e413c4838f953018": "18",
+  "0x24ec3c300ff53b96937c39b686844db9e471421e": "18",
 };
 
 const ALL_ADDRESSES: { [key: string]: string } = {
@@ -102,6 +103,7 @@ const ALL_ADDRESSES: { [key: string]: string } = {
   SWEYF: "0x8fcdd8372b5bcd27524546ad02b198c899d8ab2a",
   SWMYF: "0x2C9227bf5FC806f94601eCAf5BC027CAd801b3B6",
   SWYF: "0xdc8d88d9e57cc7be548f76e5e413c4838f953018",
+  SWX: "0x24ec3c300ff53b96937c39b686844db9e471421e",
 };
 const CONTRACT_ADDRESSES = [
   "0xB4f78a05ab16CD3e6d0100112D0CC431942859Bb",
@@ -134,6 +136,7 @@ const CONTRACT_ADDRESSES = [
   "0x8fcdd8372b5bcd27524546ad02b198c899d8ab2a",
   "0x2C9227bf5FC806f94601eCAf5BC027CAd801b3B6",
   "0xdc8d88d9e57cc7be548f76e5e413c4838f953018",
+  "0x24ec3c300ff53b96937c39b686844db9e471421e",
 ];
 
 const callGetAssetTransfers = async (
@@ -141,7 +144,7 @@ const callGetAssetTransfers = async (
   b: string | undefined
 ) => {
   return await web3.alchemy.getAssetTransfers({
-    // maxCount: 1,
+    maxCount: 100,
     excludeZeroValue: false,
     fromBlock: "0x0",
     fromAddress: a,
