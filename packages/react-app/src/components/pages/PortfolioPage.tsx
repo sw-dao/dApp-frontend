@@ -509,7 +509,7 @@ export function PortfolioPage(): JSX.Element {
 							showTime={true}
 							showZero={true}
 						/>
-						<TokenChart
+						{/* <TokenChart
 							symbol="Total"
 							prices={holdingsHistory}
 							onDateChange={noop}
@@ -518,7 +518,7 @@ export function PortfolioPage(): JSX.Element {
 							period="1D"
 							allowChangePeriod={false}
 							showComparison={false}
-						/>
+						/> */}
 						<Tabs id="portfoliotabs">
 							<TabList
 								variant="unstyled"
