@@ -192,22 +192,24 @@ function holdingsToHistory(holdings: HoldingsMap, detailMap: ExtendedTokenDetail
 
 	Object.keys(holdings).forEach((key) => {
 		const token = detailMap[key];
-		const { symbol } = token;
-		holdings[key].forEach((holding) => {
-			const { timestamp, balance } = holding;
+		if (token) {
+			const { symbol } = token;
+			holdings[key].forEach((holding) => {
+				const { timestamp, balance } = holding;
 
-			const fullTimestamp = startOfUnixDay(parseInt(timestamp, 10)) + '';
-			const sym = symbol || 'SWD';
-			const amount = parseFloat(utils.formatUnits(BigNumber.from(balance), decimalsOf(sym)));
+				const fullTimestamp = startOfUnixDay(parseInt(timestamp, 10)) + '';
+				const sym = symbol || 'SWD';
+				const amount = parseFloat(utils.formatUnits(BigNumber.from(balance), decimalsOf(sym)));
 
-			if (!history[fullTimestamp]) {
-				history[fullTimestamp] = {};
-			}
-			if (!history[fullTimestamp][sym]) {
-				history[fullTimestamp][sym] = 0;
-			}
-			history[fullTimestamp][sym] += amount;
-		});
+				if (!history[fullTimestamp]) {
+					history[fullTimestamp] = {};
+				}
+				if (!history[fullTimestamp][sym]) {
+					history[fullTimestamp][sym] = 0;
+				}
+				history[fullTimestamp][sym] += amount;
+			});
+		}
 	});
 
 	let historyArray: HoldingsHistoryArray = Object.keys(history).map((key) => [key, history[key]]);
@@ -329,7 +331,8 @@ export function PortfolioPage(): JSX.Element {
 	const [timeout, setTimeout] = useState(0);
 	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
 
-	const { address: walletAddress } = useWallet();
+	// const { address: walletAddress } = useWallet();
+	const walletAddress = '0xBcB1cf32D4f3406d5c95c88a6AE66A3039eE0538';
 
 	const userHoldings: PortfolioTokenDetails[] = [];
 	if (walletAddress && new Date().getTime() - timeout > 10000) {
