@@ -188,9 +188,9 @@ export const PRODUCTS: ProductSetupDescription[] = [
 		name: 'SW Index',
 		symbol: 'SWX',
 		addresses: { '0x89': '0x24ec3c300ff53b96937c39b686844db9e471421e' },
-		is_tokenset: true,
+		is_tokenset: false,
 		category: 'INDICES',
-		yearly_fee: '1',
+		yearly_fee: '0',
 		detail_pane: SwxToken,
 	},
 	// {

@@ -20,7 +20,8 @@
     "clean": "rimraf build && yarn workspace @project/backend clean && yarn workspace @project/react-app clean",
     "dist": "yarn clean && yarn workspace @project/backend dist && ncp packages/backend/build build",
     "dist:dev": "yarn clean &&  yarn workspace @project/backend dist:dev && ncp packages/backend/build build",
-    "start": "env-cmd -f ./build/.env nodemon ./build/bin/www",
+    "start": "pm2-runtime ecosystem.config.js",
+    "start:dApp": "env-cmd -f ./build/.env nodemon ./build/bin/www",
     "start:dev": "yarn workspace mock-server start & env-cmd -f packages/backend/.env.test nodemon ./build/bin/www",
     "startproxy": "yarn workspace dev-proxy start",
     "startproxy:stage": "yarn workspace dev-proxy start:stage"
@@ -37,7 +38,8 @@
   },
   "dependencies": {
     "env-cmd": "^10.1.0",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "pm2": "^5.2.0"
   },
   "devDependencies": {
     "ncp": "^2.0.0",
