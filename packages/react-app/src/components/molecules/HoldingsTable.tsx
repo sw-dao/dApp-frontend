@@ -2,7 +2,9 @@ import { Box, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/
 import { utils } from 'ethers';
 import { A } from 'hookrouter';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
+import { breakpointState } from '../../state';
 
 import { PortfolioTokenDetails } from '../../types';
 import { getTokenUrl } from '../../utils';
@@ -22,6 +24,7 @@ interface TrProps {
 }
 
 function TableRow({ row, last }: HoldingsRow): JSX.Element {
+	const breakpoint = useRecoilValue(breakpointState);
 	const productUrl = `/product/${row.symbol}`;
 	//console.log(`ROW ${index}: ${JSON.stringify(row)}`);
 	const props: TrProps = {
@@ -35,19 +38,87 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 	PRODUCTS.forEach((e) => {
 		if (e.symbol == row.symbol) name = e.name;
 	});
+	if (breakpoint !== 'sm') {
+		return (
+			<Tr {...props}>
+				<Td>
+					<CoinLabelCell icon={icon} symbol={row.symbol} name={name} url={productUrl} />
+				</Td>
+				<Td>
+					<A href={productUrl}>
+						<Text className="symbol">{row.symbol.toUpperCase()}</Text>
+					</A>
+				</Td>
+				<Td>{commify(safeFixed(row.amount, 4))}</Td>
+				<Td>${commify(safeFixed(row.price, 2))}</Td>
+				<Td>${commify(safeFixed(row.total, 2))}</Td>
+			</Tr>
+		);
+	}
 	return (
 		<Tr {...props}>
-			<CoinLabelCell icon={icon} symbol={row.symbol} name={name} url={productUrl} />
-			<Td>
+			<Th>
+				<Text bgColor="lightline" textAlign="center">
+					Symbol
+				</Text>
 				<A href={productUrl}>
-					<Text className="symbol">{row.symbol.toUpperCase()}</Text>
+					<Text fontWeight="normal" className="symbol" textAlign="center">
+						{row.symbol.toUpperCase()}
+					</Text>
 				</A>
-			</Td>
-			<Td>{commify(safeFixed(row.amount, 4))}</Td>
-			<Td>${commify(safeFixed(row.price, 2))}</Td>
-			<Td>${commify(safeFixed(row.total, 2))}</Td>
+				<Text bgColor="lightline" textAlign="center">
+					Price
+				</Text>
+				<Text fontWeight="normal" textAlign="center">
+					${commify(safeFixed(row.price, 2))}
+				</Text>
+			</Th>
+			<Th>
+				<Text bgColor="lightline" textAlign="center">
+					Amount
+				</Text>
+				<Text fontWeight="normal" textAlign="center">
+					{commify(safeFixed(row.amount, 4))}
+				</Text>
+				<Text bgColor="lightline" textAlign="center">
+					Total
+				</Text>
+				<Text fontWeight="normal" textAlign="center">
+					${commify(safeFixed(row.total, 2))}
+				</Text>
+			</Th>
 		</Tr>
 	);
+}
+
+{
+	/* <Tr {...props}>
+			<Th>
+				<Text bgColor="lightline" textAlign="left">
+					Symbol:
+				</Text>
+				<Text bgColor="lightline" textAlign="left">
+					Amount:
+				</Text>
+				<Text bgColor="lightline" textAlign="left">
+					Price:
+				</Text>
+				<Text bgColor="lightline" textAlign="left">
+					Total:
+				</Text>
+			</Th>
+			<Th>
+				<A href={productUrl}>
+					<Text className="symbol" textAlign="left">
+						{row.symbol.toUpperCase()}
+					</Text>
+				</A>
+				<Text textAlign="left">{commify(safeFixed(row.amount, 4))}</Text>
+				<Text textAlign="left">${commify(safeFixed(row.price, 2))}</Text>
+
+				<Text textAlign="left">${commify(safeFixed(row.total, 2))}</Text>
+			</Th>
+		</Tr> */
 }
 
 interface ThProps {
@@ -56,6 +127,7 @@ interface ThProps {
 }
 
 function TokenHeader({ first = true }) {
+	const breakpoint = useRecoilValue(breakpointState);
 	const firstProps: ThProps = {};
 	const lastProps: ThProps = {};
 	const middleProps: ThProps = {};
@@ -67,25 +139,19 @@ function TokenHeader({ first = true }) {
 		lastProps.border = '2px solid #120046';
 		middleProps.border = '2px solid #120046';
 	}
-	return (
-		<Tr>
-			<Th bgColor="lightline" {...firstProps}>
-				Name
-			</Th>
-			<Th bgColor="lightline" {...middleProps}>
-				Ticker
-			</Th>
-			<Th bgColor="lightline" {...middleProps}>
-				Amount
-			</Th>
-			<Th bgColor="lightline" {...middleProps}>
-				Price
-			</Th>
-			<Th bgColor="lightline" {...lastProps}>
-				Total
-			</Th>
-		</Tr>
-	);
+	if (breakpoint !== 'sm') {
+		return (
+			<Tr>
+				<Th bgColor="lightline">Name</Th>
+
+				<Th bgColor="lightline">Ticker</Th>
+				<Th bgColor="lightline">Amount</Th>
+				<Th bgColor="lightline">Price</Th>
+				<Th bgColor="lightline">Total</Th>
+			</Tr>
+		);
+	}
+	return <Tr></Tr>;
 }
 
 interface HoldingsTableProps {

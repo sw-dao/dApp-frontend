@@ -1,6 +1,8 @@
 import { Box, Image, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { A } from 'hookrouter';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { breakpointState } from '../../state';
 
 import { getTokenUrl, timestampSorter } from '../../utils';
 import { safeFixed } from '../../utils/contracts';
@@ -32,6 +34,8 @@ interface TrProps {
 }
 
 function TableRow({ row, last }: TableRowProps): JSX.Element {
+	const breakpoint = useRecoilValue(breakpointState);
+
 	const props: TrProps = {
 		color: '#fff',
 	};
@@ -70,29 +74,35 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 			<Td>
 				<Text as="span">{formatDate(row.timestamp.toString())}</Text>
 			</Td>
-			<Td>
-				{tIcon != '' ? (
-					<Image
-						d="inline-block"
-						h="1.8rem"
-						pr=".5rem"
-						fontSize="0.3rem"
-						align="left center"
-						src={tIcon}
-						alt={`${t} Icon`}
-					/>
-				) : (
-					''
-				)}
-			</Td>
-			<Td>{t}</Td>
+
+			{breakpoint !== 'sm' && (
+				<Td>
+					{tIcon != '' ? (
+						<Image
+							d="inline-block"
+							maxh="1.5rem"
+							maxW="1.5rem"
+							// pr=".5rem"
+							fontSize="0.3rem"
+							align="left center"
+							src={tIcon}
+							alt={`${t} Icon`}
+						/>
+					) : (
+						''
+					)}
+				</Td>
+			)}
+			{breakpoint !== 'sm' && <Td>{t}</Td>}
 			<Td>{action}</Td>
+
 			<Td>
 				<a color={'#2089fd'} href={url} target="_blank">
 					<Image
 						d="inline-block"
-						h="1.8rem"
-						pr=".5rem"
+						maxh="1rem"
+						maxW="1rem"
+						// pr=".5rem"
 						fontSize="0.3rem"
 						align="left center"
 						src="/images/portfolio/link.png"
@@ -127,6 +137,7 @@ interface ThProps {
 }
 
 function TokenHeader({ first = true }): JSX.Element {
+	const breakpoint = useRecoilValue(breakpointState);
 	const firstProps: ThProps = {};
 	const lastProps: ThProps = {};
 	const middleProps: ThProps = {};
@@ -138,34 +149,42 @@ function TokenHeader({ first = true }): JSX.Element {
 		lastProps.border = '2px solid #120046';
 		middleProps.border = '2px solid #120046';
 	}
-	return (
-		<Tr>
-			<Th bgColor="lightline" {...firstProps}>
-				Date
-			</Th>
-			<Th bgColor="lightline" {...middleProps}>
-				{' '}
-			</Th>
-			<Th bgColor="lightline" {...middleProps}>
-				Type
-			</Th>
-			<Th bgColor="lightline" {...middleProps}>
-				Action
-			</Th>
-			<Th bgColor="lightline" {...lastProps}>
-				{' '}
-			</Th>
-			{/* <Th bgColor="lightline" {...lastProps}>
+	if (breakpoint !== 'sm') {
+		return (
+			<Tr>
+				<Th bgColor="lightline" {...firstProps}>
+					Date
+				</Th>
+
+				<Th bgColor="lightline" {...middleProps}>
+					{' '}
+				</Th>
+
+				<Th bgColor="lightline" {...middleProps}>
+					Type
+				</Th>
+
+				<Th bgColor="lightline" {...middleProps}>
+					Action
+				</Th>
+
+				<Th bgColor="lightline" {...lastProps}>
+					{' '}
+				</Th>
+
+				{/* <Th bgColor="lightline" {...lastProps}>
 				To
 			</Th> */}
-			{/* <Th bgColor="lightline" {...middleProps}>
+				{/* <Th bgColor="lightline" {...middleProps}>
 				From
 			</Th>
 			<Th bgColor="lightline" {...lastProps}>
 				Value
 			</Th> */}
-		</Tr>
-	);
+			</Tr>
+		);
+	}
+	return <Tr></Tr>;
 }
 
 interface TransactionsTableProps {
