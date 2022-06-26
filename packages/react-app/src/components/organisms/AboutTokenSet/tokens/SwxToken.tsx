@@ -33,10 +33,13 @@ export function SwxToken({ details, data }: TokenDetailPane): JSX.Element {
 							As a holder of the SW Index, you are eligible to receive a portion of the monthly
 							dividend, as well as governance power at a 50% rate. This is because 50% of the SW
 							Index is made up of SWD tokens, which entitles holders to 0.5x the standard dividend
-							rate and 0.5x the standard governance power. Thus, by holding the SW Index, you can
-							gain access to both financial returns and governance rights that are exclusive to SWD
-							token holders. This makes the SW Index an attractive investment for those looking to
-							participate in the growth of the SW DAO ecosystem and leverage our products.
+							rate and 0.5x the standard governance power.
+						</Text>
+						<Text>
+							Thus, by holding the SW Index, you can gain access to both financial returns and
+							governance rights that are exclusive to SWD token holders. This makes the SW Index an
+							attractive investment for those looking to participate in the growth of the SW DAO
+							ecosystem and leverage our products.
 						</Text>
 					</div>
 					{/* <YoutubeEmbed embedId="1hD85iKYNhM" title="Buy The Dip | SW DAO" /> */}
@@ -48,13 +51,21 @@ export function SwxToken({ details, data }: TokenDetailPane): JSX.Element {
 					The SW index is currently composed of 50% SWD tokens, 30% SW DAO products, and 20%
 					currency. This index composition is not expected to change any time soon. However, the
 					founding team may make changes to the index composition in the future within the preset
-					allocations established in SWIP-07. If such changes are made, ample notice will be
-					provided to the community. Additionally, the percentage of currency in the index may
-					decrease over time as liquidity is deepened. Such an increase in liquidity would mean that
-					the currency pairs would no longer need to be included in the balancer pool at their
-					current allocation percentage.
+					allocations established in SWIP-07.
 				</Text>
-				<FeeBox symbol={details?.symbol ?? '---'} details={details} data={data} />
+				<Text>
+					If such changes are made, ample notice will be provided to the community. Additionally,
+					the percentage of currency in the index may decrease over time as liquidity is deepened.
+					Such an increase in liquidity would mean that the currency pairs would no longer need to
+					be included in the balancer pool at their current allocation percentage.
+				</Text>
+			</Box>,
+			<Box></Box>,
+			<Box>
+				<Center>
+					{' '}
+					<FeeBox symbol={details?.symbol ?? '---'} details={details} data={data} />
+				</Center>
 			</Box>,
 		],
 		[details, data],
