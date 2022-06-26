@@ -41,17 +41,22 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 	if (breakpoint !== 'sm') {
 		return (
 			<Tr {...props}>
-				<Td>
+				<Td paddingInlineEnd="0px">
 					<CoinLabelCell icon={icon} symbol={row.symbol} name={name} url={productUrl} />
 				</Td>
-				<Td>
+				<Td paddingInlineStart="0px" paddingInlineEnd="0px">
+					<A href={productUrl}>
+						<Text as="span">{name}</Text>
+					</A>
+				</Td>
+				<Td paddingInlineStart="0px">
 					<A href={productUrl}>
 						<Text className="symbol">{row.symbol.toUpperCase()}</Text>
 					</A>
 				</Td>
-				<Td>{commify(safeFixed(row.amount, 4))}</Td>
-				<Td>${commify(safeFixed(row.price, 2))}</Td>
-				<Td>${commify(safeFixed(row.total, 2))}</Td>
+				<Td paddingInlineStart="0px">{commify(safeFixed(row.amount, 4))}</Td>
+				<Td paddingInlineStart="0px">${commify(safeFixed(row.price, 2))}</Td>
+				<Td paddingInlineStart="0px">${commify(safeFixed(row.total, 2))}</Td>
 			</Tr>
 		);
 	}
@@ -91,36 +96,6 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 	);
 }
 
-{
-	/* <Tr {...props}>
-			<Th>
-				<Text bgColor="lightline" textAlign="left">
-					Symbol:
-				</Text>
-				<Text bgColor="lightline" textAlign="left">
-					Amount:
-				</Text>
-				<Text bgColor="lightline" textAlign="left">
-					Price:
-				</Text>
-				<Text bgColor="lightline" textAlign="left">
-					Total:
-				</Text>
-			</Th>
-			<Th>
-				<A href={productUrl}>
-					<Text className="symbol" textAlign="left">
-						{row.symbol.toUpperCase()}
-					</Text>
-				</A>
-				<Text textAlign="left">{commify(safeFixed(row.amount, 4))}</Text>
-				<Text textAlign="left">${commify(safeFixed(row.price, 2))}</Text>
-
-				<Text textAlign="left">${commify(safeFixed(row.total, 2))}</Text>
-			</Th>
-		</Tr> */
-}
-
 interface ThProps {
 	borderRadius?: string;
 	border?: string;
@@ -142,12 +117,22 @@ function TokenHeader({ first = true }) {
 	if (breakpoint !== 'sm') {
 		return (
 			<Tr>
-				<Th bgColor="lightline">Name</Th>
-
-				<Th bgColor="lightline">Ticker</Th>
-				<Th bgColor="lightline">Amount</Th>
-				<Th bgColor="lightline">Price</Th>
-				<Th bgColor="lightline">Total</Th>
+				<Th bgColor="lightline"></Th>
+				<Th bgColor="lightline" paddingInlineStart="0px" paddingInlineEnd="0px">
+					Name
+				</Th>
+				<Th bgColor="lightline" paddingInlineStart="0px">
+					Ticker
+				</Th>
+				<Th bgColor="lightline" paddingInlineStart="0px">
+					Amount
+				</Th>
+				<Th bgColor="lightline" paddingInlineStart="0px">
+					Price
+				</Th>
+				<Th bgColor="lightline" paddingInlineStart="0px">
+					Total
+				</Th>
 			</Tr>
 		);
 	}

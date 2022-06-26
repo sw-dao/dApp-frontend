@@ -43,15 +43,10 @@ export function CoinLabelCell({
 	if (width) tdProps.width = width;
 
 	return (
-		<Box className="nobreak coin" {...tdProps} textAlign="left">
-			<Box display="inline-block" marginRight="1.5rem">
+		<Box className="nobreak coin" {...tdProps} textAlign="center">
+			<A href={url}>
 				<CoinIcon symbol={symbol} src={icon} verticalAlign="middle" height={height || '2.5rem'} />
-				<A href={url}>
-					<Text as="span" color={hover ? 'white' : 'bodytext'}>
-						{name}
-					</Text>
-				</A>
-			</Box>
+			</A>
 		</Box>
 	);
 }

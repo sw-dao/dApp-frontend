@@ -110,23 +110,6 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 					/>
 				</a>
 			</Td>
-			{/* <Td>
-				{row.toAmount > 0 ? safeFixed(row.toAmount, 4) : 'Send'} {row.toSymbol}
-			</Td> */}
-			{/* <Td>
-				<EtherscanLink address={row.from} />
-			</Td> */}
-			{/* <Td>
-				<Image
-					d="inline-block"
-					h="1.8rem"
-					pr=".5rem"
-					fontSize="0.9rem"
-					align="left center"
-					src={icon}
-					alt={`${row.toSymbol} logo`}
-				/>
-			</Td> */}
 		</Tr>
 	);
 }
@@ -171,16 +154,6 @@ function TokenHeader({ first = true }): JSX.Element {
 				<Th bgColor="lightline" {...lastProps}>
 					{' '}
 				</Th>
-
-				{/* <Th bgColor="lightline" {...lastProps}>
-				To
-			</Th> */}
-				{/* <Th bgColor="lightline" {...middleProps}>
-				From
-			</Th>
-			<Th bgColor="lightline" {...lastProps}>
-				Value
-			</Th> */}
 			</Tr>
 		);
 	}
