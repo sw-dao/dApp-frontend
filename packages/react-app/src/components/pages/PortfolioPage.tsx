@@ -331,8 +331,7 @@ export function PortfolioPage(): JSX.Element {
 	const [timeout, setTimeout] = useState(0);
 	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
 
-	// const { address: walletAddress } = useWallet();
-	const walletAddress = '0xBcB1cf32D4f3406d5c95c88a6AE66A3039eE0538';
+	const { address: walletAddress } = useWallet();
 
 	const userHoldings: PortfolioTokenDetails[] = [];
 	if (walletAddress && new Date().getTime() - timeout > 10000) {
