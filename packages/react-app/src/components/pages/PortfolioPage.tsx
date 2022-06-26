@@ -533,7 +533,7 @@ export function PortfolioPage(): JSX.Element {
 								borderBottom="1px solid #120046"
 								borderColor="#120046"
 							>
-								<TabButton label="Holdings" />
+								<TabButton label="Portfolio" />
 								<TabButton label="Transactions" />
 							</TabList>
 
