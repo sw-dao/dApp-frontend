@@ -325,8 +325,8 @@ const valueOfHolding = (
 export function PortfolioPage(): JSX.Element {
 	const [query] = useQueryParams();
 	const { address } = query; // TODO: remove after testing
-	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>([]);
-	const [txHistory, setTxHistory] = useState<Transaction[]>([]);
+	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>();
+	const [txHistory, setTxHistory] = useState<Transaction[]>();
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const [timeout, setTimeout] = useState(0);
 	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
@@ -357,7 +357,7 @@ export function PortfolioPage(): JSX.Element {
 	let balance = 0;
 	let oldBalance = 0;
 	let priceChange = 0;
-	if (detailMap.SWD && tokenDetails.SWD) {
+	if (detailMap.SWD && tokenDetails.SWD && userHolding) {
 		userHolding.forEach((h) => {
 			h.price = detailMap[h.symbol].currentPrice.toString();
 			h.total = parseFloat(h.amount) * detailMap[h.symbol].currentPrice;

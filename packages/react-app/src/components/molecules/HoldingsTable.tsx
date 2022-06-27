@@ -180,7 +180,7 @@ function TokenHeader({ first = true }) {
 }
 
 interface HoldingsTableProps {
-	holdings: PortfolioTokenDetails[];
+	holdings: PortfolioTokenDetails[] | undefined;
 	loading: boolean;
 	first?: boolean;
 }
@@ -193,11 +193,21 @@ export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
-					<Spinner size="lg" margin="2rem auto" />
+					Please connect your wallet
 				</Td>
 			</Tr>
 		);
-	} else if (!holdings || holdings.length === 0) {
+	} else if (!holdings) {
+		rows = (
+			<Tr>
+				<Td colSpan={6} textAlign="center" color="bodytext">
+					<Text fontStyle="italic" p="2rem">
+						<Spinner size="lg" margin="2rem auto" />
+					</Text>
+				</Td>
+			</Tr>
+		);
+	} else if (holdings.length === 0) {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">

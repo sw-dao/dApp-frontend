@@ -161,7 +161,7 @@ function TokenHeader({ first = true }): JSX.Element {
 }
 
 interface TransactionsTableProps {
-	transactions: RowProps[];
+	transactions: RowProps[] | undefined;
 	loading: boolean;
 	first?: boolean;
 }
@@ -174,11 +174,21 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
-					<Spinner size="lg" margin="2rem auto" />
+					Please connect your wallet
 				</Td>
 			</Tr>
 		);
-	} else if (!transactions || transactions.length === 0) {
+	} else if (!transactions) {
+		rows = (
+			<Tr>
+				<Td colSpan={6} textAlign="center" color="bodytext">
+					<Text fontStyle="italic" p="2rem">
+						<Spinner size="lg" margin="2rem auto" />
+					</Text>
+				</Td>
+			</Tr>
+		);
+	} else if (transactions.length === 0) {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
