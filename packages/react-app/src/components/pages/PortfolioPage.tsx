@@ -334,7 +334,7 @@ export function PortfolioPage(): JSX.Element {
 	const { address: walletAddress } = useWallet();
 
 	const userHoldings: PortfolioTokenDetails[] = [];
-	if (walletAddress && new Date().getTime() - timeout > 10000) {
+	if (walletAddress && new Date().getTime() - timeout > 899999) {
 		setTimeout(new Date().getTime());
 		getTxHistory(walletAddress).then((h) => {
 			setTxHistory(h);
