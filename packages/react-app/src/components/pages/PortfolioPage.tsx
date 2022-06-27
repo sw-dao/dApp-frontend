@@ -487,7 +487,7 @@ export function PortfolioPage(): JSX.Element {
 					paddingRight="3rem"
 					paddingLeft="3rem"
 					marginBottom="3rem"
-					width="70%"
+					width="max(90%, 28rem)"
 				>
 					<VStack spacing="2rem" align="left" className="bodycontent">
 						<Box textAlign="left">

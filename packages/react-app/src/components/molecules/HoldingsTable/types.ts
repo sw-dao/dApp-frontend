@@ -48,12 +48,7 @@ export const DEFAULT_COL_STYLES: SizedColumnStyles = {
 			width: '100%',
 			height: '4rem',
 		},
-		ticker: {
-			width: '50%',
-			ml: '4.5rem',
-			mt: '-1.2rem',
-			textAlign: 'left',
-		},
+		ticker: {},
 		price: {
 			width: 'auto',
 			ml: '4.5rem',
