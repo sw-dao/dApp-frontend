@@ -62,10 +62,20 @@ export function SwxToken({ details, data }: TokenDetailPane): JSX.Element {
 			</Box>,
 			<Box></Box>,
 			<Box>
-				<Center>
-					{' '}
-					<FeeBox symbol={details?.symbol ?? '---'} details={details} data={data} />
-				</Center>
+				{/* <Center> */}
+				{/* {' '}
+					<FeeBox symbol={details?.symbol ?? '---'} details={details} data={data} /> */}
+				<Heading>Fees</Heading>
+				<Text>
+					SW charges a fee of 2.50% per transaction to keep the index automatically rebalanced. This
+					applies only when a transaction throws the Index balance off by {'>'} 2%.
+				</Text>
+				<Text>
+					We also charge a spread fee of 1.00% for buying or selling our products. This fee is kept
+					within the pool to deepen liquidity.{' '}
+				</Text>
+				<Text>The spread fee is waived for those who have {'>'} 500 SWD in their wallets.</Text>
+				{/* </Center> */}
 			</Box>,
 		],
 		[details, data],
