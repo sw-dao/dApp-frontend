@@ -62,7 +62,7 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 	if (t === '' && row.fromAmount > 0 && row.toAmount <= 0) {
 		t = 'Transfer';
 		tIcon = '/images/portfolio/send.png';
-		action = `Send ${safeFixed(row.fromAmount, 4)} ${row.fromSymbol}`;
+		action = `Sent ${safeFixed(row.fromAmount, 4)} ${row.fromSymbol}`;
 	}
 	if (t === '' && row.fromAmount <= 0 && row.toAmount > 0) {
 		t = 'Transfer';
