@@ -100,12 +100,12 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 				<a color={'#2089fd'} href={url} target="_blank">
 					<Image
 						d="inline-block"
-						maxh="1rem"
-						maxW="1rem"
+						maxh="1.5rem"
+						maxW="1.5rem"
 						// pr=".5rem"
 						fontSize="0.3rem"
 						align="left center"
-						src="/images/portfolio/link.png"
+						src="/images/portfolio/link-bold.png"
 						alt={`Tx-link Icon`}
 					/>
 				</a>
