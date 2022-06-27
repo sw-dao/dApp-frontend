@@ -84,6 +84,7 @@ const getTokenPriceData = async (
 
   console.log("GET ", days, " ", symbols);
 
+  /*
   if (+days === 1) {
     const minutePrices = await getPricesTokensMinutes(
       symbols,
@@ -102,7 +103,7 @@ const getTokenPriceData = async (
               .map((pricesTypes) => pricesTypes?.minutes)
               .reduce((result, item) => result.concat(item), [])
               .map((price: any) => fixPriceValues(price))
-              .reverse();
+              .sort((a: any, b: any) => a[0] - b[0]);
           }
 
           console.log(
@@ -120,7 +121,8 @@ const getTokenPriceData = async (
     }
 
     return [];
-  } else if (+days === 7 || +days === 30) {
+
+  } else */ if (+days === 1 || +days === 7 || +days === 30) {
     const hourlyPrices = await getPricesTokensHourly(
       tokens,
       +days
@@ -170,7 +172,8 @@ const getTokenPriceData = async (
             aggregatePricesForSymbol = pricesBySymbol
               .map((pricesTypes) => pricesTypes?.dailies)
               .reduce((result, item) => result.concat(item), [])
-              .map((price: any) => fixPriceValues(price));
+              .map((price: any) => fixPriceValues(price))
+              .sort((a: any, b: any) => a[0] - b[0]);
           }
 
           console.log(

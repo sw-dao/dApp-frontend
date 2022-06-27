@@ -10,6 +10,7 @@ import express, {
   static as staticExpress,
   urlencoded,
 } from "express";
+import compression from "compression";
 import { join } from "path";
 
 import pricesRouter from "./routes/prices";
@@ -52,6 +53,7 @@ const app = express();
 // Adding in the middleware
 // TODO clean up middlewares
 app.use(logger("dev")); // Logging framework
+app.use(compression());
 app.use(
   helmet({
     contentSecurityPolicy: false,

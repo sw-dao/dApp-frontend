@@ -5,7 +5,7 @@ const path = require("path");
 const app = express();
 
 const apiProxy = createProxyMiddleware({
-  target: "http://localhost:3000",
+  target: "http://localhost:3090",
   changeOrigin: true,
 });
 const uiProxy = createProxyMiddleware({

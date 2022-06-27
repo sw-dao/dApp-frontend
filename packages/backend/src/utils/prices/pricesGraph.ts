@@ -105,8 +105,8 @@ const getPricesTokensHourly = async (
   const now = DateTime.now().startOf('hour');
   const nowSeconds: number = Math.round(now.toSeconds());
   const endSeconds: number = Math.round(now.minus({ day: days }).toSeconds());
-  const stepCount: number = 15;
-  let stepTime: number = (nowSeconds - endSeconds) / (stepCount - 1);
+  const stepCount: number = 14;
+  let stepTime: number = (nowSeconds - endSeconds) / stepCount;
   const stepSize: number = Math.round(stepTime / 2);
   stepTime = Math.round(stepTime);
   const timestamps: number[] = [];
@@ -125,7 +125,7 @@ const getPricesTokensHourly = async (
         positionsMap.set(thisBlock, positionsCurrent);
         // Find blocks where rebalances occur.
         const changes: number[] = (await setContract.getPastEvents("Invoked", { fromBlock }))
-          .map((l) => { return l.blockNumber + 1 })
+          .map((l) => { return l.blockNumber - 1 })
           .filter((b, i: number) => {
             if (i === 0) {
               blockLast = b;
@@ -170,6 +170,8 @@ const getPricesTokensHourly = async (
             blockUnchanged = block;
           }
         }
+        positions =
+          j === 0 ? positionsMap.get(thisBlock) : await positionsMap.get(changes[j - 1]);
         blockSteps.push({
           block: blockUnchanged,
           steps: stepCount - stepsSubtract,

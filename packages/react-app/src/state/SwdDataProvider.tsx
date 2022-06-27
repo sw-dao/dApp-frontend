@@ -196,17 +196,10 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 		if (!updating) {
 			const periodsNeeded = Object.keys(tokensByPeriod);
 			const needsUpdate = new Date().getTime() - updated > 100000;
-			// if (!needsUpdate) {
-			// 	periodsNeeded = periodsNeeded.filter((p: string) => tokensByPeriod[p].length === 0);
-			// 	needsUpdate = periodsNeeded.length > 0;
-			// }
+
 			if (needsUpdate) {
 				setUpdating(true);
 				setUpdated(new Date().getTime());
-				const promiseThrottle = new PromiseThrottle({
-					requestsPerSecond: 1,
-					promiseImplementation: Promise,
-				});
 				const jobs = periodsNeeded.map((period) => {
 					return getFullTokenProductData(chainId || DEFAULT_CHAIN_ID, period).then((data) => {
 						if (goodResponse(data)) {
@@ -220,9 +213,8 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 						}
 					});
 				});
-				const promises = jobs.map((job) => promiseThrottle.add(() => job));
 
-				Promise.all(promises).then(() => {
+				Promise.all(jobs).then(() => {
 					// console.log(`Updated ${periodsNeeded.join(', ')}`);
 					setUpdating(false);
 				});

@@ -50,8 +50,8 @@ async function getPrices(componentTokens: TokenSummaryInfoMap, chainId: string) 
 			if (data && data.success) {
 				const { market_data } = data.data;
 				const pair: [number, number] = [
-					market_data.current_price.usd,
-					market_data.price_change_percentage_24h,
+					market_data.current_price.usd | 0,
+					market_data.price_change_percentage_24h | 0,
 				];
 				prices[sym] = pair;
 			}
@@ -231,7 +231,13 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 	}, [breakpoint, isConnected, positionMap]);
 
 	return (
-		<Table variant="unstyled" bgColor="transparent" className="token" fontSize="0.9rem">
+		<Table
+			variant="unstyled"
+			bgColor="blue5"
+			className="token"
+			fontSize="0.9rem"
+			borderRadius="2em"
+		>
 			<Thead>
 				<Tr color="alttext" textAlign="center">
 					<Th textAlign="center" bgColor="bodydark" borderRadius="2em 0 0 0">

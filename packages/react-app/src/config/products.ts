@@ -9,6 +9,7 @@ import { NftCollections } from '../components/organisms/AboutTokenSet/tokens/Nft
 import { PeiToken } from '../components/organisms/AboutTokenSet/tokens/PeiToken';
 import { QmTokens } from '../components/organisms/AboutTokenSet/tokens/QmTokens';
 import { SwapToken } from '../components/organisms/AboutTokenSet/tokens/SwapToken';
+import { SwxToken } from '../components/organisms/AboutTokenSet/tokens/SwxToken';
 import { SwyfToken } from '../components/organisms/AboutTokenSet/tokens/SwyfToken';
 import { ProductSetupDescription } from '../types';
 
@@ -27,34 +28,34 @@ export const PRODUCTS: ProductSetupDescription[] = [
 		addresses: { '0x89': '0x25ad32265c9354c29e145c902ae876f6b69806f2' },
 		is_tokenset: true,
 		category: 'STRATEGIES',
-		yearly_fee: '10',
+		yearly_fee: '2',
 		detail_pane: SwapToken,
 	},
-	// {
-	// 	name: 'Macro Trend BTC',
-	// 	symbol: 'MTBTC',
-	// 	addresses: { '0x89': '0x71b41b3b19aac53ca4063aec2d17fc3caeb38026' },
-	// 	is_tokenset: true,
-	// 	category: 'STRATEGIES',
-	// 	yearly_fee: '10',
-	// 	detail_pane: MacroTokens,
-	// },
-	// {
-	// 	name: 'Macro Trend ETH',
-	// 	symbol: 'MTETH',
-	// 	addresses: { '0x89': '0x72Ca52512b93E8D67309aF0C14C1A225bcbd3548' },
-	// 	is_tokenset: true,
-	// 	category: 'STRATEGIES',
-	// 	yearly_fee: '10',
-	// 	detail_pane: MacroTokens,
-	// },
+	{
+		name: 'Macro Trend BTC',
+		symbol: 'MTBTC',
+		addresses: { '0x89': '0x71b41b3b19aac53ca4063aec2d17fc3caeb38026' },
+		is_tokenset: true,
+		category: 'STRATEGIES',
+		yearly_fee: '2',
+		detail_pane: MacroTokens,
+	},
+	{
+		name: 'Macro Trend ETH',
+		symbol: 'MTETH',
+		addresses: { '0x89': '0x72Ca52512b93E8D67309aF0C14C1A225bcbd3548' },
+		is_tokenset: true,
+		category: 'STRATEGIES',
+		yearly_fee: '2',
+		detail_pane: MacroTokens,
+	},
 	{
 		name: 'Quantum Momentum BTC',
 		symbol: 'QMB',
 		addresses: { '0x89': '0xabcc2102065ba01c6df1a5a5a57158f452403b70' },
 		is_tokenset: true,
 		category: 'STRATEGIES',
-		yearly_fee: '15',
+		yearly_fee: '2',
 		detail_pane: QmTokens,
 	},
 	{
@@ -63,7 +64,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 		addresses: { '0x89': '0x9984d846a3dc77aa0488f3758976b149e8475995' },
 		is_tokenset: true,
 		category: 'STRATEGIES',
-		yearly_fee: '15',
+		yearly_fee: '2',
 		detail_pane: QmTokens,
 	},
 	// {
@@ -72,7 +73,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// 	addresses: { '0x89': '0x20ab4cb8f8da39582bc92da954ab1bb128f4e244' },
 	// 	is_tokenset: true,
 	// 	category: 'STRATEGIES',
-	// 	yearly_fee: '15',
+	// 	yearly_fee: '2',
 	// 	detail_pane: QmTokens,
 	// },
 	{
@@ -81,7 +82,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 		addresses: { '0x89': '0x58f7C5707Ba8E09B5e61ceBe8821f65434372344' },
 		is_tokenset: true,
 		category: 'STRATEGIES',
-		yearly_fee: '5',
+		yearly_fee: '1',
 		detail_pane: BtdTokens,
 	},
 	{
@@ -90,7 +91,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 		addresses: { '0x89': '0x07A79127182a1c303d11eCDa951310EC1C2E1444' },
 		is_tokenset: true,
 		category: 'STRATEGIES',
-		yearly_fee: '5',
+		yearly_fee: '1',
 		detail_pane: BtdTokens,
 	},
 	{
@@ -99,7 +100,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 		addresses: { '0x89': '0xb87352B4C3EB9daEd09cD4996dFf85c122394912' },
 		is_tokenset: true,
 		category: 'STRATEGIES',
-		yearly_fee: '5',
+		yearly_fee: '1',
 		detail_pane: BtdTokens,
 	},
 	// {
@@ -114,7 +115,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// {
 	// 	name: 'Discretionary ETH',
 	// 	symbol: 'DETH',
-	// 	addresses: { '0x89': '0x72b467cacbdbec5918d8eec0371ca33e6fd42421' },
+	// 	addresses: { '0x89': '0x72b467cacbdbec5918d8eec0371ca33e6xfd42421' },
 	// 	is_tokenset: true,
 	// 	category: 'STRATEGIES',
 	// 	yearly_fee: '10',
@@ -183,6 +184,15 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// 	yearly_fee: '3',
 	// 	detail_pane: MiTokens,
 	// },
+	{
+		name: 'SW Index',
+		symbol: 'SWX',
+		addresses: { '0x89': '0x24ec3c300ff53b96937c39b686844db9e471421e' },
+		is_tokenset: false,
+		category: 'INDICES',
+		yearly_fee: '0',
+		detail_pane: SwxToken,
+	},
 	// {
 	// 	name: 'Polygon Ecosystem Index',
 	// 	symbol: 'PEI',

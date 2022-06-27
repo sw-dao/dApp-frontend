@@ -1,20 +1,6 @@
 import { ButtonStyleProps } from './types';
 
 export const BUTTON_STYLES: ButtonStyleProps = {
-	INDICES: {
-		label: 'Indices',
-		image: '/images/purple-gem.png',
-		active: {
-			color: '#E24EFF',
-			bgColor: '#301FA0',
-			borderColor: 'transparent',
-		},
-		inactive: {
-			color: 'alttext',
-			bgColor: 'transparent',
-			borderColor: 'alttext',
-		},
-	},
 	NFTS: {
 		label: 'NFT',
 		image: '/images/gem-nfts.png',
@@ -36,6 +22,20 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		image: '/images/green-gem.png',
 		active: {
 			color: '#FFCC50',
+			bgColor: '#301FA0',
+			borderColor: 'transparent',
+		},
+		inactive: {
+			color: 'alttext',
+			bgColor: 'transparent',
+			borderColor: 'alttext',
+		},
+	},
+	INDICES: {
+		label: 'Indices',
+		image: '/images/purple-gem.png',
+		active: {
+			color: '#E24EFF',
 			bgColor: '#301FA0',
 			borderColor: 'transparent',
 		},
