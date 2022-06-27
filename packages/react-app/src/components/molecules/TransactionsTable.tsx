@@ -194,7 +194,7 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		endIndex,
 	} = usePagination({
 		totalItems: transactions?.length,
-		initialPageSize: 9,
+		initialPageSize: 11,
 	});
 
 	if (loading) {
@@ -209,9 +209,10 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
-					<Text fontStyle="italic" p="2rem">
-						<Spinner size="lg" margin="2rem auto" />
+					<Text fontStyle="italic" p="2rem 2rem 0 2rem">
+						Loading your wallet history ...
 					</Text>
+					<Spinner size="lg" margin="2rem auto" />
 				</Td>
 			</Tr>
 		);
@@ -246,15 +247,52 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 			{!transactions || transactions.length === 0 ? (
 				''
 			) : (
-				<Box display="flex" alignItems="center" justifyContent="center" flexDirection="row">
-					<Button onClick={setPreviousPage} disabled={!previousEnabled}>
-						Previous Page
+				<Box
+					display="inline-grid"
+					alignItems="center"
+					justifyContent="center"
+					gridTemplateRows="auto"
+					gridTemplateColumns="1fr 2fr 1fr 2fr 1fr"
+					gridAutoFlow="column"
+					width="100%"
+				>
+					<Button
+						onClick={setPreviousPage}
+						disabled={!previousEnabled}
+						padding="0.75rem"
+						fontSize="0.8rem"
+						height="0.85rem"
+						gridColumn="2"
+						minWidth=""
+						maxWidth="6rem"
+						width="100%"
+						justifySelf="right"
+					>
+						← Previous
 					</Button>
-					<Text padding=".5rem" textColor="white">
-						Page {currentPage + 1} of {totalPages - 1}
+					<Text
+						padding=".5rem"
+						textColor="white"
+						gridColumn="3"
+						minWidth=""
+						maxWidth="7.5rem"
+						justifySelf="center"
+					>
+						Page {currentPage + 1}&nbsp;of&nbsp;{totalPages - 1}
 					</Text>
-					<Button onClick={setNextPage} disabled={!nextEnabled}>
-						Next Page
+					<Button
+						onClick={setNextPage}
+						disabled={!nextEnabled}
+						padding="0.75rem"
+						fontSize="0.8rem"
+						height="0.85rem"
+						gridColumn="4"
+						minWidth=""
+						maxWidth="6rem"
+						width="100%"
+						justifySelf="left"
+					>
+						Next →
 					</Button>
 				</Box>
 			)}

@@ -62,9 +62,7 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 					</A>
 				</Td> */}
 				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].ticker}>
-					<A href={productUrl}>
-						<Text className="symbol">{row.symbol.toUpperCase()}</Text>
-					</A>
+					{row.symbol.toUpperCase()}
 				</Td>
 				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
 					{commify(safeFixed(row.amount, 4))}
@@ -87,6 +85,8 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 							align="center"
 							padding="0.2rem"
 							fontSize="0.8rem"
+							maxWidth="5rem"
+							margin="auto"
 						>
 							Buy/Sell
 						</ButtonLink>
@@ -201,9 +201,10 @@ export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
-					<Text fontStyle="italic" p="2rem">
-						<Spinner size="lg" margin="2rem auto" />
+					<Text fontStyle="italic" p="2rem 2rem 0 2rem">
+						Loading your wallet ...
 					</Text>
+					<Spinner size="lg" margin="2rem auto" />
 				</Td>
 			</Tr>
 		);
