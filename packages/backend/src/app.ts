@@ -69,7 +69,7 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   // Express Static just loves to cache, but this stops it.
-  res.set("Cache-Control", "public, max-age=600");
+  res.set("Cache-Control", "no-store");
   next();
 });
 
