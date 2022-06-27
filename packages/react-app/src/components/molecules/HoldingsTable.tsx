@@ -9,7 +9,9 @@ import { breakpointState } from '../../state';
 import { PortfolioTokenDetails } from '../../types';
 import { getTokenUrl } from '../../utils';
 import { commify, safeFixed } from '../../utils/contracts';
+import { ButtonLink } from '../atoms/ButtonLink';
 import { CoinLabelCell } from '../atoms/CoinLabelCell';
+import { DEFAULT_COL_STYLES } from './HoldingsTable/types';
 
 interface HoldingsRow {
 	row: PortfolioTokenDetails;
@@ -42,21 +44,54 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 		return (
 			<Tr {...props}>
 				<Td paddingInlineEnd="0px">
-					<CoinLabelCell icon={icon} symbol={row.symbol} name={name} url={productUrl} />
+					<CoinLabelCell
+						icon={icon}
+						symbol={row.symbol}
+						name={name}
+						url={productUrl}
+						{...DEFAULT_COL_STYLES[breakpoint].name}
+						width="100%"
+						height="4rem"
+						hideSymbol
+						linkCell
+					/>
 				</Td>
-				<Td paddingInlineStart="0px" paddingInlineEnd="0px">
+				{/* <Td paddingInlineStart="0px" paddingInlineEnd="0px">
 					<A href={productUrl}>
 						<Text as="span">{name}</Text>
 					</A>
-				</Td>
-				<Td paddingInlineStart="0px">
+				</Td> */}
+				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].ticker}>
 					<A href={productUrl}>
 						<Text className="symbol">{row.symbol.toUpperCase()}</Text>
 					</A>
 				</Td>
-				<Td paddingInlineStart="0px">{commify(safeFixed(row.amount, 4))}</Td>
-				<Td paddingInlineStart="0px">${commify(safeFixed(row.price, 2))}</Td>
-				<Td paddingInlineStart="0px">${commify(safeFixed(row.total, 2))}</Td>
+				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
+					{commify(safeFixed(row.amount, 4))}
+				</Td>
+				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
+					${commify(safeFixed(row.price, 2))}
+				</Td>
+				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
+					${commify(safeFixed(row.total, 2))}
+				</Td>
+				{breakpoint !== 'sm' && (
+					<Td
+						textAlign="center"
+						paddingInlineStart="0px"
+						// {...DEFAULT_COL_STYLES[breakpoint].action}
+					>
+						<ButtonLink
+							variant="primary"
+							href={productUrl}
+							align="center"
+							padding="0.2rem"
+							fontSize="0.8rem"
+						>
+							Buy/Sell
+						</ButtonLink>
+					</Td>
+				)}
 			</Tr>
 		);
 	}
@@ -117,22 +152,27 @@ function TokenHeader({ first = true }) {
 	if (breakpoint !== 'sm') {
 		return (
 			<Tr>
-				<Th bgColor="lightline"></Th>
-				<Th bgColor="lightline" paddingInlineStart="0px" paddingInlineEnd="0px">
+				{/* <Th bgColor="lightline"></Th> */}
+				<Th bgColor="lightline" paddingInlineStart="0px" paddingInlineEnd="0px" textAlign="center">
 					Name
 				</Th>
-				<Th bgColor="lightline" paddingInlineStart="0px">
+				<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
 					Ticker
 				</Th>
-				<Th bgColor="lightline" paddingInlineStart="0px">
+				<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
 					Amount
 				</Th>
-				<Th bgColor="lightline" paddingInlineStart="0px">
+				<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
 					Price
 				</Th>
-				<Th bgColor="lightline" paddingInlineStart="0px">
+				<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
 					Total
 				</Th>
+				{breakpoint !== 'sm' && (
+					<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
+						Trade
+					</Th>
+				)}
 			</Tr>
 		);
 	}
