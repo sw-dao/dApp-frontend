@@ -1,4 +1,16 @@
-import { Box, Image, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Image,
+	Spinner,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tr,
+} from '@chakra-ui/react';
 import { A } from 'hookrouter';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
@@ -6,7 +18,9 @@ import { breakpointState } from '../../state';
 
 import { getTokenUrl, timestampSorter } from '../../utils';
 import { safeFixed } from '../../utils/contracts';
+import { ButtonLink } from '../atoms/ButtonLink';
 import { EtherscanLink } from '../atoms/EtherscanLink';
+import { usePagination } from './Pagination/usePagination';
 
 const formatDate = (timestamp: string): string => {
 	const ts = parseInt(timestamp, 10) * 1000;
@@ -169,6 +183,19 @@ interface TransactionsTableProps {
 export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 	const { transactions, loading, first = true } = props;
 	let rows;
+	const {
+		currentPage,
+		totalPages,
+		setNextPage,
+		setPreviousPage,
+		nextEnabled,
+		previousEnabled,
+		startIndex,
+		endIndex,
+	} = usePagination({
+		totalItems: transactions?.length,
+		initialPageSize: 9,
+	});
 
 	if (loading) {
 		rows = (
@@ -201,7 +228,11 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 	} else {
 		const lastIx = transactions.length - 1;
 		transactions.sort((a, b) => timestampSorter(b.timestamp.toString(), a.timestamp.toString()));
-		rows = transactions.map((row, ix) => <TableRow key={ix} row={row} last={ix === lastIx} />);
+		// rows = transactions.map((row, ix) => <TableRow key={ix} row={row} last={ix === lastIx} />);
+
+		rows = transactions
+			.slice(startIndex, endIndex)
+			.map((row, ix) => <TableRow key={ix} row={row} last={ix === lastIx} />);
 	}
 
 	return (
@@ -212,6 +243,21 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 				</Thead>
 				<Tbody bgColor="transparent">{rows}</Tbody>
 			</Table>
+			{!transactions || transactions.length === 0 ? (
+				''
+			) : (
+				<Box display="flex" alignItems="center" justifyContent="center" flexDirection="row">
+					<Button onClick={setPreviousPage} disabled={!previousEnabled}>
+						Previous Page
+					</Button>
+					<Text padding=".5rem" textColor="white">
+						Page {currentPage + 1} of {totalPages - 1}
+					</Text>
+					<Button onClick={setNextPage} disabled={!nextEnabled}>
+						Next Page
+					</Button>
+				</Box>
+			)}
 		</Box>
 	);
 }
