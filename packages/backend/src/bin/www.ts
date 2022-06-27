@@ -56,7 +56,7 @@ const normalizePort = (val: string) => {
   return false;
 };
 
-const port = normalizePort(process.env.PORT || "3000");
+const port = normalizePort(process.env.APP_PORT || "3090");
 app.set("port", port);
 
 export const web3 = createAlchemyWeb3("wss://polygon-mainnet.g.alchemy.com/v2/"+alchemyApiKey);

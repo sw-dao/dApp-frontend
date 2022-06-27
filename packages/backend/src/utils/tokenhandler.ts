@@ -84,6 +84,7 @@ const getTokenPriceData = async (
 
   console.log("GET ", days, " ", symbols);
 
+  /*
   if (+days === 1) {
     const minutePrices = await getPricesTokensMinutes(
       symbols,
@@ -120,7 +121,8 @@ const getTokenPriceData = async (
     }
 
     return [];
-  } else if (+days === 7 || +days === 30) {
+
+  } else */ if (+days === 1 || +days === 7 || +days === 30) {
     const hourlyPrices = await getPricesTokensHourly(
       tokens,
       +days
