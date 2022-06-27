@@ -506,10 +506,11 @@ export function PortfolioPage(): JSX.Element {
 						<PriceAndDateHeader
 							symbol="PORTFOLIO"
 							price={balance}
-							change={priceChange}
+							// change={priceChange}
+							change={0}
 							date={loadDate}
 							showTime={true}
-							showZero={true}
+							showZero={false}
 						/>
 						{/* <TokenChart
 							symbol="Total"
