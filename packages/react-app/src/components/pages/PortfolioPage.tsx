@@ -19,14 +19,17 @@ import { useQueryParams } from 'hookrouter';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
+import { getPositions, getTxHistory } from '../../services/backend';
 
-import { tokenDetailsForCurrentPeriod } from '../../state';
+import { extendedTokenDetailsState, tokenDetailsForCurrentPeriod } from '../../state';
 import {
 	ChartData,
+	ExtendedTokenDetailsMap,
 	Holding,
 	PortfolioTokenDetails,
 	TokenDetails,
 	TokenDetailsMap,
+	Transaction,
 } from '../../types';
 import { getOverriddenDetails, timestampSorter } from '../../utils';
 import { findBestPrice } from '../../utils';
@@ -174,21 +177,6 @@ function holdingsListToMap(holdings: Holding[]) {
 	return map;
 }
 
-const valueOfHolding = (
-	symbol: string,
-	amount: number,
-	timestamp: string,
-	tokens: TokenDetailsMap,
-) => {
-	const prices = tokens[symbol].prices;
-	if (!prices) {
-		console.warn(`No prices for token: ${symbol}`);
-	}
-	const price = findBestPrice(prices, timestamp);
-	const total = amount * price;
-	return total;
-};
-
 interface HoldingsHistory {
 	[key: string]: number;
 }
@@ -199,27 +187,29 @@ interface HoldingsHistoryMap {
 
 type HoldingsHistoryArray = [string, HoldingsHistory][];
 
-function holdingsToHistory(holdings: HoldingsMap, tokens: TokenDetailsMap): ChartData {
+function holdingsToHistory(holdings: HoldingsMap, detailMap: ExtendedTokenDetailsMap): ChartData {
 	const history: HoldingsHistoryMap = {};
 
 	Object.keys(holdings).forEach((key) => {
-		const token = tokens[key];
-		const { symbol } = token;
-		holdings[key].forEach((holding) => {
-			const { timestamp, balance } = holding;
+		const token = detailMap[key];
+		if (token) {
+			const { symbol } = token;
+			holdings[key].forEach((holding) => {
+				const { timestamp, balance } = holding;
 
-			const fullTimestamp = startOfUnixDay(parseInt(timestamp, 10)) + '';
-			const sym = symbol || 'SWD';
-			const amount = parseFloat(utils.formatUnits(BigNumber.from(balance), decimalsOf(sym)));
+				const fullTimestamp = startOfUnixDay(parseInt(timestamp, 10)) + '';
+				const sym = symbol || 'SWD';
+				const amount = parseFloat(utils.formatUnits(BigNumber.from(balance), decimalsOf(sym)));
 
-			if (!history[fullTimestamp]) {
-				history[fullTimestamp] = {};
-			}
-			if (!history[fullTimestamp][sym]) {
-				history[fullTimestamp][sym] = 0;
-			}
-			history[fullTimestamp][sym] += amount;
-		});
+				if (!history[fullTimestamp]) {
+					history[fullTimestamp] = {};
+				}
+				if (!history[fullTimestamp][sym]) {
+					history[fullTimestamp][sym] = 0;
+				}
+				history[fullTimestamp][sym] += amount;
+			});
+		}
 	});
 
 	let historyArray: HoldingsHistoryArray = Object.keys(history).map((key) => [key, history[key]]);
@@ -254,7 +244,7 @@ function holdingsToHistory(holdings: HoldingsMap, tokens: TokenDetailsMap): Char
 	const fullTotals: ChartData = full.map((h) => {
 		const [timestamp, holdings] = h;
 		const total = Object.keys(holdings).reduce(
-			(acc, key) => acc + valueOfHolding(key, holdings[key], timestamp, tokens),
+			(acc, key) => acc + valueOfHolding(key, holdings[key], detailMap),
 			0,
 		);
 		return [parseInt(timestamp), total + ''];
@@ -317,15 +307,79 @@ interface HoldingsQueryResults {
 	refetch: () => void;
 }
 
+const valueOfHolding = (
+	symbol: string,
+	amount: number,
+	// timestamp: string,
+	detailMap: ExtendedTokenDetailsMap,
+) => {
+	const price = detailMap[symbol].currentPrice;
+	if (!price) {
+		console.warn(`No prices for token: ${symbol}`);
+	}
+	// const price = findBestPrice(prices, timestamp);
+	const total = amount * price;
+	return total;
+};
+
 export function PortfolioPage(): JSX.Element {
 	const [query] = useQueryParams();
 	const { address } = query; // TODO: remove after testing
-
+	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>();
+	const [txHistory, setTxHistory] = useState<Transaction[]>();
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
+	const [timeout, setTimeout] = useState(0);
+	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
+
 	const { address: walletAddress } = useWallet();
 
+	const userHoldings: PortfolioTokenDetails[] = [];
+	if (walletAddress && new Date().getTime() - timeout > 899999) {
+		setTimeout(new Date().getTime());
+		getTxHistory(walletAddress).then((h) => {
+			setTxHistory(h);
+		});
+		getPositions(walletAddress).then((holdings) => {
+			for (const e in holdings) {
+				// console.log(holdings, holdings[e], detailMap);
+				userHoldings.push({
+					amount: holdings[e].toString(),
+					price: '0', //detailMap[e].currentPrice.toString()
+					total: 0, //holdings[e] * detailMap[e].currentPrice
+					name: '',
+					symbol: e,
+					timestamp: '',
+				});
+			}
+			setUserHolding(userHoldings);
+		});
+	}
+	let balance = 0;
+	let oldBalance = 0;
+	let priceChange = 0;
+	if (detailMap.SWD && tokenDetails.SWD && userHolding) {
+		userHolding.forEach((h) => {
+			h.price = detailMap[h.symbol].currentPrice.toString();
+			h.total = parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
+			balance += parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
+			oldBalance += parseFloat(h.amount) * parseFloat(tokenDetails[h.symbol].prices[0][1]);
+		});
+		const cP = balance;
+		const p = oldBalance;
+		priceChange = ((cP - p) / p) * 100;
+	}
+
+	// const priceChange = useMemo(() => {
+	// 	if (prices.length > 0) {
+	// 		const cP = parseInt(currentPrice);
+	// 		const p = parseInt(prices[0][1]);
+	// 		return ((cP - p) / p) * 100;
+	// 	}
+	// 	return row?.changePercent1Day || details?.changePercent1Day || 0;
+	// }, [details, row]);
+
 	const [loadDate, setLoadDate] = useState(Date.now());
-	const priceChange = 0;
+	// const priceChange = 0;
 
 	const userAddress = useMemo(() => {
 		if (address) {
@@ -336,7 +390,6 @@ export function PortfolioPage(): JSX.Element {
 
 	const holdingsParams = useMemo(() => {
 		const skip = !userAddress;
-		console.log(userAddress);
 		return {
 			skip,
 			variables: {
@@ -345,6 +398,7 @@ export function PortfolioPage(): JSX.Element {
 		};
 	}, [userAddress]);
 
+	console.log(tokenDetails, walletAddress);
 	const {
 		data: holdingsData,
 		loading: holdingsLoading,
@@ -433,40 +487,41 @@ export function PortfolioPage(): JSX.Element {
 					paddingRight="3rem"
 					paddingLeft="3rem"
 					marginBottom="3rem"
-					width="70%"
+					width="max(90%, 28rem)"
 				>
 					<VStack spacing="2rem" align="left" className="bodycontent">
 						<Box textAlign="left">
 							<Heading fontSize="2rem">
 								Portfolio Balance
-								<ReloadIcon
+								{/* <ReloadIcon
 									color="bodytext"
 									onClick={handleReload}
 									d="inline-block"
 									ml="1rem"
 									fontSize="1.25rem"
 									cursor="pointer"
-								/>
+								/> */}
 							</Heading>
 						</Box>
 						<PriceAndDateHeader
 							symbol="PORTFOLIO"
-							price={currentBalance}
-							change={priceChange}
+							price={balance}
+							// change={priceChange}
+							change={0}
 							date={loadDate}
 							showTime={true}
 							showZero={false}
 						/>
-						<TokenChart
+						{/* <TokenChart
 							symbol="Total"
 							prices={holdingsHistory}
 							onDateChange={noop}
 							size={[100, 500]}
 							heading={{ textAlign: 'center', id: 'chartHead' }}
-							period="1Y"
+							period="1D"
 							allowChangePeriod={false}
 							showComparison={false}
-						/>
+						/> */}
 						<Tabs id="portfoliotabs">
 							<TabList
 								variant="unstyled"
@@ -479,7 +534,7 @@ export function PortfolioPage(): JSX.Element {
 								borderBottom="1px solid #120046"
 								borderColor="#120046"
 							>
-								<TabButton label="Holdings" />
+								<TabButton label="Portfolio" />
 								<TabButton label="Transactions" />
 							</TabList>
 
@@ -492,12 +547,12 @@ export function PortfolioPage(): JSX.Element {
 								borderColor="#120046"
 							>
 								<TabPanel p="0">
-									<HoldingsTable first={false} loading={holdingsLoading} holdings={holdings} />
+									<HoldingsTable first={false} loading={holdingsLoading} holdings={userHolding} />
 								</TabPanel>
 								<TabPanel p="0">
 									<TransactionsTable
 										first={false}
-										transactions={transactions}
+										transactions={txHistory}
 										loading={holdingsLoading}
 									/>
 								</TabPanel>

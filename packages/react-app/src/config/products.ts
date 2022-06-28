@@ -9,7 +9,7 @@ import { NftCollections } from '../components/organisms/AboutTokenSet/tokens/Nft
 import { PeiToken } from '../components/organisms/AboutTokenSet/tokens/PeiToken';
 import { QmTokens } from '../components/organisms/AboutTokenSet/tokens/QmTokens';
 import { SwapToken } from '../components/organisms/AboutTokenSet/tokens/SwapToken';
-import { SwxToken } from '../components/organisms/AboutTokenSet/tokens/SwxToken';
+//import { SwxToken } from '../components/organisms/AboutTokenSet/tokens/SwxToken';
 import { SwyfToken } from '../components/organisms/AboutTokenSet/tokens/SwyfToken';
 import { ProductSetupDescription } from '../types';
 
@@ -184,7 +184,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// 	yearly_fee: '3',
 	// 	detail_pane: MiTokens,
 	// },
-	{
+	/* {
 		name: 'SW Index',
 		symbol: 'SWX',
 		addresses: { '0x89': '0x24ec3c300ff53b96937c39b686844db9e471421e' },
@@ -192,7 +192,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 		category: 'INDICES',
 		yearly_fee: '0',
 		detail_pane: SwxToken,
-	},
+	}, */
 	// {
 	// 	name: 'Polygon Ecosystem Index',
 	// 	symbol: 'PEI',

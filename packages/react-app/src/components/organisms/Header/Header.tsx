@@ -57,7 +57,8 @@ export function Header(props: { breakpoint: string; mobile: boolean }): JSX.Elem
 						<Spacer key="spc2" />,
 						<HeaderLink key="token" page="Token" isActive={pathKey === 'token'} />,
 						<Spacer key="spc" />,
-						// <HeaderLink key="portfolio" page="Portfolio" isActive={pathKey === 'portfolio'} />,
+						<HeaderLink key="portfolio" page="Portfolio" isActive={pathKey === 'portfolio'} />,
+						<Spacer key="spc" />,
 				  ]
 				: [];
 		if (['lg', 'xl'].includes(breakpoint)) {
@@ -71,6 +72,7 @@ export function Header(props: { breakpoint: string; mobile: boolean }): JSX.Elem
 					borderRadius="max"
 					borderColor="#fff"
 					position="relative"
+					marginTop="-0.3rem"
 				>
 					<SearchField
 						absolute
@@ -98,6 +100,7 @@ export function Header(props: { breakpoint: string; mobile: boolean }): JSX.Elem
 					onClick={onOpen}
 					_hover={{ color: '#AADCFE', cursor: 'pointer' }}
 					ml="1rem"
+					marginTop=".25rem"
 				/>,
 			);
 		}

@@ -52,7 +52,12 @@ export function QmTokens({ details, data }: TokenDetailPane): JSX.Element {
 					</ListItem>
 					<ListItem>Take back control of your money from Wall Street and the big banks.</ListItem>
 				</List>
-				<FeeBox symbol={details?.symbol ?? '---'} details={details} data={data} />
+			</Box>,
+			<Box>
+				<Center>
+					{' '}
+					<FeeBox symbol={details?.symbol ?? '---'} details={details} data={data} />
+				</Center>
 			</Box>,
 		],
 		[details, data],

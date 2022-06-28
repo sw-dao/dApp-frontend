@@ -209,9 +209,11 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 							{symbol}
 						</Text>
 					</Td>
-					<Td textAlign="center" fontSize="0.8rem" padding="0 0.25em">
-						<DisplayNumber value={position.quantity} symbol={symbol} hideSymbol />
-					</Td>
+					{breakpoint !== 'sm' && (
+						<Td textAlign="center" fontSize="0.8rem" padding="0 0.25em">
+							<DisplayNumber value={position.quantity} symbol={symbol} hideSymbol />
+						</Td>
+					)}
 					{breakpoint !== 'sm' && (
 						<Td textAlign="center" fontSize="0.8rem" padding="0 0.25em">
 							{position.value}
@@ -241,9 +243,11 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 					<Th textAlign="center" bgColor="bodydark" borderRadius="2em 0 0 0">
 						Name
 					</Th>
-					<Th textAlign="center" bgColor="bodydark">
-						Quantity per token
-					</Th>
+					{breakpoint !== 'sm' && (
+						<Th textAlign="center" bgColor="bodydark">
+							Quantity per token
+						</Th>
+					)}
 					{breakpoint !== 'sm' && (
 						<Th textAlign="center" bgColor="bodydark">
 							Value per token

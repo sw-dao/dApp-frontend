@@ -224,7 +224,7 @@ export async function getMultipleRequiredApprovals(
 	return results.every((result) => result);
 }
 
-export const timestampSorter = (a: string, b: string): number => parseInt(a[0]) - parseInt(b[0]);
+export const timestampSorter = (a: string, b: string): number => parseInt(a) - parseInt(b);
 
 const DECIMAL_RE = new RegExp(/^([0-9]+\.?[0-9]*|\.[0-9]+)$/);
 export const isValidNumber = (value: string): boolean => {

@@ -64,7 +64,12 @@ export function SwapToken({ details, data }: TokenDetailPane): JSX.Element {
 					‘rug pull’ the collateral that you have allocated into the SWAP asset pool.
 				</Text>
 			</Box>,
-			<FeeBox symbol="SWAP" details={details} data={data} />,
+			<Box>
+				<Center>
+					{' '}
+					<FeeBox symbol={details?.symbol ?? '---'} details={details} data={data} />
+				</Center>
+			</Box>,
 		],
 		[details, data],
 	);

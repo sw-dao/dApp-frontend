@@ -59,7 +59,9 @@ const normalizePort = (val: string) => {
 const port = normalizePort(process.env.APP_PORT || "3090");
 app.set("port", port);
 
-export const web3 = createAlchemyWeb3("wss://polygon-mainnet.g.alchemy.com/v2/"+alchemyApiKey);
+export const web3 = createAlchemyWeb3(
+  "https://polygon-mainnet.g.alchemy.com/v2/" + alchemyApiKey
+);
 
 /**
  * Create HTTP server.

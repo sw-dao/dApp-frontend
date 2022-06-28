@@ -114,15 +114,19 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 				promiseImplementation: Promise,
 			});
 			const xMap: ExtendedTokenDetailsMap = {};
-			const detailReqs = tokenKeys.map(
+			const promises: any[] = [];
+			tokenKeys.map(
 				(symbol) =>
 					// promiseThrottle.add(() =>
-					getExtendedTokenDetails(cId, symbol).then((detail) => {
-						xMap[symbol] = detail;
-					}),
+					promises.push(
+						getExtendedTokenDetails(cId, symbol).then((detail) => {
+							xMap[symbol] = detail;
+						}),
+					),
 				// ),
 			);
-			Promise.all(detailReqs).then(() => {
+
+			Promise.all(promises).then(() => {
 				// setLoadedExtended(cId);
 				setExtendedTokensMap(xMap);
 			});
@@ -200,21 +204,24 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 			if (needsUpdate) {
 				setUpdating(true);
 				setUpdated(new Date().getTime());
-				const jobs = periodsNeeded.map((period) => {
-					return getFullTokenProductData(chainId || DEFAULT_CHAIN_ID, period).then((data) => {
-						if (goodResponse(data)) {
-							const tokenList = data as Array<TokenDetails>;
-							const tokenMap: TokenDetailsMap = {};
-							tokenList.forEach((detail) => {
-								tokenMap[detail.symbol.toUpperCase()] = detail;
-							});
-							// console.log(`Updating period ${period}`, tokenMap);
-							tokenSettersByPeriod[period](tokenMap);
-						}
-					});
+				const promises: any[] = [];
+				periodsNeeded.map((period) => {
+					promises.push(
+						getFullTokenProductData(chainId || DEFAULT_CHAIN_ID, period).then((data) => {
+							if (goodResponse(data)) {
+								const tokenList = data as Array<TokenDetails>;
+								const tokenMap: TokenDetailsMap = {};
+								tokenList.forEach((detail) => {
+									tokenMap[detail.symbol.toUpperCase()] = detail;
+								});
+								// console.log(`Updating period ${period}`, tokenMap);
+								tokenSettersByPeriod[period](tokenMap);
+							}
+						}),
+					);
 				});
 
-				Promise.all(jobs).then(() => {
+				Promise.all(promises).then(() => {
 					// console.log(`Updated ${periodsNeeded.join(', ')}`);
 					setUpdating(false);
 				});

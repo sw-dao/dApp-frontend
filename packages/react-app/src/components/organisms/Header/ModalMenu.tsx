@@ -122,6 +122,9 @@ export function ModalMenu({
 								/>
 							</ListItem>
 							<ListItem>
+								<HeaderLink variant="list" page="Portfolio" isActive={pathKey === 'portfolio'} />
+							</ListItem>
+							<ListItem>
 								<Box {...listItemStyle}>
 									<A href="https://vote.swdao.org">
 										<Text className="link" _hover={{ color: 'white', textDecoration: 'underline' }}>
@@ -166,9 +169,3 @@ export function ModalMenu({
 		</Modal>
 	);
 }
-
-/*
-<ListItem>
-	<HeaderLink variant="list" page="Portfolio" isActive={pathKey === 'portfolio'} />
-</ListItem>
-*/
