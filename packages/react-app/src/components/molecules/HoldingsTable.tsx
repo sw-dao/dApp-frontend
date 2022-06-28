@@ -1,17 +1,15 @@
 import { Box, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
-import { utils } from 'ethers';
 import { A } from 'hookrouter';
-import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
 import { breakpointState } from '../../state';
 
 import { PortfolioTokenDetails } from '../../types';
 import { getTokenUrl } from '../../utils';
-import { commify, safeFixed } from '../../utils/contracts';
 import { ButtonLink } from '../atoms/ButtonLink';
 import { CoinLabelCell } from '../atoms/CoinLabelCell';
 import { DEFAULT_COL_STYLES } from './HoldingsTable/types';
+import { formatNumber } from './TransactionsTable';
 
 interface HoldingsRow {
 	row: PortfolioTokenDetails;
@@ -65,10 +63,7 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 					{row.symbol.toUpperCase()}
 				</Td>
 				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
-					{parseFloat(row.amount).toLocaleString(undefined, {
-						minimumSignificantDigits: 2,
-						maximumSignificantDigits: 8,
-					})}
+					{formatNumber(row.amount)}
 				</Td>
 				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
 					{parseFloat(row.price).toLocaleString(undefined, {
@@ -136,10 +131,7 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 					Amount
 				</Text>
 				<Text fontWeight="normal" textAlign="center">
-					{parseFloat(row.amount).toLocaleString(undefined, {
-						minimumSignificantDigits: 2,
-						maximumSignificantDigits: 8,
-					})}
+					{formatNumber(row.amount)}
 				</Text>
 				<Text bgColor="lightline" textAlign="center">
 					Total

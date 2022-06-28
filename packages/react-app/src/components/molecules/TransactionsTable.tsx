@@ -11,17 +11,11 @@ import {
 	Thead,
 	Tr,
 } from '@chakra-ui/react';
-import { A } from 'hookrouter';
 import { isString } from 'lodash';
-import { type } from 'os';
-import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { breakpointState } from '../../state';
 
 import { getTokenUrl, timestampSorter } from '../../utils';
-import { safeFixed } from '../../utils/contracts';
-import { ButtonLink } from '../atoms/ButtonLink';
-import { EtherscanLink } from '../atoms/EtherscanLink';
 import { usePagination } from './Pagination/usePagination';
 
 const formatDate = (timestamp: string): string => {
@@ -30,17 +24,19 @@ const formatDate = (timestamp: string): string => {
 	return date.toLocaleDateString();
 };
 
-const formatNumber = (n: number | string): string => {
+export const formatNumber = (n: number | string): string => {
 	if (isString(n)) {
-		return parseFloat(n).toLocaleString(undefined, {
+		const num: string = parseFloat(n).toLocaleString(undefined, {
 			minimumSignificantDigits: 2,
 			maximumSignificantDigits: 6,
 		});
+		return num.length > 8 ? parseFloat(n).toExponential(5) : num;
 	} else {
-		return n.toLocaleString(undefined, {
+		const num: string = n.toLocaleString(undefined, {
 			minimumSignificantDigits: 2,
 			maximumSignificantDigits: 6,
 		});
+		return num.length > 8 ? n.toExponential(5) : num;
 	}
 };
 
