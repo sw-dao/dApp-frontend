@@ -144,7 +144,7 @@ const callGetAssetTransfers = async (
   b: string | undefined
 ) => {
   return await web3.alchemy.getAssetTransfers({
-    maxCount: 100,
+    maxCount: 500,
     excludeZeroValue: false,
     fromBlock: "0x0",
     fromAddress: a,

@@ -46,7 +46,14 @@ export function PriceAndDateHeader(props: PriceAndDateHeaderProps): JSX.Element 
 			</Text>
 			<Flex direction="row" spacing="1rem" width="100%" pos="relative">
 				<Text alignSelf="flex-end" color="white" fontSize="2rem">
-					{price === 0 ? '$0.00' : `$${utils.commify(safeFixed(price, 2))}`}
+					{price === 0
+						? '$0.00'
+						: price.toLocaleString(undefined, {
+								currency: 'USD',
+								style: 'currency',
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+						  })}
 				</Text>
 				{(change > 0 || change < 0 || showZero) && (
 					<Box className={change > 0.0 ? 'change positive' : 'change negative'}>

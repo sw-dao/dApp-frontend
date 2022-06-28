@@ -1,7 +1,7 @@
 export const getPreviousEnabled = (currentPage: number): boolean => currentPage > 0;
 
 export const getNextEnabled = (currentPage: number, totalPages: number): boolean =>
-	currentPage + 1 < totalPages - 1;
+	currentPage + 1 < totalPages;
 
 export const getTotalPages = (totalItems: number, pageSize: number): number =>
 	Math.ceil(totalItems / pageSize);
@@ -10,19 +10,19 @@ export const getStartIndex = (pageSize: number, currentPage: number): number =>
 	pageSize * currentPage;
 
 export const getEndIndex = (pageSize: number, currentPage: number, totalItems: number): number => {
-	const lastPageEndIndex = pageSize * (currentPage + 1);
+	const lastPageEndIndex = pageSize * (currentPage + 1) - 1;
 
 	if (lastPageEndIndex > totalItems) {
 		return totalItems - 1;
 	}
 
-	return lastPageEndIndex - 1;
+	return lastPageEndIndex;
 };
 
 export const limitPageBounds =
 	(totalItems: number, pageSize: number) =>
 	(page: number): number =>
-		Math.min(Math.max(page, 0), getTotalPages(totalItems, pageSize) - 1);
+		Math.min(Math.max(page, 0), getTotalPages(totalItems, pageSize));
 
 export type PaginationState = {
 	totalItems: number;

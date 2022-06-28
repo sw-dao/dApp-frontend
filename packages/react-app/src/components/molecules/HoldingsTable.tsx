@@ -65,13 +65,26 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 					{row.symbol.toUpperCase()}
 				</Td>
 				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
-					{commify(safeFixed(row.amount, 4))}
+					{parseFloat(row.amount).toLocaleString(undefined, {
+						minimumSignificantDigits: 2,
+						maximumSignificantDigits: 8,
+					})}
 				</Td>
 				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
-					${commify(safeFixed(row.price, 2))}
+					{parseFloat(row.price).toLocaleString(undefined, {
+						currency: 'USD',
+						style: 'currency',
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					})}
 				</Td>
 				<Td textAlign="center" paddingInlineStart="0px" {...DEFAULT_COL_STYLES[breakpoint].price}>
-					${commify(safeFixed(row.total, 2))}
+					{row.total.toLocaleString(undefined, {
+						currency: 'USD',
+						style: 'currency',
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					})}
 				</Td>
 				{breakpoint !== 'sm' && (
 					<Td
@@ -110,7 +123,12 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 					Price
 				</Text>
 				<Text fontWeight="normal" textAlign="center">
-					${commify(safeFixed(row.price, 2))}
+					{parseFloat(row.price).toLocaleString(undefined, {
+						currency: 'USD',
+						style: 'currency',
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					})}
 				</Text>
 			</Th>
 			<Th>
@@ -118,13 +136,21 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 					Amount
 				</Text>
 				<Text fontWeight="normal" textAlign="center">
-					{commify(safeFixed(row.amount, 4))}
+					{parseFloat(row.amount).toLocaleString(undefined, {
+						minimumSignificantDigits: 2,
+						maximumSignificantDigits: 8,
+					})}
 				</Text>
 				<Text bgColor="lightline" textAlign="center">
 					Total
 				</Text>
 				<Text fontWeight="normal" textAlign="center">
-					${commify(safeFixed(row.total, 2))}
+					{row.total.toLocaleString(undefined, {
+						currency: 'USD',
+						style: 'currency',
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					})}
 				</Text>
 			</Th>
 		</Tr>

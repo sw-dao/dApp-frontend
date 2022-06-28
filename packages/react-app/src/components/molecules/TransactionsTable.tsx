@@ -12,6 +12,8 @@ import {
 	Tr,
 } from '@chakra-ui/react';
 import { A } from 'hookrouter';
+import { isString } from 'lodash';
+import { type } from 'os';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { breakpointState } from '../../state';
@@ -26,6 +28,20 @@ const formatDate = (timestamp: string): string => {
 	const ts = parseInt(timestamp, 10) * 1000;
 	const date = new Date(ts);
 	return date.toLocaleDateString();
+};
+
+const formatNumber = (n: number | string): string => {
+	if (isString(n)) {
+		return parseFloat(n).toLocaleString(undefined, {
+			minimumSignificantDigits: 2,
+			maximumSignificantDigits: 6,
+		});
+	} else {
+		return n.toLocaleString(undefined, {
+			minimumSignificantDigits: 2,
+			maximumSignificantDigits: 6,
+		});
+	}
 };
 
 interface RowProps {
@@ -64,24 +80,24 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 	if (row.fromAmount > 0 && row.toAmount > 0) {
 		t = 'Exchange';
 		tIcon = '/images/portfolio/exchange-circle.png';
-		action = `${safeFixed(row.fromAmount, 4)} ${row.fromSymbol} for ${safeFixed(row.toAmount, 4)} ${
+		action = `${formatNumber(row.fromAmount)} ${row.fromSymbol} for ${formatNumber(row.toAmount)} ${
 			row.toSymbol
 		} `;
 	}
 	if (row.fromSymbol === 'SWX') {
 		t = 'Bond Issuance';
 		tIcon = '/images/portfolio/plus-circle.png';
-		action = `Deposited ${safeFixed(row.fromAmount, 4)} ${row.fromSymbol}`;
+		action = `Deposited ${formatNumber(row.fromAmount)} ${row.fromSymbol}`;
 	}
 	if (t === '' && row.fromAmount > 0 && row.toAmount <= 0) {
 		t = 'Transfer';
 		tIcon = '/images/portfolio/send.png';
-		action = `Sent ${safeFixed(row.fromAmount, 4)} ${row.fromSymbol}`;
+		action = `Sent ${formatNumber(row.fromAmount)} ${row.fromSymbol}`;
 	}
 	if (t === '' && row.fromAmount <= 0 && row.toAmount > 0) {
 		t = 'Transfer';
 		tIcon = '/images/portfolio/recieve.png';
-		action = `Recieved ${safeFixed(row.toAmount, 4)} ${row.toSymbol}`;
+		action = `Recieved ${formatNumber(row.toAmount)} ${row.toSymbol}`;
 	}
 	return (
 		<Tr {...props}>
@@ -194,7 +210,7 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		endIndex,
 	} = usePagination({
 		totalItems: transactions?.length,
-		initialPageSize: 11,
+		initialPageSize: 10,
 	});
 
 	if (loading) {
@@ -232,7 +248,7 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		// rows = transactions.map((row, ix) => <TableRow key={ix} row={row} last={ix === lastIx} />);
 
 		rows = transactions
-			.slice(startIndex, endIndex)
+			.slice(startIndex, endIndex + 1)
 			.map((row, ix) => <TableRow key={ix} row={row} last={ix === lastIx} />);
 	}
 
@@ -278,7 +294,7 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 						maxWidth="7.5rem"
 						justifySelf="center"
 					>
-						Page {currentPage + 1}&nbsp;of&nbsp;{totalPages - 1}
+						Page {currentPage + 1}&nbsp;of&nbsp;{totalPages}
 					</Text>
 					<Button
 						onClick={setNextPage}
