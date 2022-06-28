@@ -128,7 +128,7 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
 						search={true}
 						onChange={onChange}
 					/>
-					<SearchIcon position="absolute" left="1rem" top=".6rem" width="2rem" height={height} />
+					<SearchIcon position="absolute" left="1rem" top=".72rem" width="2rem" height={height} />
 				</Box>
 			</Box>
 		);

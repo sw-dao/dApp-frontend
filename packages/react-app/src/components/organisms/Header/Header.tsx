@@ -72,6 +72,7 @@ export function Header(props: { breakpoint: string; mobile: boolean }): JSX.Elem
 					borderRadius="max"
 					borderColor="#fff"
 					position="relative"
+					marginTop="-0.3rem"
 				>
 					<SearchField
 						absolute
@@ -99,6 +100,7 @@ export function Header(props: { breakpoint: string; mobile: boolean }): JSX.Elem
 					onClick={onOpen}
 					_hover={{ color: '#AADCFE', cursor: 'pointer' }}
 					ml="1rem"
+					marginTop=".25rem"
 				/>,
 			);
 		}

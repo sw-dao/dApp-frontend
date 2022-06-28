@@ -94,6 +94,7 @@ export default function WalletButton(props: WalletProps): JSX.Element {
 					width={breakpoints}
 					size={size}
 					fontSize="xs"
+					marginTop="-.2rem"
 				>
 					{icon && (
 						<Box mr="2" verticalAlign="center" display={['none', 'none', 'none', 'inline-block']}>
