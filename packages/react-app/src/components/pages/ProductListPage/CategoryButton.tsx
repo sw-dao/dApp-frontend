@@ -23,7 +23,18 @@ export default function CategoryButton({
 	const breakpoint = useRecoilValue(breakpointState);
 	const mr = useMemo(() => MARGINS[breakpoint] || '2.5rem', [breakpoint]);
 	const { label, image, imageHeight = '3rem', imageTop = '-0.4rem' } = BUTTON_STYLES[name];
-	const hover = { color: '#120046', bgColor: BUTTON_STYLES[name][state].color };
+	let hover = {};
+	if (name === 'YIELD' && state === 'active') {
+		hover = {
+			color: BUTTON_STYLES[name][state].bgColor,
+			bgColor: BUTTON_STYLES[name][state].color,
+		};
+	} else {
+		hover = {
+			color: '#120046',
+			bgColor: BUTTON_STYLES[name][state].color,
+		};
+	}
 	return (
 		<Box
 			_hover={hover}

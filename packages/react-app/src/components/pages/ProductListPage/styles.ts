@@ -51,8 +51,8 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		imageHeight: '3.1rem',
 		imageTop: '-0.5rem',
 		active: {
-			color: '#43A047',
-			bgColor: '#301FA0',
+			color: '#301FA0',
+			bgColor: '#43A047',
 			borderColor: 'transparent',
 		},
 		inactive: {
