@@ -28,20 +28,21 @@ export function CoinIcon({ symbol, src, height = '1.8rem', ...rest }: CoinIconPr
 		return <Image src={src} alt={label} {...props} />;
 	} else {
 		return (
-			<Box {...props}>
-				<Box
-					backgroundImage={`url(${src})`}
-					backgroundRepeat="no-repeat"
-					backgroundSize="cover"
-					backgroundPosition="center"
-					width="4rem"
-					height="4rem"
-				>
-					<Box color="black" padding="0.5rem 0 0 1.25rem" fontSize="1rem" fontWeight={600}>
-						<Text transform="rotate(-45deg)">{label.slice(0, 1)}</Text>
-					</Box>
-				</Box>
-			</Box>
+			<Image src={src} alt={label} {...props} />
+			// <Box {...props}>
+			// 	<Box
+			// 		backgroundImage={`url(${src})`}
+			// 		backgroundRepeat="no-repeat"
+			// 		backgroundSize="cover"
+			// 		backgroundPosition="center"
+			// 		width="4rem"
+			// 		height="4rem"
+			// 	>
+			// 		<Box color="black" padding="0.5rem 0 0 1.25rem" fontSize="1rem" fontWeight={600}>
+			// 			<Text transform="rotate(-45deg)">{label.slice(0, 1)}</Text>
+			// 		</Box>
+			// 	</Box>
+			// </Box>
 		);
 	}
 }

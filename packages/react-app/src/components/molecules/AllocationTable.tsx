@@ -201,6 +201,9 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 		keys.sort();
 		return keys.map((symbol) => {
 			const position = positionMap[symbol];
+			if (parseFloat(position.quantity) < 0.001) {
+				return;
+			}
 			return (
 				<Tr key={symbol} color="purple">
 					<Td padding="0 0 0 0.5em" className="nobreak coin">
