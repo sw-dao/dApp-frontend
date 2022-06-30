@@ -1,9 +1,9 @@
 import { Box, Flex, Icon } from '@chakra-ui/react';
 import React, { useEffect, useMemo } from 'react';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { breakpointState } from '../../../state';
+import { breakpointState, periodState } from '../../../state';
 import { SizedColumnStyles } from './types';
 
 const DEFAULT_SORTS: Record<string, JSX.Element> = {
@@ -69,6 +69,7 @@ export function TokenHeader({
 		}
 		setSorts(s);
 	}, [sort]);
+	const [periodVal, setPeriodState] = useRecoilState(periodState);
 
 	// note - "nowrap" because this is only shown if the screen is large
 	return (
@@ -83,7 +84,7 @@ export function TokenHeader({
 				Price{sorts.price}
 			</Box>
 			<Box {...props} {...styles.change} cursor="pointer" onClick={() => onSort('change')}>
-				Change{sorts.change}
+				{periodVal} Change{sorts.change}
 			</Box>
 			<Box {...props} {...styles.chart}>
 				Chart
