@@ -84,10 +84,10 @@ export function RedeemExactForm(props: FormPanelProps): JSX.Element {
 			};
 		}
 		let buttonLabel = 'Sell';
-		let buttonTooltip = 'Purchase tokens';
+		let buttonTooltip = 'Sell tokens';
 		if (!isApproved) {
 			buttonLabel = `Approve & Sell`;
-			buttonTooltip = 'Approve and purchase tokens';
+			buttonTooltip = 'Approve and sell tokens';
 		}
 		if (redeemVal <= MIN_TRADE) {
 			buttonTooltip = `Amount must be greater than ${MIN_TRADE.toString()}`;
