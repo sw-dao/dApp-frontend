@@ -205,7 +205,7 @@ const config = {
 				},
 				'.activelink': {
 					color: 'white',
-					textShadow: '-.5ex 0 .5ex 0 white',
+					textShadow: '.5px 0 .5px white',
 				},
 			},
 			'.homewrapper': {
