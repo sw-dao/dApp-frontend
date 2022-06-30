@@ -19,6 +19,12 @@ const CELLS_PER_ROW: Record<string, number> = {
 	lg: 3,
 	xl: 3,
 };
+const GRID_ITEM_MAXW: Record<string, string> = {
+	sm: '98%',
+	md: '100%',
+	lg: '100%',
+	xl: '100%',
+};
 
 export function DynamicGrid({
 	cells,
@@ -29,7 +35,12 @@ export function DynamicGrid({
 	const breakpoint = useRecoilValue(breakpointState);
 
 	const rows = useMemo(
-		() => cells.map((cell, ix) => <GridItem key={`item{${ix}}`}>{cell}</GridItem>),
+		() =>
+			cells.map((cell, ix) => (
+				<GridItem maxW={GRID_ITEM_MAXW[breakpoint]} key={`item{${ix}}`}>
+					{cell}
+				</GridItem>
+			)),
 		[cells],
 	);
 

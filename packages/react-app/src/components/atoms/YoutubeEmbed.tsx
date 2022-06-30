@@ -13,13 +13,13 @@ interface YoutubeEmbedProps {
 export const YoutubeEmbed = ({
 	embedId,
 	title,
-	width = '400px',
-	height = '300px',
+	width = 'auto',
+	height = 'auto',
 }: YoutubeEmbedProps): JSX.Element => (
 	<div className="video-responsive">
 		<iframe
-			width={width}
-			height={height}
+			// width={width}
+			// height={height}
 			src={`https://www.youtube.com/embed/${embedId}`}
 			frameBorder="0"
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
