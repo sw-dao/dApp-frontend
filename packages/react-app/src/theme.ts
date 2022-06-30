@@ -120,12 +120,15 @@ const config = {
 		global: () => ({
 			html: {
 				backgroundColor: '#070019',
+				overflowX: 'hidden',
 			},
 			body: {
 				backgroundColor: '#070019',
 				backgroundPosition: 'top left',
 				backgroundRepeat: 'repeat-x',
 				marginRight: '0 !important',
+				overflowX: 'hidden',
+				position: 'relativ',
 			},
 			'.sm, .md': {
 				'.border-thicken': {
