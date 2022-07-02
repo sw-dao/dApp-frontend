@@ -128,7 +128,8 @@ const config = {
 				backgroundRepeat: 'repeat-x',
 				marginRight: '0 !important',
 				overflowX: 'hidden',
-				position: 'relativ',
+				position: 'relative',
+				width: '100vw',
 			},
 			'.sm, .md': {
 				'.border-thicken': {
@@ -167,7 +168,6 @@ const config = {
 				width: '100%',
 				height: '100%',
 				margin: '0 auto',
-				minWidth: '400px',
 				padding: '0',
 			},
 			'.change': {

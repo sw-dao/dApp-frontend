@@ -12,13 +12,14 @@ import {
   validationResult,
 } from "express-validator";
 
-import { baseUrl0x } from "../settings";
 import { SwapRequest } from "../types";
 import { getSwapParameters, validSwap, validToken } from "../utils/0x";
 import { getCallToUrl } from "../utils/axios";
 import { handleError } from "../utils/error";
 
 const router: Router = express.Router();
+
+const baseUrl0x = "https://polygon.api.0x.org/swap/v1";
 
 /* GET prices from 0x API. */
 // TODO DRY validation
@@ -50,7 +51,7 @@ router.post(
     const url: URL = new URL(`${baseUrl0x}/price`);
     const priceRequest: SwapRequest = await getSwapParameters(req);
 
-    console.log(`priceRequest to ${url.toString()}:\n ${JSON.stringify(priceRequest, null, 2)}`);
+    // console.log(`priceRequest to ${url.toString()}:\n ${JSON.stringify(priceRequest, null, 2)}`);
     const priceResponse = await getCallToUrl(url, { params: priceRequest })
       .then((response: AxiosResponse) => {
         return response.data;

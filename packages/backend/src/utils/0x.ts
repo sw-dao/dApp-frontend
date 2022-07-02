@@ -92,6 +92,8 @@ const getSwapParameters = async (req: Request, skipValidation: boolean = true): 
     takerAddress: walletAddress,
   };
 
+  console.log(swapData);
+
   return swapData;
 };
 

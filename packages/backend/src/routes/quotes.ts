@@ -9,13 +9,14 @@ import {
   validationResult
 } from "express-validator";
 
-import { baseUrl0x } from "../settings";
 import { SwapRequest } from "../types";
 import { getSwapParameters, validSwap, validToken } from "../utils/0x";
 import { getCallToUrl } from "../utils/axios";
 import { handleError } from "../utils/error";
 
 const router: Router = express.Router();
+
+const baseUrl0x = "https://polygon.api.0x.org/swap/v1";
 
 /* GET prices from 0x API. */
 router.post(
@@ -37,8 +38,8 @@ router.post(
     .trim()
     .isEthereumAddress(),
   body("data.chainId", "Please provide valid chainId")
-  .notEmpty()
-  .trim(),
+    .notEmpty()
+    .trim(),
   async (req: Request, res: Response) => {
     const errors: Result<ValidationError> = validationResult(req);
 
@@ -61,6 +62,7 @@ router.post(
         return handleError(error);
       });
     res.json(quoteResponse);
+    console.log(quoteResponse);
   }
 );
 
