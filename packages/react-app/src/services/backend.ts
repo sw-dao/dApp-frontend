@@ -175,3 +175,30 @@ export const getTxHistory = async (address: string): Promise<Transaction[]> => {
 		})
 		.catch(handleError);
 };
+
+export const getSingleTokenPrice = async (
+	address: string,
+): Promise<{ currentPrice: number; changePercentDay: number }> => {
+	return request
+		.get(`/api/tokens/swappable/price/${address}`)
+		.then((res) => {
+			return res['data'];
+		})
+		.catch(handleError);
+};
+
+export const getTokenSetAllocation = async (
+	address: string,
+): Promise<
+	{
+		component: string;
+		unit: string;
+	}[]
+> => {
+	return request
+		.get(`/api/tokens/tokenset/${address}`)
+		.then((res) => {
+			return res['data'];
+		})
+		.catch(handleError);
+};

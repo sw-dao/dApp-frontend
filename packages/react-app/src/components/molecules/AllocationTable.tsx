@@ -6,6 +6,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { DEFAULT_CHAIN_ID } from '../../config';
+import { getSingleTokenPrice, getTokenSetAllocation } from '../../services/backend';
 import { getCoinDataByAddress } from '../../services/coingecko';
 import { allSwappableTokensState, breakpointState } from '../../state';
 import { PositionStructOutput } from '../../typechain/ISetToken';
@@ -42,17 +43,13 @@ async function getPrices(componentTokens: TokenSummaryInfoMap, chainId: string) 
 		requestsPerSecond: 1,
 		promiseImplementation: Promise,
 	});
-	const cId = chainId ?? DEFAULT_CHAIN_ID;
+	// const cId = chainId ?? DEFAULT_CHAIN_ID;
 	const promises = Object.keys(componentTokens).map(async (sym) => {
 		const address = componentTokens[sym].address;
 		return promiseThrottle.add(async () => {
-			const data = await getCoinDataByAddress(address, cId);
-			if (data && data.success) {
-				const { market_data } = data.data;
-				const pair: [number, number] = [
-					market_data.current_price.usd || 0,
-					market_data.price_change_percentage_24h || 0,
-				];
+			const data = await getSingleTokenPrice(address);
+			if (data) {
+				const pair: [number, number] = [data.currentPrice || 0, data.changePercentDay || 0];
 				prices[sym] = pair;
 			}
 		});
@@ -65,7 +62,12 @@ async function getPrices(componentTokens: TokenSummaryInfoMap, chainId: string) 
 export function AllocationTable(props: AllocationTableProps): JSX.Element {
 	const { symbol } = props;
 	const breakpoint = useRecoilValue(breakpointState);
-	const [positions, setPositions] = useState<PositionStructOutput[]>([]);
+	const [positions, setPositions] = useState<
+		{
+			component: string;
+			unit: string;
+		}[]
+	>();
 	const [componentTokens, setComponentTokens] = useState<TokenSummaryInfoMap>({});
 	const [positionMap, setPositionMap] = useState<PositionMap>({});
 	const [priceMap, setPriceMap] = useState<Record<string, [number, number]>>({});
@@ -104,25 +106,32 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 	}, [isConnected, provider, componentTokens, chainId, loading, loaded]);
 
 	useEffect(() => {
-		if (isConnected && provider && allowedTokens[symbol] && !loading) {
+		if (isConnected && provider && allowedTokens[symbol] && !loading && !positions) {
 			const address = allowedTokens[symbol]?.address || '';
 			if (!address) {
 				console.warn('No address for token', symbol);
 				return;
 			}
-			const settokenContract = getSetToken(allowedTokens[symbol].address, provider);
-			if (!settokenContract) {
-				console.warn('No settoken contract for token', symbol);
-			}
-			setLoading(true);
-			settokenContract
-				?.getComponents()
-				.then((components) => {
+			// const settokenContract = getSetToken(allowedTokens[symbol].address, provider);
+			// if (!settokenContract) {
+			// 	console.warn('No settoken contract for token', symbol);
+			// }
+			// setLoading(true);
+			// settokenContract?.getComponents().then((components) => {
+			// 	setAddresses(components);
+			// 	return settokenContract.getPositions();
+			// });
+			// .then((positions: PositionStructOutput[]) => {
+			// 		setPositions(positions);
+			// 	})
+			getTokenSetAllocation(address)
+				.then((r) => {
+					setPositions(r);
+					const components: string[] = [];
+					r.forEach((c) => {
+						components.push(c.component);
+					});
 					setAddresses(components);
-					return settokenContract.getPositions();
-				})
-				.then((positions: PositionStructOutput[]) => {
-					setPositions(positions);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -144,7 +153,8 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 	}, [allowedTokens, componentTokens]);
 
 	useEffect(() => {
-		if (loaded && addressMap && Object.keys(positionMap).length !== positions.length) {
+		if (loaded && addressMap && positions && Object.keys(positionMap).length !== positions.length) {
+			// console.log(loaded, addressMap, Object.keys(positionMap).length, positions.length);
 			const map: PositionMap = {};
 			let total = 0;
 			positions.forEach((position) => {

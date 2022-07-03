@@ -8,6 +8,7 @@ import {
 } from "express-validator";
 import NodeCache from "node-cache";
 import { ExtendedTokenDetailResponse, TokenDetailsResponse } from "src/types";
+import { getSingleTokenPrice, getTokenSetAllocation } from "../utils/0x/main";
 
 import {
   SupportedCurrencies,
@@ -113,6 +114,52 @@ router.get(
       await getExtendedTokenDetails(symbol, chainId);
 
     res.json(extendedTokenDetails);
+  }
+);
+
+router.get(
+  "/swappable/price/:address/",
+  param("address", "Please provide a valid token address")
+    .notEmpty()
+    .trim()
+    .isEthereumAddress(),
+
+  async (req: Request, res: Response) => {
+    const errors: Result<ValidationError> = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    await getSingleTokenPrice(req.params.address).then((r) => {
+      console.log(`Getting single Price data`, r);
+      res.json(r);
+    });
+    // console.log(`Getting Token Price`, positionsRequest);
+  }
+);
+
+router.get(
+  "/tokenset/:address/",
+  param("address", "Please provide a valid token address")
+    .notEmpty()
+    .trim()
+    .isEthereumAddress(),
+
+  async (req: Request, res: Response) => {
+    const errors: Result<ValidationError> = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    await getTokenSetAllocation(req.params.address).then((r) => {
+      console.log(`Getting TokenSet data`, r);
+      res.json(r);
+    });
+    // console.log(`Getting Token Price`, positionsRequest);
   }
 );
 

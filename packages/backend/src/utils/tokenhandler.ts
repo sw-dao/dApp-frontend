@@ -7,7 +7,7 @@ import {
   ExtendedTokenDetailResponse,
   TokenDetails,
 } from "../types";
-import getPrices from "./0x/main";
+import { getPrices } from "./0x/main";
 import { Operations, graphClient } from "./graph";
 import {
   getPricesTokensDaily,
@@ -42,17 +42,13 @@ const getExtendedTokenDetails = async (
         marketCap: 0,
         totalSupply: 0,
       };
-    });
-  const changePercentDay =
-    ((prices.currentPrice - prices.changePercentDay) /
-      prices.changePercentDay) *
-    100; // ((220 - 200)/200)*100
+    }); // ((220 - 200)/200)*100
   if (tokenData) {
     return {
       address,
       symbol,
       marketCap: prices.marketCap,
-      changePercent1Day: changePercentDay,
+      changePercent1Day: prices.changePercentDay,
       volume1Day: tokenData.volumeDay,
       totalSupply: prices.totalSupply,
       currentPrice: prices.currentPrice,
@@ -63,7 +59,7 @@ const getExtendedTokenDetails = async (
     address,
     symbol,
     marketCap: prices.marketCap,
-    changePercent1Day: changePercentDay,
+    changePercent1Day: prices.changePercentDay,
     volume1Day: 0,
     totalSupply: prices.totalSupply,
     currentPrice: prices.currentPrice,
@@ -123,10 +119,7 @@ const getTokenPriceData = async (
     return [];
 
   } else */ if (+days === 1 || +days === 7 || +days === 30) {
-    const hourlyPrices = await getPricesTokensHourly(
-      tokens,
-      +days
-    );
+    const hourlyPrices = await getPricesTokensHourly(tokens, +days);
 
     if (hourlyPrices) {
       return _.chain(hourlyPrices)

@@ -5,6 +5,7 @@ import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
 import { baseUrl0x } from "../../settings";
 import { web3 } from "../../bin/www";
+
 export const ADDRESSES = [
   "0x25ad32265c9354c29e145c902ae876f6b69806f2", // # alpha portfolio
   "0x71b41b3b19aac53ca4063aec2d17fc3caeb38026", // # macro trend btc
@@ -26,9 +27,11 @@ export const ADDRESSES = [
   "0xad2b726fd2bd3a7f8f4b3929152438eba637ef19", // # swd momentum index
   "0x55a40b33cff2eb062e7aa76506b7de711f2b2aff", // # polygon ecosystem index
 ]; // # contract addresS
+
 interface CommonDecimals {
   [addr: string]: string;
 }
+
 export const COMMON_DECIMALS: CommonDecimals = {
   "0xaee24d5296444c007a532696aada9de5ce6cafd0": "18",
   "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270": "18",
@@ -54,6 +57,12 @@ export const COMMON_DECIMALS: CommonDecimals = {
   "0xf2aa5ccea80c246a71e97b418173fcc956408d3f": "18",
   "0x72b467cacbdbec5918d8eec0371ca33e6fd42421": "18",
 };
+
+export const PRECISION_REQUIRED = [
+  "0x340f412860da7b7823df372a2b59ff78b7ae6abc",
+  "0x130ce4e4f76c2265f94a961d70618562de0bb8d2",
+  "0x4f025829c4b13df652f38abd2ab901185ff1e609",
+];
 
 // Get current TokenSet Positions
 const getTokenSetPositions = async (contractAddr: string, past: boolean) => {
@@ -148,13 +157,17 @@ const getTokenPrice = async (
     const latest: number = await web3.eth.getBlockNumber();
     startBlock = latest - 37565;
   }
+  let precision: boolean = false;
+  data.forEach((d) => {
+    if (PRECISION_REQUIRED.includes(d.tokenAddress.toLowerCase())) {
+      precision = true;
+    }
+  });
   const price = await axios
-    // .get(
-    //   `https://polygon.api.0x.org/swap/v1/price?buyToken=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&sellToken=${addr}&sellAmount=${n}`
-    // )
     .post(baseUrl0x + `/history`, {
       buyTokens: data,
       startBlock,
+      precision,
     })
     .then((response) => {
       return response.data; // return price and decimals
@@ -181,6 +194,7 @@ const getTokenSetPrice = async (address: string, past: boolean) => {
     return Promise.resolve(price);
   }
 };
+
 const getTotalSupply = async (address: string) => {
   const token = new web3.eth.Contract(TokenSetABI as AbiItem[], address);
   return await token.methods.totalSupply().call((err: any, res: any) => {
@@ -190,15 +204,36 @@ const getTotalSupply = async (address: string) => {
     return res;
   });
 };
-const getPrices = async (address: string) => {
+
+export const getTokenSetAllocation = async (address: string) => {
+  const result = await getTokenSetPositions(address, false);
+  const r: { component: string; unit: string }[] = [];
+  result.forEach((element: { component: string; unit: string }) => {
+    r.push({ component: element.component, unit: element.unit });
+  });
+  return r;
+};
+
+export const getSingleTokenPrice = async (address: string) => {
+  const currentPrice = await getTokenSetPrice(address, false);
+  const changePercentDay = await getTokenSetPrice(address, true);
+  return Promise.resolve({
+    currentPrice,
+    changePercentDay:
+      ((currentPrice - changePercentDay) / changePercentDay) * 100,
+  });
+};
+export const getPrices = async (address: string) => {
   const currentPrice = await getTokenSetPrice(address, false);
   const changePercentDay = await getTokenSetPrice(address, true);
   const totalSupply = await getTotalSupply(address);
   return Promise.resolve({
     currentPrice,
-    changePercentDay,
+    changePercentDay:
+      ((currentPrice - changePercentDay) / changePercentDay) * 100,
     totalSupply: totalSupply / 10 ** 18,
     marketCap: (totalSupply / 10 ** 18) * currentPrice,
   });
 };
+
 export default getPrices;
