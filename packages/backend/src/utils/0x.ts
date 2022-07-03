@@ -74,10 +74,14 @@ const getSwapParameters = async (req: Request, skipValidation: boolean = true): 
 
   const walletAddress = req.body?.data?.account;
   let shouldSkipFee = false;
-  try {
-    shouldSkipFee = await hasQualifyingSWDBalance(chainId, walletAddress);
-  } catch (error) {
-    console.log(error);
+  if (buyToken === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+    shouldSkipFee = true;
+  } else {
+    try {
+      shouldSkipFee = await hasQualifyingSWDBalance(chainId, walletAddress);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const swapData: SwapRequest = {
@@ -85,9 +89,8 @@ const getSwapParameters = async (req: Request, skipValidation: boolean = true): 
     sellToken,
     sellAmount,
     feeRecipient,
-    slippagePercentage: 0.005,
-    // buyTokenPercentageFee: shouldSkipFee ? 0 : buyTokenPercentageFee,
-    buyTokenPercentageFee: 0,  // Charging a fee is failing with WalletExecuteDelegateCallFailedError. TODO
+    slippagePercentage: 0.5,
+    buyTokenPercentageFee: shouldSkipFee ? 0 : buyTokenPercentageFee,
     skipValidation,
     takerAddress: walletAddress,
   };

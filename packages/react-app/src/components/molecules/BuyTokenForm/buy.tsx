@@ -340,7 +340,7 @@ export async function updatePrices(
 		if (errorDescription) {
 			if (errorDescription === 'INSUFFICIENT_ASSET_LIQUIDITY') {
 				errorDescription = isYieldFund(sellToken)
-					? 'SW Yield Funds are only available to sell out of during the final 3 days of every calendar quarter.'
+					? 'SW Yield Funds are only available to sell during the final 3 days of every calendar quarter.'
 					: 'Insufficient liquidity at the moment. Please try again later.';
 			}
 			showErrorToast(
