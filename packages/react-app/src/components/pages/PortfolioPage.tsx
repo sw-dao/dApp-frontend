@@ -359,10 +359,13 @@ export function PortfolioPage(): JSX.Element {
 	let priceChange = 0;
 	if (detailMap.SWD && tokenDetails.SWD && userHolding) {
 		userHolding.forEach((h) => {
-			h.price = detailMap[h.symbol].currentPrice.toString();
-			h.total = parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
-			balance += parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
-			oldBalance += parseFloat(h.amount) * parseFloat(tokenDetails[h.symbol].prices[0][1]);
+			if (detailMap[h.symbol]) {
+				h.price = detailMap[h.symbol].currentPrice.toString();
+
+				h.total = parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
+				balance += parseFloat(h.amount) * detailMap[h.symbol].currentPrice;
+				oldBalance += parseFloat(h.amount) * parseFloat(tokenDetails[h.symbol].prices[0][1]);
+			}
 		});
 		const cP = balance;
 		const p = oldBalance;
