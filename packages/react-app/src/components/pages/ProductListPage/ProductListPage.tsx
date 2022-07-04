@@ -34,7 +34,7 @@ function fakeTokenDetails(product: ProductSetupDescription, chainId: string): To
 
 export function ProductListPage(): JSX.Element {
 	const [query, setQuery] = useQueryParams();
-	const { filter = '', period = '1Y', sort = 'name' } = query;
+	const { filter = '', period = '1D', sort = 'name' } = query;
 	const tokenPriceDetail = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const detailMap = useRecoilValue(extendedTokenDetailsState);
 	const { chainId } = useWallet();
