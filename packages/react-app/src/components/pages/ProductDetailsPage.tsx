@@ -66,6 +66,9 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 		setQuery({ ...query, period: p });
 		setPeriodState(p);
 	};
+	useEffect(() => {
+		setPeriod('1Y');
+	}, []);
 
 	const { image: icon, name } = getOverriddenDetails(symbol);
 
