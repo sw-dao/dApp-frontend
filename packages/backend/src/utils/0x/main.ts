@@ -205,7 +205,6 @@ const getTotalSupply = async (address: string) => {
   });
 };
 
-<<<<<<< HEAD
 export const getTokenSetAllocation = async (address: string) => {
   const result = await getTokenSetPositions(address, false);
   const r: { component: string; unit: string }[] = [];
@@ -225,9 +224,6 @@ export const getSingleTokenPrice = async (address: string) => {
   });
 };
 export const getPrices = async (address: string) => {
-=======
-const getPrices = async (address: string) => {
->>>>>>> 062a7929436d694694d0894f0cb6fe062e605cb2
   const currentPrice = await getTokenSetPrice(address, false);
   const changePercentDay = await getTokenSetPrice(address, true);
   const totalSupply = await getTotalSupply(address);

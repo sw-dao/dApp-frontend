@@ -330,12 +330,16 @@ export function PortfolioPage(): JSX.Element {
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const [timeout, setTimeout] = useState(0);
 	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
+	const [refresh, setRefresh] = useState(false);
+	const [ogAddress, setOgAddress] = useState<string>();
 
 	const { address: walletAddress } = useWallet();
 
 	const userHoldings: PortfolioTokenDetails[] = [];
-	if (walletAddress && new Date().getTime() - timeout > 899999) {
+	if ((refresh && walletAddress) || (walletAddress && new Date().getTime() - timeout > 899999)) {
+		setRefresh(false);
 		setTimeout(new Date().getTime());
+		setOgAddress(walletAddress);
 		getTxHistory(walletAddress).then((h) => {
 			setTxHistory(h);
 		});
@@ -357,7 +361,7 @@ export function PortfolioPage(): JSX.Element {
 	let balance = 0;
 	let oldBalance = 0;
 	let priceChange = 0;
-	if (detailMap.SWD && tokenDetails.SWD && userHolding) {
+	if (walletAddress && detailMap.SWD && tokenDetails.SWD && userHolding) {
 		userHolding.forEach((h) => {
 			if (detailMap[h.symbol]) {
 				h.price = detailMap[h.symbol].currentPrice.toString();
@@ -370,6 +374,11 @@ export function PortfolioPage(): JSX.Element {
 		const cP = balance;
 		const p = oldBalance;
 		priceChange = ((cP - p) / p) * 100;
+	}
+	if (ogAddress && walletAddress && ogAddress != walletAddress) {
+		setUserHolding(undefined);
+		setTxHistory(undefined);
+		setRefresh(true);
 	}
 
 	// const priceChange = useMemo(() => {
@@ -478,7 +487,9 @@ export function PortfolioPage(): JSX.Element {
 
 	const handleReload = (evt: any) => {
 		evt.preventDefault();
-		holdingsRefetch();
+		setUserHolding(undefined);
+		setTxHistory(undefined);
+		setRefresh(true);
 	};
 
 	return (
@@ -496,14 +507,14 @@ export function PortfolioPage(): JSX.Element {
 						<Box textAlign="left">
 							<Heading fontSize="2rem">
 								Portfolio Balance
-								{/* <ReloadIcon
+								<ReloadIcon
 									color="bodytext"
 									onClick={handleReload}
 									d="inline-block"
 									ml="1rem"
 									fontSize="1.25rem"
 									cursor="pointer"
-								/> */}
+								/>
 							</Heading>
 						</Box>
 						<PriceAndDateHeader
