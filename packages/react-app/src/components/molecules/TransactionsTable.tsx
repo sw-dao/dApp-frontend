@@ -97,32 +97,42 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 	}
 	return (
 		<Tr {...props}>
-			<Td>
-				<Text as="span">{formatDate(row.timestamp.toString())}</Text>
-			</Td>
-
 			{breakpoint !== 'sm' && (
-				<Td>
-					{tIcon != '' ? (
-						<Image
-							d="inline-block"
-							maxh="1.5rem"
-							maxW="1.5rem"
-							// pr=".5rem"
-							fontSize="0.3rem"
-							align="left center"
-							src={tIcon}
-							alt={`${t} Icon`}
-						/>
-					) : (
-						''
-					)}
+				<Td width="190px">
+					<Text as="span">{formatDate(row.timestamp.toString())}</Text>
 				</Td>
 			)}
-			{breakpoint !== 'sm' && <Td>{t}</Td>}
-			<Td>{action}</Td>
 
-			<Td>
+			<Td padding="16px 0 16px 16px">
+				{tIcon != '' ? (
+					<Image
+						d="inline-block"
+						maxh="1.5rem"
+						maxW="1.5rem"
+						// pr=".5rem"
+						fontSize="0.3rem"
+						align="left center"
+						src={tIcon}
+						alt={`${t} Icon`}
+					/>
+				) : (
+					''
+				)}
+			</Td>
+
+			{breakpoint !== 'sm' && <Td>{t}</Td>}
+			{breakpoint !== 'sm' ? (
+				<Td>{action}</Td>
+			) : (
+				<Td>
+					<Text bgColor="lightline" fontWeight="bold">
+						{formatDate(row.timestamp.toString())}
+					</Text>
+					<Text>{action}</Text>
+				</Td>
+			)}
+
+			<Td padding="16px 16px 16px 0">
 				<a color={'#2089fd'} href={url} target="_blank">
 					<Image
 						d="inline-block"
