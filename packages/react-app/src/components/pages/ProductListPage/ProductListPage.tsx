@@ -76,10 +76,7 @@ export function ProductListPage(): JSX.Element {
 
 	const filteredTokens = useMemo(() => {
 		const cId = chainId || DEFAULT_CHAIN_ID;
-		const allProducts =
-			!filter || filter === 'ALL'
-				? PRODUCTS_BY_CATEGORY['STRATEGIES']
-				: PRODUCTS_BY_CATEGORY[filter];
+		const allProducts = !filter || filter === 'ALL' ? PRODUCTS : PRODUCTS_BY_CATEGORY[filter];
 		const rv = allProducts.map(
 			(product) => tokenPriceDetail[product.symbol] ?? fakeTokenDetails(product, cId),
 		);

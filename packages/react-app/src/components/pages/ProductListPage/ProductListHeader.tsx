@@ -48,10 +48,7 @@ export default function ProductListHeader({
 	const categoryButtons = useMemo(() => {
 		const keys = Object.keys(PRODUCTS_BY_CATEGORY);
 		keys.sort();
-		return [
-			// 'ALL',
-			...keys,
-		].map((key: string) => {
+		return ['ALL', ...keys].map((key: string) => {
 			return (
 				<CategoryButton
 					key={key}
