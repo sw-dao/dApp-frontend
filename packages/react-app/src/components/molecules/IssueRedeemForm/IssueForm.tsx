@@ -25,6 +25,7 @@ import { CoinIcon } from '../../atoms/CoinIcon';
 import DisplayNumber from '../../atoms/DisplayNumber';
 import { YesNoIcon } from '../../atoms/YesNoIcon';
 import { styles } from '../BuyTokenForm/styles';
+import WalletButton from '../WalletButton';
 import { checkApproval, getApprovalsNeeded } from './issuance';
 
 const WIDTHS: Record<string, string> = {
@@ -265,11 +266,15 @@ export function IssueForm(props: FormPanelProps): JSX.Element {
 				</Thead>
 				<Tbody>{tableRows}</Tbody>
 			</Table>
-			<Tooltip label={buyTooltip} shouldWrapChildren>
-				<Button disabled={!buyEnabled} onClick={handleBuy} isLoading={isBusy}>
-					{buyLabel}
-				</Button>
-			</Tooltip>
+			{!disabled ? (
+				<Tooltip label={buyTooltip} shouldWrapChildren>
+					<Button disabled={!buyEnabled} onClick={handleBuy} isLoading={isBusy}>
+						{buyLabel}
+					</Button>
+				</Tooltip>
+			) : (
+				<WalletButton width="7rem" connectLabel="Connect Wallet" />
+			)}
 		</VStack>
 	);
 }

@@ -12,6 +12,7 @@ import { TooltipWrapper } from '../../atoms/TooltipWrapper';
 import { YesNoIcon } from '../../atoms/YesNoIcon';
 import CoinSelectorWithBalance from '../CoinSelectorWithBalance';
 import { handleMaxAndNotify } from '../helpers';
+import WalletButton from '../WalletButton';
 import { readableBalance } from './buy';
 import { styles } from './styles';
 import { FormProps } from './types';
@@ -232,11 +233,15 @@ export default function BuyForm(props: FormProps): JSX.Element {
 					{buySymbol}
 				</Text>
 			</Flex>
-			<Tooltip label={buyTooltip}>
-				<Button disabled={disabled || !buyEnabled} onClick={onSubmit} isLoading={isBusy}>
-					{buyLabel}
-				</Button>
-			</Tooltip>
+			{!disabled ? (
+				<Tooltip label={buyTooltip}>
+					<Button disabled={disabled || !buyEnabled} onClick={onSubmit} isLoading={isBusy}>
+						{buyLabel}
+					</Button>
+				</Tooltip>
+			) : (
+				<WalletButton width="7rem" connectLabel="Connect Wallet" />
+			)}
 		</VStack>
 	);
 }

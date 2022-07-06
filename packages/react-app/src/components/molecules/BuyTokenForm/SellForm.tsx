@@ -11,6 +11,7 @@ import { TooltipWrapper } from '../../atoms/TooltipWrapper';
 import { YesNoIcon } from '../../atoms/YesNoIcon';
 import CoinSelectorWithBalance from '../CoinSelectorWithBalance';
 import { handleMaxAndNotify } from '../helpers';
+import WalletButton from '../WalletButton';
 import { readableBalance } from './buy';
 import { styles } from './styles';
 import { FormProps } from './types';
@@ -257,11 +258,15 @@ export default function SellForm(props: FormProps): JSX.Element {
 					margin="0 0.5rem"
 				/>
 			</Flex>
-			<Tooltip label={sellTooltip}>
-				<Button disabled={!sellEnabled} onClick={onSubmit} isLoading={isBusy}>
-					{sellLabel}
-				</Button>
-			</Tooltip>
+			{!disabled ? (
+				<Tooltip label={sellTooltip}>
+					<Button disabled={!sellEnabled} onClick={onSubmit} isLoading={isBusy}>
+						{sellLabel}
+					</Button>
+				</Tooltip>
+			) : (
+				<WalletButton width="7rem" connectLabel="Connect Wallet" />
+			)}
 		</VStack>
 	);
 }

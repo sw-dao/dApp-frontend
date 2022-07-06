@@ -13,6 +13,7 @@ import { TooltipWrapper } from '../../atoms/TooltipWrapper';
 import { YesNoIcon } from '../../atoms/YesNoIcon';
 import { styles } from '../BuyTokenForm/styles';
 import CoinSelectorWithBalance from '../CoinSelectorWithBalance';
+import WalletButton from '../WalletButton';
 import { checkApproval } from './issuance';
 
 const WIDTHS: Record<string, string> = {
@@ -273,11 +274,15 @@ export function RedeemExactForm(props: FormPanelProps): JSX.Element {
 					disabled={disabled}
 				/>
 			</Flex>
-			<Tooltip label={buttonTooltip} shouldWrapChildren>
-				<Button disabled={!buttonEnabled} onClick={handleRedeem} isLoading={isBusy}>
-					{buttonLabel}
-				</Button>
-			</Tooltip>
+			{!disabled ? (
+				<Tooltip label={buttonTooltip} shouldWrapChildren>
+					<Button disabled={!buttonEnabled} onClick={handleRedeem} isLoading={isBusy}>
+						{buttonLabel}
+					</Button>
+				</Tooltip>
+			) : (
+				<WalletButton width="7rem" connectLabel="Connect Wallet" />
+			)}
 		</VStack>
 	);
 }

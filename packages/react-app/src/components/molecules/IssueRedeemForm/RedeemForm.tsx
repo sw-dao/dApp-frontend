@@ -25,6 +25,7 @@ import { CoinIcon } from '../../atoms/CoinIcon';
 import DisplayNumber from '../../atoms/DisplayNumber';
 import { YesNoIcon } from '../../atoms/YesNoIcon';
 import { styles } from '../BuyTokenForm/styles';
+import WalletButton from '../WalletButton';
 
 function checkApproval(symbol: string, amount: number, approvals: CoinBalances) {
 	if (!approvals[symbol]) {
@@ -252,11 +253,15 @@ export function RedeemForm(props: FormPanelProps): JSX.Element {
 				</Thead>
 				<Tbody>{tableRows}</Tbody>
 			</Table>
-			<Tooltip label={sellTooltip} shouldWrapChildren>
-				<Button disabled={!sellEnabled} onClick={handleSell}>
-					{sellLabel}
-				</Button>
-			</Tooltip>
+			{!disabled ? (
+				<Tooltip label={sellTooltip} shouldWrapChildren>
+					<Button disabled={!sellEnabled} onClick={handleSell}>
+						{sellLabel}
+					</Button>
+				</Tooltip>
+			) : (
+				<WalletButton width="7rem" connectLabel="Connect Wallet" />
+			)}
 		</VStack>
 	);
 }
