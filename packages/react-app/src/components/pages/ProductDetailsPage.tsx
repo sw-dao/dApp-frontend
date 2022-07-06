@@ -28,13 +28,10 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 	const { period = '1Y' } = query;
 	const [periodVal, setPeriodState] = useRecoilState(periodState);
 	const windowSize = useWindowSize();
-
 	const tokenPrices = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const detailMap = useRecoilValue(extendedTokenDetailsState);
-
 	const [prices, setPrices] = useState<ChartData>([]); // SWD prices
-
 	const [product, setProduct] = useState<TokenDetails | null>(null);
 
 	useEffect(() => {

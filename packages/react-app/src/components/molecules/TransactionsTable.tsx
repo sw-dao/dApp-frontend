@@ -17,6 +17,7 @@ import { breakpointState } from '../../state';
 
 import { getTokenUrl, timestampSorter } from '../../utils';
 import { usePagination } from './Pagination/usePagination';
+import WalletButton from './WalletButton';
 
 const formatDate = (timestamp: string): string => {
 	const ts = parseInt(timestamp, 10) * 1000;
@@ -197,13 +198,14 @@ function TokenHeader({ first = true }): JSX.Element {
 }
 
 interface TransactionsTableProps {
+	isConnected: boolean;
 	transactions: RowProps[] | undefined;
 	loading: boolean;
 	first?: boolean;
 }
 
 export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
-	const { transactions, loading, first = true } = props;
+	const { isConnected, transactions, loading, first = true } = props;
 	let rows;
 	const {
 		currentPage,
@@ -219,11 +221,12 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		initialPageSize: 10,
 	});
 
-	if (loading) {
+	if (loading && !isConnected) {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
-					Please connect your wallet
+					<Text paddingBottom="1rem">Please connect your wallet</Text>
+					<WalletButton width="5rem" />
 				</Td>
 			</Tr>
 		);
@@ -266,7 +269,7 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 				</Thead>
 				<Tbody bgColor="transparent">{rows}</Tbody>
 			</Table>
-			{!transactions || transactions.length === 0 ? (
+			{!transactions || transactions.length === 0 || !isConnected ? (
 				''
 			) : (
 				<Box

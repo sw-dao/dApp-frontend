@@ -10,6 +10,7 @@ import { ButtonLink } from '../atoms/ButtonLink';
 import { CoinLabelCell } from '../atoms/CoinLabelCell';
 import { DEFAULT_COL_STYLES } from './HoldingsTable/types';
 import { formatNumber } from './TransactionsTable';
+import WalletButton from './WalletButton';
 
 interface HoldingsRow {
 	row: PortfolioTokenDetails;
@@ -198,20 +199,22 @@ function TokenHeader({ first = true }) {
 }
 
 interface HoldingsTableProps {
+	isConnected: boolean;
 	holdings: PortfolioTokenDetails[] | undefined;
 	loading: boolean;
 	first?: boolean;
 }
 
 export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
-	const { holdings, loading, first = true } = props;
+	const { isConnected, holdings, loading, first = true } = props;
 	let rows;
 
-	if (loading) {
+	if (loading && !isConnected) {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
-					Please connect your wallet
+					<Text paddingBottom="1rem">Please connect your wallet</Text>
+					<WalletButton width="5rem" />
 				</Td>
 			</Tr>
 		);

@@ -333,7 +333,7 @@ export function PortfolioPage(): JSX.Element {
 	const [refresh, setRefresh] = useState(false);
 	const [ogAddress, setOgAddress] = useState<string>();
 
-	const { address: walletAddress } = useWallet();
+	const { isConnected, address: walletAddress } = useWallet();
 
 	const userHoldings: PortfolioTokenDetails[] = [];
 	if ((refresh && walletAddress) || (walletAddress && new Date().getTime() - timeout > 899999)) {
@@ -561,10 +561,16 @@ export function PortfolioPage(): JSX.Element {
 								borderColor="#120046"
 							>
 								<TabPanel p="0">
-									<HoldingsTable first={false} loading={holdingsLoading} holdings={userHolding} />
+									<HoldingsTable
+										isConnected={isConnected}
+										first={false}
+										loading={holdingsLoading}
+										holdings={userHolding}
+									/>
 								</TabPanel>
 								<TabPanel p="0">
 									<TransactionsTable
+										isConnected={isConnected}
 										first={false}
 										transactions={txHistory}
 										loading={holdingsLoading}
