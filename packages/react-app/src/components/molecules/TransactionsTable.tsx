@@ -22,7 +22,7 @@ import WalletButton from './WalletButton';
 const formatDate = (timestamp: string): string => {
 	const ts = parseInt(timestamp, 10) * 1000;
 	const date = new Date(ts);
-	return date.toLocaleDateString();
+	return date.toLocaleDateString('en', { year: 'numeric', month: '2-digit', day: '2-digit' });
 };
 
 export const formatNumber = (n: number | string): string => {
