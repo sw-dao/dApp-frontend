@@ -57,10 +57,78 @@ const styles = {
 		borderColor: 'transparent',
 	},
 };
+// interface BuySell {
+// 	amount: number;
+// 	timestamp: number;
+// 	value: number;
+// }
+// interface BuySellMap {
+// 	[symbol: string]: BuySell[];
+// }
 
-function startOfUnixDay(unix: number) {
-	return startOfDay(fromUnixTime(unix)).getTime();
-}
+// // interface PreChart {}
+
+// const CHART_DATA_PLUS: BuySellMap = {
+// 	SWD: [
+// 		{
+// 			amount: 6.9157720628e-7,
+// 			timestamp: 1656126439,
+// 			value: 0.000004750739133404401,
+// 		},
+// 		{
+// 			amount: 14.884087640518457,
+// 			timestamp: 1648603109,
+// 			value: 101.31820229806758,
+// 		},
+// 		{
+// 			amount: 15.200905151515181,
+// 			timestamp: 1646892888,
+// 			value: 100.206464483699,
+// 		},
+// 		{
+// 			amount: 317.49841749017236,
+// 			timestamp: 1653221831,
+// 			value: 998.2270895289665,
+// 		},
+// 	],
+// 	SWYF: [
+// 		{
+// 			amount: 4.99841534636992,
+// 			timestamp: 1653736755,
+// 			value: 5.921943428153019,
+// 		},
+// 		{
+// 			amount: 0.10016835664851025,
+// 			timestamp: 1653736809,
+// 			value: 0.11845987536915001,
+// 		},
+// 		{
+// 			amount: 5.875433971898958,
+// 			timestamp: 1655183972,
+// 			value: 6.62182029546848,
+// 		},
+// 	],
+// 	QME: [
+// 		{ amount: 0.037, timestamp: 1654414601, value: 17.628510435414263 },
+// 		{
+// 			amount: 0.000999,
+// 			timestamp: 1655783387,
+// 			value: 0.2991188722200339,
+// 		},
+// 		{ amount: 0.024, timestamp: 1654125214, value: 11.610666881044 },
+// 		{ amount: 3.786, timestamp: 1654414461, value: 1803.6510874326216 },
+// 	],
+// };
+// const CHART_DATA_MINUS: BuySellMap = {
+// 	SWYF: [
+// 		{
+// 			amount: 10.97401767,
+// 			timestamp: 1655525079,
+// 			value: 12.990251086564914,
+// 		},
+// 	],
+// 	QME: [{ amount: 0.001, timestamp: 1655781547, value: 0.2992440971591555 }],
+// };
 
 function TabButton({ label }: { label: string }): JSX.Element {
 	return (
@@ -76,255 +144,29 @@ function TabButton({ label }: { label: string }): JSX.Element {
 	);
 }
 
-const holdingsQuery = `query UserHoldings($address: String!) {
-	swdUsers(
-		where: {address: $address}
-		) {
-		address,
-		holdings {
-			balance,
-			timestamp,
-			token {
-				address
-			}
-		},
-		sellTransactions {
-			id,
-			transactionReceipt {
-				token {
-					id,
-					address
-				},
-				timestamp,
-				from,
-				to,
-				value
-			}
-		},
-		buyTransactions {
-			id,
-			transactionReceipt {
-				token {
-					id,
-					address
-				},
-				timestamp,
-				from,
-				to,
-				value
-			}
-		}
-	}
-}`;
-
-const UNKNOWN_TOKEN: TokenDetails = {
-	symbol: '???',
-	currentPrice: 0,
-	changePercent1Day: 0,
-	prices: [],
-	marketCap: 0,
-	volume1Day: 0,
-	totalSupply: 0,
-	address: '',
-};
-
-function holdingDetails(holding: Holding, tokens: TokenDetailsMap): PortfolioTokenDetails {
-	const { balance, timestamp, address } = holding;
-
-	const tokenList: Array<TokenDetails> = Object.values(tokens);
-	let token: TokenDetails | undefined = tokenList.find((t) => t.address === address);
-	if (!token) {
-		console.warn(`Cannot find token details for address: ${address}`);
-		token = { ...UNKNOWN_TOKEN, address };
-	}
-	const bigBalance = BigNumber.from(balance);
-	const amount = formatUnits(bigBalance, decimalsOf(token.symbol));
-	const cleanBalance = parseFloat(amount);
-	// latest price
-	const price = token.currentPrice;
-	const total = cleanBalance * price;
-	const overrides = getOverriddenDetails(token.symbol);
-
-	return {
-		amount,
-		price: price.toFixed(2),
-		total,
-		name: overrides.name || token.symbol,
-		symbol: token.symbol,
-		timestamp,
-	};
-}
-
-interface HoldingsMap {
-	[address: string]: Holding[];
-}
-
-function holdingsListToMap(holdings: Holding[]) {
-	const map: HoldingsMap = {};
-	holdings.forEach((holding) => {
-		const { balance, timestamp, token } = holding;
-		const address = token?.address || '0X0000000000000000000000000000000000000000';
-		const key = address.toUpperCase();
-		if (!map[key]) {
-			map[key] = [];
-		}
-		map[key].push({ balance, timestamp, address });
-	});
-	// sort those holdings by timestamp, descending
-	for (const key in map) {
-		map[key].sort((a, b) => timestampSorter(b.timestamp, a.timestamp));
-	}
-	return map;
-}
-
-interface HoldingsHistory {
-	[key: string]: number;
-}
-
-interface HoldingsHistoryMap {
-	[key: string]: HoldingsHistory;
-}
-
-type HoldingsHistoryArray = [string, HoldingsHistory][];
-
-function holdingsToHistory(holdings: HoldingsMap, detailMap: ExtendedTokenDetailsMap): ChartData {
-	const history: HoldingsHistoryMap = {};
-
-	Object.keys(holdings).forEach((key) => {
-		const token = detailMap[key];
-		if (token) {
-			const { symbol } = token;
-			holdings[key].forEach((holding) => {
-				const { timestamp, balance } = holding;
-
-				const fullTimestamp = startOfUnixDay(parseInt(timestamp, 10)) + '';
-				const sym = symbol || 'SWD';
-				const amount = parseFloat(utils.formatUnits(BigNumber.from(balance), decimalsOf(sym)));
-
-				if (!history[fullTimestamp]) {
-					history[fullTimestamp] = {};
-				}
-				if (!history[fullTimestamp][sym]) {
-					history[fullTimestamp][sym] = 0;
-				}
-				history[fullTimestamp][sym] += amount;
-			});
-		}
-	});
-
-	let historyArray: HoldingsHistoryArray = Object.keys(history).map((key) => [key, history[key]]);
-	historyArray.sort((a, b) => timestampSorter(a[0], b[0]));
-	// That's the sparse array, we need to fill in the gaps
-	// chop to one year
-	const yearAgo = Date.now() - 365 * 24 * 60 * 60 * 1000;
-	historyArray = historyArray.filter((h) => parseInt(h[0]) > yearAgo);
-	if (historyArray.length === 0) {
-		return [];
-	}
-
-	let current = historyArray.shift();
-	while (!current) {
-		current = historyArray.shift();
-	}
-	const startTime = parseInt(current[0]);
-	let dayHoldings = current[1];
-	// for each day in from the start of the period, fill in the missing
-	// carry the balance forward unless there is a new transaction
-	const full: HoldingsHistoryArray = eachDayOfInterval({
-		start: new Date(startTime),
-		end: startOfDay(Date.now()),
-	}).map((day) => {
-		const timestamp = day.getTime();
-		if (history[timestamp]) {
-			dayHoldings = history[timestamp];
-		}
-		return [timestamp + '', dayHoldings];
-	});
-
-	const fullTotals: ChartData = full.map((h) => {
-		const [timestamp, holdings] = h;
-		const total = Object.keys(holdings).reduce(
-			(acc, key) => acc + valueOfHolding(key, holdings[key], detailMap),
-			0,
-		);
-		return [parseInt(timestamp), total + ''];
-	});
-
-	return fullTotals;
-}
-
-interface ITransactionReceipt {
-	token: { id: string };
-	from: string;
-	to: string;
-	value: number;
-	timestamp: string;
-}
-
-interface TransactionWithId {
-	id: string;
-	transactionReceipt: ITransactionReceipt;
-}
-
-function txDetails(tx: TransactionWithId, tokens: TokenDetailsMap) {
-	const {
-		id,
-		transactionReceipt: {
-			token: { id: tokenId },
-			from,
-			to,
-			value,
-			timestamp,
-		},
-	} = tx;
-	const [txId, seq] = id.split('-');
-
-	const address = tokenId.toLowerCase();
-	const tokenList: Array<TokenDetails> = Object.values(tokens);
-	console.log(`tokenList: ${JSON.stringify(tokenList)}`);
-	const token = tokenList.find((t) => t?.address?.toLowerCase() === address);
-	const amount = utils.formatUnits(value, decimalsOf(token?.symbol || 'ETH'));
-	return {
-		id: tx.id,
-		txId,
-		timestamp,
-		seq,
-		from,
-		to,
-		amount,
-		symbol: token ? token.symbol.toUpperCase() : '???',
-		token,
-	};
-}
-
 const noop = () => {
-	// noop
+	//noop
 };
 
-interface HoldingsQueryResults {
-	data?: any;
-	loading: boolean;
-	refetch: () => void;
-}
+// const convertTimestamp = (epoch: number) => {
+// 	const date = new Date(epoch * 1000);
+// 	return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
+// };
 
-const valueOfHolding = (
-	symbol: string,
-	amount: number,
-	// timestamp: string,
-	detailMap: ExtendedTokenDetailsMap,
-) => {
-	const price = detailMap[symbol].currentPrice;
-	if (!price) {
-		console.warn(`No prices for token: ${symbol}`);
-	}
-	// const price = findBestPrice(prices, timestamp);
-	const total = amount * price;
-	return total;
-};
+// const getChartData = (detailMap: ExtendedTokenDetailsMap) => {
+// 	const chart = [];
+// 	for (const symbol in CHART_DATA_PLUS) {
+// 		chart.push(detailMap[symbol]);
+// 		for (const txIndex in CHART_DATA_PLUS[symbol]) {
+// 			const tx = CHART_DATA_PLUS[symbol][txIndex];
+// 			const tS = new Date(convertTimestamp(tx.timestamp)).getTime();
+// 			for (const data in chart[symbol])
+// 		}
+// 	}
+// };
 
 export function PortfolioPage(): JSX.Element {
 	const [query] = useQueryParams();
-	const { address } = query; // TODO: remove after testing
 	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>();
 	const [txHistory, setTxHistory] = useState<Transaction[]>();
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
@@ -380,110 +222,9 @@ export function PortfolioPage(): JSX.Element {
 		setTxHistory(undefined);
 		setRefresh(true);
 	}
-
-	// const priceChange = useMemo(() => {
-	// 	if (prices.length > 0) {
-	// 		const cP = parseInt(currentPrice);
-	// 		const p = parseInt(prices[0][1]);
-	// 		return ((cP - p) / p) * 100;
-	// 	}
-	// 	return row?.changePercent1Day || details?.changePercent1Day || 0;
-	// }, [details, row]);
-
 	const [loadDate, setLoadDate] = useState(Date.now());
-	// const priceChange = 0;
 
-	const userAddress = useMemo(() => {
-		if (address) {
-			return address === 'test' ? '0x27239549dd40e1d60f5b80b0c4196923745b1fd2' : walletAddress;
-		}
-		return walletAddress;
-	}, [address, walletAddress]);
-
-	const holdingsParams = useMemo(() => {
-		const skip = !userAddress;
-		return {
-			skip,
-			variables: {
-				address: userAddress,
-			},
-		};
-	}, [userAddress]);
-
-	console.log(tokenDetails, walletAddress);
-	const {
-		data: holdingsData,
-		loading: holdingsLoading,
-		refetch: holdingsRefetch,
-	}: HoldingsQueryResults = useQuery(holdingsQuery, holdingsParams);
-
-	const {
-		holdings,
-		transactions,
-		currentBalance,
-		holdingsHistory,
-	}: {
-		holdings: PortfolioTokenDetails[];
-		transactions: any[];
-		currentBalance: number;
-		holdingsHistory: ChartData;
-	} = useMemo(() => {
-		if (holdingsLoading || !holdingsData) {
-			return {
-				holdings: [] as PortfolioTokenDetails[],
-				transactions: [] as any[],
-				currentBalance: 0,
-				holdingsHistory: [],
-			};
-		}
-		const { swdUsers } = holdingsData;
-		if (swdUsers.length === 0) {
-			return {
-				holdings: [] as PortfolioTokenDetails[],
-				transactions: [] as any[],
-				currentBalance: 0,
-				holdingsHistory: [],
-			};
-		}
-		const holdingsByCoin = holdingsListToMap(swdUsers[0].holdings);
-		const sellTransactions = swdUsers[0].sellTransactions.map((tx: TransactionWithId) =>
-			txDetails(tx, tokenDetails),
-		);
-		const buyTransactions = swdUsers[0].buyTransactions.map((tx: TransactionWithId) =>
-			txDetails(tx, tokenDetails),
-		);
-
-		const holdings: PortfolioTokenDetails[] = [];
-
-		// const transactions = Array.prototype.push.apply(sellTransactions, buyTransactions);
-		const transactions = sellTransactions.concat(buyTransactions);
-		//const currentBalance = holdings.reduce((acc, holding) => acc + holding.total, 0);
-		let holdingsHistory: ChartData = [];
-		if (tokenDetails && Object.keys(tokenDetails).length > 0) {
-			// get the most recent balance on each - remember they are already sorted
-			Object.values(holdingsByCoin)
-				// only the ones with activity
-				.filter((holdingList) => holdingList.length > 0)
-				// turn the last one into a "Holding" for the table below
-				.forEach((holdingList) => {
-					const current = holdingList[holdingList.length - 1];
-					holdings.push(holdingDetails(current, tokenDetails));
-				});
-			holdingsHistory = holdingsToHistory(holdingsByCoin, tokenDetails);
-		}
-
-		const currentBalance =
-			holdingsHistory.length > 0 ? parseFloat(holdingsHistory[holdingsHistory.length - 1][1]) : 0;
-
-		setLoadDate(Date.now());
-
-		return {
-			holdings,
-			transactions,
-			currentBalance,
-			holdingsHistory,
-		};
-	}, [holdingsLoading, holdingsData, tokenDetails]);
+	const holdingsHistory: ChartData = [];
 
 	const handleReload = (evt: any) => {
 		evt.preventDefault();
@@ -561,19 +302,13 @@ export function PortfolioPage(): JSX.Element {
 								borderColor="#120046"
 							>
 								<TabPanel p="0">
-									<HoldingsTable
-										isConnected={isConnected}
-										first={false}
-										loading={holdingsLoading}
-										holdings={userHolding}
-									/>
+									<HoldingsTable isConnected={isConnected} first={false} holdings={userHolding} />
 								</TabPanel>
 								<TabPanel p="0">
 									<TransactionsTable
 										isConnected={isConnected}
 										first={false}
 										transactions={txHistory}
-										loading={holdingsLoading}
 									/>
 								</TabPanel>
 							</TabPanels>

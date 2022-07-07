@@ -107,18 +107,18 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 	return (
 		<Tr {...props}>
 			<Th>
-				<Text bgColor="lightline" textAlign="center">
+				<Text fontWeight="normal" bgColor="lightline" textAlign="center">
 					Symbol
 				</Text>
 				<A href={productUrl}>
-					<Text fontWeight="normal" className="symbol" textAlign="center">
+					<Text fontWeight="bold" className="symbol" textAlign="center">
 						{row.symbol.toUpperCase()}
 					</Text>
 				</A>
-				<Text bgColor="lightline" textAlign="center">
+				<Text fontWeight="normal" bgColor="lightline" textAlign="center">
 					Price
 				</Text>
-				<Text fontWeight="normal" textAlign="center">
+				<Text fontWeight="bold" textAlign="center">
 					{parseFloat(row.price).toLocaleString(undefined, {
 						currency: 'USD',
 						style: 'currency',
@@ -128,16 +128,16 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 				</Text>
 			</Th>
 			<Th>
-				<Text bgColor="lightline" textAlign="center">
+				<Text fontWeight="normal" bgColor="lightline" textAlign="center">
 					Amount
 				</Text>
-				<Text fontWeight="normal" textAlign="center">
+				<Text fontWeight="bold" textAlign="center">
 					{formatNumber(row.amount)}
 				</Text>
-				<Text bgColor="lightline" textAlign="center">
+				<Text fontWeight="normal" bgColor="lightline" textAlign="center">
 					Total
 				</Text>
-				<Text fontWeight="normal" textAlign="center">
+				<Text fontWeight="bold" textAlign="center">
 					{row.total.toLocaleString(undefined, {
 						currency: 'USD',
 						style: 'currency',
@@ -201,15 +201,14 @@ function TokenHeader({ first = true }) {
 interface HoldingsTableProps {
 	isConnected: boolean;
 	holdings: PortfolioTokenDetails[] | undefined;
-	loading: boolean;
 	first?: boolean;
 }
 
 export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
-	const { isConnected, holdings, loading, first = true } = props;
+	const { isConnected, holdings, first = true } = props;
 	let rows;
 
-	if (loading && !isConnected) {
+	if (!isConnected) {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">

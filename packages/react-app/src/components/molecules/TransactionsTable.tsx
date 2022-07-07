@@ -200,12 +200,11 @@ function TokenHeader({ first = true }): JSX.Element {
 interface TransactionsTableProps {
 	isConnected: boolean;
 	transactions: RowProps[] | undefined;
-	loading: boolean;
 	first?: boolean;
 }
 
 export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
-	const { isConnected, transactions, loading, first = true } = props;
+	const { isConnected, transactions, first = true } = props;
 	let rows;
 	const {
 		currentPage,
@@ -221,7 +220,7 @@ export function TransactionsTable(props: TransactionsTableProps): JSX.Element {
 		initialPageSize: 10,
 	});
 
-	if (loading && !isConnected) {
+	if (!isConnected) {
 		rows = (
 			<Tr>
 				<Td colSpan={6} textAlign="center" color="bodytext">
