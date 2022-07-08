@@ -19,16 +19,16 @@ const getExtendedTokenDetails = async (
   symbol: string,
   chainId: string
 ): Promise<ExtendedTokenDetailResponse> => {
-  const tokenData = await graphClient
-    .query({
-      query: Operations.getExtendedTokenDetails,
-      variables: { symbol, chainId },
-    })
-    .then((res) => res.data.prices_token_infos[0])
-    .catch((e) => {
-      console.error(`[TokenHandler] getExtendedTokenDetails ${e.message}`);
-      return {};
-    });
+  // const tokenData = await graphClient
+  //   .query({
+  //     query: Operations.getExtendedTokenDetails,
+  //     variables: { symbol, chainId },
+  //   })
+  //   .then((res) => res.data.prices_token_infos[0])
+  //   .catch((e) => {
+  //     console.error(`[TokenHandler] getExtendedTokenDetails ${e.message}`);
+  //     return {};
+  //   });
   const address = SwappableTokens.TokenProducts["0x89"][symbol];
   const prices = await getPrices(address)
     .then((res) => {
@@ -43,18 +43,18 @@ const getExtendedTokenDetails = async (
         totalSupply: 0,
       };
     }); // ((220 - 200)/200)*100
-  if (tokenData) {
-    return {
-      address,
-      symbol,
-      marketCap: prices.marketCap,
-      changePercent1Day: prices.changePercentDay,
-      volume1Day: tokenData.volumeDay,
-      totalSupply: prices.totalSupply,
-      currentPrice: prices.currentPrice,
-      tokenset: tokenData.token.tokensetAllocationsByTokenid || [],
-    } as ExtendedTokenDetailResponse;
-  }
+  // if (tokenData) {
+  //   return {
+  //     address,
+  //     symbol,
+  //     marketCap: prices.marketCap,
+  //     changePercent1Day: prices.changePercentDay,
+  //     volume1Day: tokenData.volumeDay,
+  //     totalSupply: prices.totalSupply,
+  //     currentPrice: prices.currentPrice,
+  //     tokenset: tokenData.token.tokensetAllocationsByTokenid || [],
+  //   } as ExtendedTokenDetailResponse;
+  // }
   return {
     address,
     symbol,
