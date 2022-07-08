@@ -3,10 +3,7 @@ import { AbiItem } from "web3-utils";
 // import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
 import { SwappableTokens, TokenProducts } from "../../settings";
-
-interface Positions {
-  [addr: string]: number;
-}
+import { Positions } from "./exports";
 
 export const getPositions = async (address: string) => {
   const portfolio: Positions = {};
