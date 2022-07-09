@@ -63,7 +63,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 		if (defaultPrices && !tokenDetails[symbol]) {
 			setPrices(defaultPrices);
 		}
-		console.log(`CHART DATA: ${prices}`);
+		console.log(`CHART DATA: `, prices);
 	}, [loadPrices, period, prices, symbol, tokenDetails]);
 
 	useEffect(() => {
