@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { BigNumber } from 'ethers';
 
 import { BACKEND_SERVER_URL, TIMEOUT } from '../config';
-import { ExtendedTokenDetails, PortfolioHoldings, Transaction } from '../types';
+import { BuySellMap, ExtendedTokenDetails, PortfolioHoldings, Transaction } from '../types';
 
 function numberOrZero(value: string | null) {
 	if (!value) {
@@ -167,7 +167,12 @@ export const getPositions = async (address: string): Promise<PortfolioHoldings> 
 		.catch(handleError);
 };
 
-export const getTxHistory = async (address: string): Promise<Transaction[]> => {
+export const getTxHistory = async (
+	address: string,
+): Promise<{
+	txHistory: Transaction[];
+	charts: BuySellMap[];
+}> => {
 	return request
 		.get(`/api/portfolio/history/${address}`)
 		.then((res) => {

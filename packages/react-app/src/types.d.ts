@@ -240,6 +240,15 @@ export interface Transaction {
 	transactionHash: string;
 }
 
+export interface BuySell {
+	amount: number;
+	timestamp: number;
+	value: number;
+}
+export interface BuySellMap {
+	[symbol: string]: BuySell[];
+}
+
 export interface ExtendedTokenDetails {
 	symbol: string;
 	address: string;

@@ -55,14 +55,15 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	const [mergedPrices, setMergedPrices] = useState<MergedPrice[]>([]);
 	const [loadedPrices, setLoadedPrices] = useState('');
 	const [loading, setLoading] = useState(false);
-
 	useEffect(() => {
-		if (loadPrices && tokenDetails) {
+		if (loadPrices && tokenDetails[symbol]) {
 			const product = tokenDetails[symbol];
-			if (product) {
-				setPrices(product.prices);
-			}
+			setPrices(product.prices);
 		}
+		if (defaultPrices && !tokenDetails[symbol]) {
+			setPrices(defaultPrices);
+		}
+		console.log(`CHART DATA: ${prices}`);
 	}, [loadPrices, period, prices, symbol, tokenDetails]);
 
 	useEffect(() => {
@@ -109,16 +110,18 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	}, [loadedPrices, chainId, period, showComparison, loading]);
 
 	useEffect(() => {
-		const merged = mergePrices(
-			symbol,
-			prices,
-			ethPrices,
-			btcPrices,
-			compareEth,
-			compareBtc,
-			period,
-		);
-		setMergedPrices(merged);
+		if (prices.length !== 0) {
+			const merged = mergePrices(
+				symbol,
+				prices,
+				ethPrices,
+				btcPrices,
+				compareEth,
+				compareBtc,
+				period,
+			);
+			setMergedPrices(merged);
+		}
 	}, [compareBtc, compareEth, prices, ethPrices, btcPrices, symbol, period]);
 
 	function handleCompareBtc(e: React.ChangeEvent<HTMLInputElement>) {

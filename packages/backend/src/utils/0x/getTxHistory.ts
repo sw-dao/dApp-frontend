@@ -16,6 +16,7 @@ import {
   CONTRACT_ADDRESSES,
   Transaction,
 } from "./exports";
+import portfolioCharts from "./portfolioChart";
 
 const callGetAssetTransfers = async (
   a: string | undefined,
@@ -67,7 +68,7 @@ const getSymbol = async (address: string) => {
   return symbol;
 };
 
-const getTxHistory = async (address: string) => {
+const getTxHistoryMain = async (address: string) => {
   const res1 = await callGetAssetTransfers(address, undefined);
   const res2 = await callGetAssetTransfers(undefined, address);
   const res: AssetTransfersResult[] = [];
@@ -77,7 +78,7 @@ const getTxHistory = async (address: string) => {
   for (const tr of res2.transfers) {
     res.push(tr);
   }
-  const masterObj: any[] = [];
+  const masterObj: Transaction[] = [];
   const promises = [];
   console.log("Getting Total Transactions: ", res.length);
   for (const i of res) {
@@ -104,7 +105,7 @@ const mainLoop = async (
   //   console.log(i.hash);
   const tx = await web3.eth.getTransactionReceipt(i.hash);
   const obj: Transaction = {
-    timestamp: "",
+    timestamp: 0,
     fromSymbol: "",
     fromAmount: 0,
     fromAddress: "",
@@ -161,7 +162,11 @@ const mainLoop = async (
     //   }
   }
   obj.transactionHash = tx.transactionHash;
-  obj.timestamp = (await web3.eth.getBlock(tx.blockNumber)).timestamp;
+  let ts = (await web3.eth.getBlock(tx.blockNumber)).timestamp;
+  if (typeof ts === "string") {
+    ts = parseInt(ts, 10);
+  }
+  obj.timestamp = ts;
   obj.blockNumber = tx.blockNumber;
   masterObj.push(obj);
   // console.log(obj);
@@ -197,6 +202,15 @@ const processTxTopic = async (
       obj.toAddress = logs.address;
     }
   }
+};
+
+const getTxHistory = async (address: string) => {
+  const txHistory = await getTxHistoryMain(address);
+  if (txHistory) {
+    const charts = await portfolioCharts(txHistory);
+    return { txHistory, charts };
+  }
+  return;
 };
 
 export default getTxHistory;

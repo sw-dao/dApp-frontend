@@ -3,7 +3,7 @@ export interface CommonDecimals {
 }
 
 export interface Transaction {
-  timestamp: string | number;
+  timestamp: number;
   fromSymbol: string;
   fromAmount: number;
   fromAddress: string;
@@ -18,6 +18,23 @@ export interface Transaction {
 
 export interface Positions {
   [addr: string]: number;
+}
+
+export interface BuySell {
+  amount: number;
+  timestamp: number;
+  value: number;
+}
+export interface BuySellMap {
+  [symbol: string]: BuySell[];
+}
+export async function asyncForEach<T>(
+  array: T[],
+  callback: (item: T, index: number) => Promise<void>
+) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index);
+  }
 }
 
 export const ADDRESSES = [
@@ -164,3 +181,37 @@ export const ALL_ADDRESSES: { [key: string]: string } = {
   SWYF: "0xdc8d88d9e57cc7be548f76e5e413c4838f953018",
   // SWX: "0x24ec3c300ff53b96937c39b686844db9e471421e",
 };
+
+export const SYMBOLS = [
+  "BMI",
+  "BTBTC",
+  "BTETH",
+  "BTMAT",
+  "DBTC",
+  "DETH",
+  "DMATI",
+  "DMI",
+  "DVI",
+  "EIGHT",
+  "EMI",
+  "FOMO",
+  "HORSE",
+  "KEV",
+  "MMI",
+  "MTBTC",
+  "MTETH",
+  "PEI",
+  "QMB",
+  "QME",
+  "QMM",
+  "SMI",
+  "SSPOTS",
+  "SURF",
+  "SWAP",
+  "SWBYF",
+  "SWD",
+  "SWEYF",
+  "SWMYF",
+  "SWYF",
+  //   "SWX"
+];
