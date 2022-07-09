@@ -35,19 +35,19 @@ const filterTx = async (
     decimals = `${k}Decimals`;
     amount2 = amount;
   }
-  const value =
-    (await getValueFromBlock(tx[address], tx.blockNumber, tx[decimals])) *
-    tx[amount2];
+  // const value =
+  //   (await getValueFromBlock(tx[address], tx.blockNumber, tx[decimals])) *
+  //   tx[amount2];
   if (SYMBOLS.includes(tx[symbol])) {
     if (tx[symbol] in buySell) {
       buySell[tx[symbol]].push({
         amount: tx[amount],
         timestamp: tx.timestamp,
-        value,
+        value: 0,
       });
     } else {
       buySell[tx[symbol]] = [
-        { amount: tx[amount], timestamp: tx.timestamp, value },
+        { amount: tx[amount], timestamp: tx.timestamp, value: 0 },
       ];
     }
   }
