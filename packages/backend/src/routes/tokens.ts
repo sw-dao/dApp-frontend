@@ -97,7 +97,9 @@ router.get(
       return res.status(400).json({ errors: errors.array() });
     }
     const chainId = req.query.chainId as string;
-    const symbol = req.params.symbol;
+    // const symbol = req.params.symbol;
+    const symbols = req.params.symbol.slice(0, -1).split(",");
+
     if (
       !SwappableTokens.ERC20[chainId] ||
       !SwappableTokens.TokenProducts[chainId]
@@ -110,10 +112,18 @@ router.get(
         ],
       });
     }
-    const extendedTokenDetails: ExtendedTokenDetailResponse =
-      await getExtendedTokenDetails(symbol, chainId);
-
-    res.json(extendedTokenDetails);
+    const promises = [];
+    const tokenDetails: { [symbol: string]: ExtendedTokenDetailResponse } = {};
+    for (const symbol of symbols) {
+      promises.push(
+        getExtendedTokenDetails(symbol, chainId).then((r) => {
+          tokenDetails[r.symbol] = r;
+        })
+      );
+    }
+    Promise.all(promises).then(() => {
+      res.json(tokenDetails);
+    });
   }
 );
 

@@ -2,7 +2,13 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { BigNumber } from 'ethers';
 
 import { BACKEND_SERVER_URL, TIMEOUT } from '../config';
-import { BuySellMap, ExtendedTokenDetails, PortfolioHoldings, Transaction } from '../types';
+import {
+	BuySellMap,
+	ExtendedTokenDetails,
+	ExtendedTokenDetailsMap,
+	PortfolioHoldings,
+	Transaction,
+} from '../types';
 
 function numberOrZero(value: string | null) {
 	if (!value) {
@@ -141,19 +147,25 @@ export const getQuote = async (
 export const getExtendedTokenDetails = async (
 	chainId: string,
 	symbol: string,
-): Promise<ExtendedTokenDetails> => {
+): Promise<ExtendedTokenDetailsMap> => {
 	return request
 		.get(`/api/tokens/detail/${symbol.toUpperCase()}?chainId=${chainId}`)
 		.then((res) => {
 			const { data } = res;
-			return {
-				...data,
-				marketCap: numberOrZero(data.marketCap),
-				changePercent1Day: numberOrZero(data.changePercent1Day),
-				volume1Day: numberOrZero(data.volume1Day),
-				currentPrice: numberOrZero(data.currentPrice),
-				totalSupply: numberOrZero(data.totalSupply),
-			} as ExtendedTokenDetails;
+
+			const dataAll: { [symbol: string]: ExtendedTokenDetails } = {};
+			for (const symbol in data) {
+				const d = data[symbol];
+				dataAll[d.symbol] = {
+					...d,
+					marketCap: numberOrZero(d.marketCap),
+					changePercent1Day: numberOrZero(d.changePercent1Day),
+					volume1Day: numberOrZero(d.volume1Day),
+					currentPrice: numberOrZero(d.currentPrice),
+					totalSupply: numberOrZero(d.totalSupply),
+				};
+			}
+			return dataAll;
 		})
 		.catch(handleError);
 };

@@ -57,6 +57,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	const [mergedPrices, setMergedPrices] = useState<MergedPrice[]>([]);
 	const [loadedPrices, setLoadedPrices] = useState('');
 	const [loading, setLoading] = useState(false);
+
 	useEffect(() => {
 		if (loadPrices && tokenDetails[symbol]) {
 			const product = tokenDetails[symbol];
@@ -65,8 +66,9 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 		if (defaultPrices && !tokenDetails[symbol]) {
 			setPrices(defaultPrices);
 		}
+
 		console.log(`CHART DATA: `, prices);
-	}, [loadPrices, period, prices, symbol, tokenDetails, update]);
+	}, [loadPrices, prices, symbol, tokenDetails, update]);
 
 	useEffect(() => {
 		if (!loading) {

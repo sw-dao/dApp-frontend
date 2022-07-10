@@ -8,27 +8,12 @@ import {
   TokenDetails,
 } from "../types";
 import { getPrices } from "./0x/main";
-import { Operations, graphClient } from "./graph";
-import {
-  getPricesTokensDaily,
-  getPricesTokensHourly,
-  getPricesTokensMinutes,
-} from "./prices";
+import { getPricesTokensDaily, getPricesTokensHourly } from "./prices";
 
 const getExtendedTokenDetails = async (
   symbol: string,
   chainId: string
 ): Promise<ExtendedTokenDetailResponse> => {
-  // const tokenData = await graphClient
-  //   .query({
-  //     query: Operations.getExtendedTokenDetails,
-  //     variables: { symbol, chainId },
-  //   })
-  //   .then((res) => res.data.prices_token_infos[0])
-  //   .catch((e) => {
-  //     console.error(`[TokenHandler] getExtendedTokenDetails ${e.message}`);
-  //     return {};
-  //   });
   const address = SwappableTokens.TokenProducts["0x89"][symbol];
   const prices = await getPrices(address)
     .then((res) => {
@@ -42,19 +27,7 @@ const getExtendedTokenDetails = async (
         marketCap: 0,
         totalSupply: 0,
       };
-    }); // ((220 - 200)/200)*100
-  // if (tokenData) {
-  //   return {
-  //     address,
-  //     symbol,
-  //     marketCap: prices.marketCap,
-  //     changePercent1Day: prices.changePercentDay,
-  //     volume1Day: tokenData.volumeDay,
-  //     totalSupply: prices.totalSupply,
-  //     currentPrice: prices.currentPrice,
-  //     tokenset: tokenData.token.tokensetAllocationsByTokenid || [],
-  //   } as ExtendedTokenDetailResponse;
-  // }
+    });
   return {
     address,
     symbol,
@@ -79,46 +52,7 @@ const getTokenPriceData = async (
   const now = DateTime.now();
 
   console.log("GET ", days, " ", symbols);
-
-  /*
-  if (+days === 1) {
-    const minutePrices = await getPricesTokensMinutes(
-      symbols,
-      Math.round(now.minus({ day: +days }).toSeconds()),
-      Math.round(now.toSeconds()),
-      chainId
-    );
-
-    if (minutePrices) {
-      return _.chain(minutePrices)
-        .groupBy("symbol")
-        .map((pricesBySymbol) => {
-          let aggregatePricesForSymbol = [];
-          if (pricesBySymbol) {
-            aggregatePricesForSymbol = pricesBySymbol
-              .map((pricesTypes) => pricesTypes?.minutes)
-              .reduce((result, item) => result.concat(item), [])
-              .map((price: any) => fixPriceValues(price))
-              .sort((a: any, b: any) => a[0] - b[0]);
-          }
-
-          console.log(
-            `[TokenHandler] returning ${aggregatePricesForSymbol.length} minute prices for ${pricesBySymbol[0].symbol}`
-          );
-
-          return {
-            address: tokens[pricesBySymbol[0].symbol],
-            symbol: pricesBySymbol[0].symbol,
-            tokenset: pricesBySymbol[0].tokenset,
-            prices: aggregatePricesForSymbol,
-          };
-        })
-        .value() as TokenDetails[];
-    }
-
-    return [];
-
-  } else */ if (+days === 1 || +days === 7 || +days === 30) {
+  if (+days === 1 || +days === 7 || +days === 30) {
     const hourlyPrices = await getPricesTokensHourly(tokens, +days);
 
     if (hourlyPrices) {

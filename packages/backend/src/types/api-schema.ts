@@ -168,7 +168,7 @@ export interface Components {
     };
     ExtendedTokenDetailResponse: {
       address?: string;
-      symbol?: string;
+      symbol: string;
       marketCap?: number;
       changePercent1Day?: number;
       volume1Day?: number;
