@@ -16,7 +16,7 @@ import { utils } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { useQuery } from 'graphql-hooks';
 import { useQueryParams } from 'hookrouter';
-import { random } from 'lodash';
+import { isUndefined, random } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
@@ -101,6 +101,9 @@ const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 	for (const symbol in chartData) {
 		if (!chart[symbol]) {
 			chart[symbol] = [];
+		}
+		if (isUndefined(tokenDetails[symbol].prices)) {
+			continue;
 		}
 		const product = tokenDetails[symbol].prices;
 		for (const txIndex in chartData[symbol]) {

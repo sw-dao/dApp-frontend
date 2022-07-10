@@ -23,13 +23,13 @@ const callGetAssetTransfers = async (
   b: string | undefined
 ) => {
   return await web3.alchemy.getAssetTransfers({
-    maxCount: 500,
+    maxCount: 1000,
     excludeZeroValue: false,
     fromBlock: "0x0",
     fromAddress: a,
     toAddress: b,
 
-    contractAddresses: CONTRACT_ADDRESSES,
+    contractAddresses: Object.values(TokenProducts["0x89"]),
     category: [AssetTransfersCategory.ERC20],
   });
 };
