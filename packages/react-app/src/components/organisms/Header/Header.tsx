@@ -56,7 +56,7 @@ export function Header(props: { breakpoint: string; mobile: boolean }): JSX.Elem
 						<HeaderLink key="products" page="Products" url="/" isActive={pathKey === 'products'} />,
 						<Spacer key="spc2" />,
 						<HeaderLink key="token" page="Token" isActive={pathKey === 'token'} />,
-						<Spacer key="spc" />,
+						<Spacer key="spc1" />,
 						<HeaderLink key="portfolio" page="Portfolio" isActive={pathKey === 'portfolio'} />,
 						<Spacer key="spc" />,
 				  ]

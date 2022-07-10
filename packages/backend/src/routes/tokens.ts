@@ -38,7 +38,7 @@ const verifyCacheCompleteData = (
     console.log(`Cache key for ${token} ${currency} ${timeframe} is ${key}`);
     if (cache.has(key)) {
       const cachedData = cache.get(key);
-      console.log("Returning cached data");
+      // console.log("Returning cached data");
       return res.status(200).json(cache.get(key));
     }
     return next();
@@ -97,7 +97,6 @@ router.get(
       return res.status(400).json({ errors: errors.array() });
     }
     const chainId = req.query.chainId as string;
-    // const symbol = req.params.symbol;
     const symbols = req.params.symbol.slice(0, -1).split(",");
 
     if (

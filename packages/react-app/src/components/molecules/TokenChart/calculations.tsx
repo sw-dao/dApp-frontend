@@ -63,8 +63,8 @@ export function mergePrices(
 		return merged;
 	}
 	const priceMap = chartDataToMap(prices);
-	console.log(`Compare ETH ${compareEth} with ${ethPrices?.length}`);
-	console.log(`Compare BTC ${compareBtc} with ${btcPrices?.length}`);
+	// console.log(`Compare ETH ${compareEth} with ${ethPrices?.length}`);
+	// console.log(`Compare BTC ${compareBtc} with ${btcPrices?.length}`);
 	const ethPriceMap = compareEth && ethPrices ? chartDataToMap(ethPrices) : {};
 	const btcPriceMap = compareBtc && btcPrices ? chartDataToMap(btcPrices) : {};
 	const ethTimestamps: number[] =
@@ -134,23 +134,23 @@ export function mergePrices(
 		}
 	}
 
-	if (merged.length === 0) {
-		console.log(
-			`No data for ${symbol} in ${period}.  First date was ${dateFormatter(
-				keys[0],
-			)}, Last date was ${dateFormatter(keys[keys.length - 1])}`,
-		);
-	} else {
-		console.log(
-			`Returning ${merged.length} prices for ${symbol} in ${period}.  ${dateFormatter(
-				keys[0],
-			)} - ${dateFormatter(
-				keys[keys.length - 1],
-			)}, where the query for period ${period} was ${dateFormatter(`${startTs}`)} - ${dateFormatter(
-				`${endTs}`,
-			)}`,
-		);
-	}
+	// if (merged.length === 0) {
+	// 	console.log(
+	// 		`No data for ${symbol} in ${period}.  First date was ${dateFormatter(
+	// 			keys[0],
+	// 		)}, Last date was ${dateFormatter(keys[keys.length - 1])}`,
+	// 	);
+	// } else {
+	// 	console.log(
+	// 		`Returning ${merged.length} prices for ${symbol} in ${period}.  ${dateFormatter(
+	// 			keys[0],
+	// 		)} - ${dateFormatter(
+	// 			keys[keys.length - 1],
+	// 		)}, where the query for period ${period} was ${dateFormatter(`${startTs}`)} - ${dateFormatter(
+	// 			`${endTs}`,
+	// 		)}`,
+	// 	);
+	// }
 
 	return merged;
 }

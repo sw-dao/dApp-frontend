@@ -77,7 +77,7 @@ export const getEthPrice = async (chainId: string) => {
 
 export const getTokenProductData = async (chainId: string, token: string, period = '1D') => {
 	const call = `/api/tokens/swappable/products/${token}/usd/${period}`;
-	console.log(`[getTokenProducData] Req: ${call}`);
+	// console.log(`[getTokenProducData] Req: ${call}`);
 
 	const config: AxiosRequestConfig = {
 		params: {
@@ -88,7 +88,7 @@ export const getTokenProductData = async (chainId: string, token: string, period
 	return await request
 		.get(call, config)
 		.then((res) => {
-			console.log('[getTokenProducData] Res: ', res.data);
+			// console.log('[getTokenProducData] Res: ', res.data);
 			return res.data;
 		})
 		.catch(handleError);

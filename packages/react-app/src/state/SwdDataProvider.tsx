@@ -110,7 +110,6 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 			tokenKeys.map((symbol) => (symbolAll = symbolAll.concat(`${symbol},`))),
 				getExtendedTokenDetails(cId, symbolAll).then((details) => {
 					setExtendedTokensMap(details);
-					console.log(details);
 				});
 		}
 	}, [allSwappableTokens.TokenProducts, chainId, setExtendedTokensMap, tokensLoaded]);
