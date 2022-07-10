@@ -20,7 +20,7 @@ const getExtendedTokenDetails = async (
       return res;
     })
     .catch((e) => {
-      console.error(`[TokenHandler-0x] getExtendedTokenDetails ${e.message}`);
+      // console.error(`[TokenHandler-0x] getExtendedTokenDetails ${e.message}`);
       return {
         changePercentDay: 0,
         currentPrice: 0,
@@ -67,9 +67,9 @@ const getTokenPriceData = async (
               .map((price: any) => fixPriceValues(price));
           }
 
-          console.log(
-            `[TokenHandler] returning ${aggregatePricesForSymbol.length} hourly prices for ${pricesBySymbol[0].symbol}`
-          );
+          // console.log(
+          //   `[TokenHandler] returning ${aggregatePricesForSymbol.length} hourly prices for ${pricesBySymbol[0].symbol}`
+          // );
 
           return {
             address: tokens[pricesBySymbol[0].symbol],
@@ -103,9 +103,9 @@ const getTokenPriceData = async (
               .sort((a: any, b: any) => a[0] - b[0]);
           }
 
-          console.log(
-            `[TokenHandler] returning ${aggregatePricesForSymbol.length} daily prices for ${pricesBySymbol[0].symbol}`
-          );
+          // console.log(
+          //   `[TokenHandler] returning ${aggregatePricesForSymbol.length} daily prices for ${pricesBySymbol[0].symbol}`
+          // );
 
           return {
             address: tokens[pricesBySymbol[0].symbol],
