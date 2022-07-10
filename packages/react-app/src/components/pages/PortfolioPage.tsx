@@ -16,6 +16,7 @@ import { utils } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { useQuery } from 'graphql-hooks';
 import { useQueryParams } from 'hookrouter';
+import { random } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
@@ -129,9 +130,9 @@ const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 							return;
 						}
 					});
-					if (!temp) {
-						chart[symbol].push([timestamp, '0']);
-					}
+					// if (!temp) {
+					// 	chart[symbol].push([timestamp, '0']);
+					// }
 				}
 			});
 		}
@@ -306,7 +307,8 @@ export function PortfolioPage(): JSX.Element {
 							showZero={false}
 						/>
 						<TokenChart
-							symbol={chartData.length.toString()}
+							update={chartData.length + random(1, 100)}
+							symbol="Total"
 							prices={chartData}
 							onDateChange={setPeriod}
 							size={[100, 500]}
