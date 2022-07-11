@@ -10,11 +10,7 @@ import {
   createAlchemyWeb3,
 } from "@alch/alchemy-web3";
 import { Log } from "web3-core";
-import {
-  ALL_ADDRESSES,
-  COMMON_DECIMALS,
-  Transaction,
-} from "./exports";
+import { ALL_ADDRESSES, COMMON_DECIMALS, Transaction } from "./exports";
 import portfolioCharts from "./portfolioChart";
 
 const callGetAssetTransfers = async (
@@ -53,7 +49,10 @@ const getDecimals = async (address: string) => {
 const getSymbol = async (address: string) => {
   let symbol: string = "NaN";
   for (const i of Object.keys(ALL_ADDRESSES)) {
-    if (symbol === "NaN" && toChecksumAddress(ALL_ADDRESSES[i.toLowerCase()]) === address) {
+    if (
+      symbol === "NaN" &&
+      toChecksumAddress(ALL_ADDRESSES[i.toLowerCase()]) === address
+    ) {
       symbol = i;
     }
     if (symbol !== "NaN") {
@@ -200,7 +199,11 @@ const processTxTopic = async (
   }
 
   if (address2 === address) {
-    if (obj.toSymbol === "") {
+    if (
+      obj.toSymbol === "" ||
+      address1 !==
+        toChecksumAddress("0x1c0c05a2aa31692e5dc9511b04f651db9e4d8320")
+    ) {
       obj.toSymbol = await getSymbol(logs.address);
       const decimals = await getDecimals(logs.address);
       obj.toDecimals = decimals;
