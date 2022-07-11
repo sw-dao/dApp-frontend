@@ -76,7 +76,15 @@ const getTxHistoryMain = async (address: string) => {
     res.push(tr);
   }
   for (const tr of res2.transfers) {
-    res.push(tr);
+    let temp = false;
+    for (const i of res) {
+      if (i.hash === tr.hash) {
+        temp = true;
+      }
+    }
+    if (!temp) {
+      res.push(tr);
+    }
   }
   const masterObj: Transaction[] = [];
   const promises = [];
