@@ -115,7 +115,7 @@ const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 					let temp = false;
 					chart[symbol].every((e) => {
 						if (e[0] === timestamp) {
-							e[1] = (parseFloat(e[1]) * tx.amount).toString();
+							e[1] = (parseFloat(e[1]) + parseFloat(value) * tx.amount).toString();
 							temp = true;
 							return;
 						}
@@ -124,15 +124,16 @@ const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 						chart[symbol].push([timestamp, (parseFloat(value) * tx.amount).toString()]);
 						// chart[symbol].push([timestamp, tx.amount.toString()]);
 					}
-				} else {
-					let temp = false;
-					chart[symbol].every((e) => {
-						if (e[0] == timestamp) {
-							temp = true;
-							return;
-						}
-					});
 				}
+				// else {
+				// 	let temp = false;
+				// 	chart[symbol].every((e) => {
+				// 		if (e[0] == timestamp) {
+				// 			temp = true;
+				// 			return;
+				// 		}
+				// 	});
+				// }
 			});
 		}
 	}
@@ -222,7 +223,7 @@ export function PortfolioPage(): JSX.Element {
 		const plusCharts = getChartData(tokenDetails, txHistory.charts[0]);
 		const minusCharts = getChartData(tokenDetails, txHistory.charts[1]);
 		const plus = combinePlusChartData(plusCharts);
-		// console.log(plusCharts, minusCharts, plus);
+		console.log(plusCharts, minusCharts, plus);
 		const chart = combinePlusWithMinusChartData(plus, minusCharts);
 		chart.sort((b, a) => timestampSorter(b[0].toString(), a[0].toString()));
 		holdingsCharts[periodVal] = chart;
