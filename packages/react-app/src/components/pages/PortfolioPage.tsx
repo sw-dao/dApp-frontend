@@ -108,22 +108,21 @@ const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 		const product = tokenDetails[symbol].prices;
 		for (const txIndex in chartData[symbol]) {
 			const tx = chartData[symbol][txIndex];
-			const tS = new Date(convertTimestamp(tx.timestamp * 1000)).getTime();
 			product.forEach((data) => {
 				const timestamp = data[0];
 				const value = data[1];
-				const stringTimestamp = convertTimestamp(timestamp);
 				if (timestamp >= tx.timestamp) {
 					let temp = false;
 					chart[symbol].every((e) => {
 						if (e[0] === timestamp) {
-							e[1] = (parseInt(e[1]) * tx.amount).toString();
+							e[1] = (parseFloat(e[1]) * tx.amount).toString();
 							temp = true;
 							return;
 						}
 					});
 					if (!temp) {
-						chart[symbol].push([timestamp, (parseInt(value) * tx.amount).toString()]);
+						chart[symbol].push([timestamp, (parseFloat(value) * tx.amount).toString()]);
+						// chart[symbol].push([timestamp, tx.amount.toString()]);
 					}
 				} else {
 					let temp = false;
@@ -133,9 +132,6 @@ const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 							return;
 						}
 					});
-					// if (!temp) {
-					// 	chart[symbol].push([timestamp, '0']);
-					// }
 				}
 			});
 		}
@@ -148,9 +144,12 @@ const combinePlusChartData = (plus: ChartDataMap) => {
 	for (const symbol in plus) {
 		plus[symbol].forEach((data) => {
 			let temp = false;
+			// if (!combinedChart[symbol]) {
+			// 	combinedChart[symbol] = [];
+			// }
 			combinedChart.forEach((e) => {
 				if (e[0] === data[0]) {
-					e[1] = (parseInt(e[1]) + parseInt(data[1])).toString();
+					e[1] = (parseFloat(e[1]) + parseFloat(data[1])).toString();
 					temp = true;
 				}
 			});
@@ -167,7 +166,7 @@ const combinePlusWithMinusChartData = (combinedPlus: ChartData, minus: ChartData
 		minus[symbol].forEach((data) => {
 			combinedChart.forEach((e) => {
 				if (e[0] === data[0]) {
-					e[1] = (parseInt(e[1]) - parseInt(data[1])).toString();
+					e[1] = (parseFloat(e[1]) - parseFloat(data[1])).toString();
 				}
 			});
 		});
@@ -223,6 +222,7 @@ export function PortfolioPage(): JSX.Element {
 		const plusCharts = getChartData(tokenDetails, txHistory.charts[0]);
 		const minusCharts = getChartData(tokenDetails, txHistory.charts[1]);
 		const plus = combinePlusChartData(plusCharts);
+		// console.log(plusCharts, minusCharts, plus);
 		const chart = combinePlusWithMinusChartData(plus, minusCharts);
 		chart.sort((b, a) => timestampSorter(b[0].toString(), a[0].toString()));
 		holdingsCharts[periodVal] = chart;
