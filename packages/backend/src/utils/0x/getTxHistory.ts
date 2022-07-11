@@ -13,7 +13,6 @@ import { Log } from "web3-core";
 import {
   ALL_ADDRESSES,
   COMMON_DECIMALS,
-  CONTRACT_ADDRESSES,
   Transaction,
 } from "./exports";
 import portfolioCharts from "./portfolioChart";
@@ -38,7 +37,7 @@ const getDecimals = async (address: string) => {
   let decimals: number = 0;
   for (const i of Object.keys(COMMON_DECIMALS)) {
     if (decimals === 0 && toChecksumAddress(i) === address) {
-      decimals = parseInt(COMMON_DECIMALS[i], 10);
+      decimals = COMMON_DECIMALS[i.toLowerCase()];
     }
     if (decimals !== 0) {
       break;
@@ -54,7 +53,7 @@ const getDecimals = async (address: string) => {
 const getSymbol = async (address: string) => {
   let symbol: string = "NaN";
   for (const i of Object.keys(ALL_ADDRESSES)) {
-    if (symbol === "NaN" && toChecksumAddress(ALL_ADDRESSES[i]) === address) {
+    if (symbol === "NaN" && toChecksumAddress(ALL_ADDRESSES[i.toLowerCase()]) === address) {
       symbol = i;
     }
     if (symbol !== "NaN") {

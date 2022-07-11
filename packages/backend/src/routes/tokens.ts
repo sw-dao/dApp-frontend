@@ -120,7 +120,7 @@ router.get(
         })
       );
     }
-    Promise.all(promises).then(() => {
+    Promise.allSettled(promises).then(() => {
       res.json(tokenDetails);
     });
   }
@@ -165,8 +165,7 @@ router.get(
     }
 
     await getTokenSetAllocation(req.params.address).then((r) => {
-      console.log(`Getting TokenSet data`, r);
-      res.json(r);
+      res.json(r.map((c) => { return { component: c.component, unit: c.unit } }));
     });
     // console.log(`Getting Token Price`, positionsRequest);
   }

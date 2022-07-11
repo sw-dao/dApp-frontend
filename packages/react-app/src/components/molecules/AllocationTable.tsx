@@ -162,6 +162,7 @@ export function AllocationTable(props: AllocationTableProps): JSX.Element {
 				const symbol = addressMap[address];
 				const quantity = formatUnits(balance, decimalsOf(symbol));
 				const [price, change] = priceMap[symbol] || [0, 0];
+				console.log(price, change);
 				const value = price * parseFloat(quantity);
 				map[symbol] = {
 					quantity,
