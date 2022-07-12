@@ -16,6 +16,8 @@ import { ProductSetupDescription } from '../types';
 export const PRODUCTS: ProductSetupDescription[] = [
 	{
 		name: 'SW Governance',
+		description:
+			"SW DAO's native token that aligns the DAO with its holders, enabling community-led ownership and governance.",
 		symbol: 'SWD',
 		addresses: { '0x89': '0xaee24d5296444c007a532696aada9de5ce6cafd0' },
 		is_tokenset: false,
@@ -24,6 +26,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Alpha Portfolio',
+		description:
+			'A discretionarily managed investment vehicle for those who want to outperform the market.',
 		symbol: 'SWAP',
 		addresses: { '0x89': '0x25ad32265c9354c29e145c902ae876f6b69806f2' },
 		is_tokenset: true,
@@ -33,6 +37,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Macro Trend BTC',
+		description:
+			'An automated trend-following strategy that seeks to capitalize on the larger price movements of Bitcoin.',
 		symbol: 'MTBTC',
 		addresses: { '0x89': '0x71b41b3b19aac53ca4063aec2d17fc3caeb38026' },
 		is_tokenset: true,
@@ -42,6 +48,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Macro Trend ETH',
+		description:
+			'An automated trend-following strategy that seeks to capitalize on the larger price movements of Ethereum.',
 		symbol: 'MTETH',
 		addresses: { '0x89': '0x72Ca52512b93E8D67309aF0C14C1A225bcbd3548' },
 		is_tokenset: true,
@@ -51,6 +59,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Quantum Momentum BTC',
+		description:
+			'An automated high-frequency strategy that leverages machine learning to seek out the strongest risk-adjusted returns in Bitcoin.',
 		symbol: 'QMB',
 		addresses: { '0x89': '0xabcc2102065ba01c6df1a5a5a57158f452403b70' },
 		is_tokenset: true,
@@ -60,6 +70,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Quantum Momentum ETH',
+		description:
+			'An automated high-frequency strategy that leverages machine learning to seek out the strongest risk-adjusted returns in Ethereum.',
 		symbol: 'QME',
 		addresses: { '0x89': '0x9984d846a3dc77aa0488f3758976b149e8475995' },
 		is_tokenset: true,
@@ -69,6 +81,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Quantum Momentum MATIC',
+		description:
+			'An automated high-frequency strategy that leverages machine learning to seek out the strongest risk-adjusted returns in MATIC.',
 		symbol: 'QMM',
 		addresses: { '0x89': '0x20ab4cb8f8da39582bc92da954ab1bb128f4e244' },
 		is_tokenset: true,
@@ -78,6 +92,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Buy the Dip BTC',
+		description:
+			'An automated strategy that allows you to take advantage of lower Bitcoin prices and build your portfolio with ease.',
 		symbol: 'BTBTC',
 		addresses: { '0x89': '0x58f7C5707Ba8E09B5e61ceBe8821f65434372344' },
 		is_tokenset: true,
@@ -87,6 +103,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Buy the Dip ETH',
+		description:
+			'An automated strategy that allows you to take advantage of lower Ethereum prices and build your portfolio with ease.',
 		symbol: 'BTETH',
 		addresses: { '0x89': '0x07A79127182a1c303d11eCDa951310EC1C2E1444' },
 		is_tokenset: true,
@@ -96,6 +114,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Buy the Dip MATIC',
+		description:
+			'An automated strategy that allows you to take advantage of lower MATIC prices and build your portfolio with ease.',
 		symbol: 'BTMAT',
 		addresses: { '0x89': '0xb87352B4C3EB9daEd09cD4996dFf85c122394912' },
 		is_tokenset: true,
@@ -204,6 +224,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	{
 		name: 'USDC Yield Fund',
+		description:
+			'A discretionarily managed yield farming fund that seeks to generate yield denominated in USDC.',
 		symbol: 'SWYF',
 		addresses: { '0x89': '0xdc8d88d9e57cc7be548f76e5e413c4838f953018' },
 		is_tokenset: false,
@@ -213,6 +235,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'BTC Yield Fund',
+		description:
+			'A discretionarily managed yield farming fund that seeks to generate yield denominated in Bitcoin.',
 		symbol: 'SWBYF',
 		addresses: { '0x89': '0xE525deeC6eB2566c29C272BB69eEd2E8A46389dc' },
 		is_tokenset: false,
@@ -222,6 +246,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'ETH Yield Fund',
+		description:
+			'A discretionarily managed yield farming fund that seeks to generate yield denominated in Ethereum.',
 		symbol: 'SWEYF',
 		addresses: { '0x89': '0x8fcdd8372b5bcd27524546ad02b198c899d8ab2a' },
 		is_tokenset: false,
@@ -231,6 +257,8 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'MATIC Yield Fund',
+		description:
+			'A discretionarily managed yield farming fund that seeks to generate yield denominated in Matic.',
 		symbol: 'SWMYF',
 		addresses: { '0x89': '0x2C9227bf5FC806f94601eCAf5BC027CAd801b3B6' },
 		is_tokenset: false,
