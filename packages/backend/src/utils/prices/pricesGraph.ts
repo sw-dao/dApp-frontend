@@ -9,7 +9,7 @@ import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
 import { DateTime } from "luxon";
 import { isEmpty, isUndefined } from "lodash";
-import { ADDRESSES, COMMON_DECIMALS } from "../0x/exports";
+import { ADDRESSES } from "../0x/exports";
 
 // document: DocumentNode | TypedDocumentNode<TSubscriptionData, TSubscriptionVariables>;
 // variables?: TSubscriptionVariables;
@@ -89,12 +89,11 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
   });
   const tokensRawData: TokenInfoZeroX[] = await Promise.all<TokenInfoZeroX>(
     tokensRaw.map(async (t) => {
-      const a = t.address;
-      const decimals: number =
-        a in COMMON_DECIMALS
-          ? parseInt(COMMON_DECIMALS[a], 10)
-          : parseInt(await getDecimals(a), 10);
-      return { symbol: t.symbol, decimals, tokenAddress: a } as TokenInfoZeroX;
+      return {
+        symbol: t.symbol,
+        decimals: await getDecimals(t.address),
+        tokenAddress: t.address
+      } as TokenInfoZeroX;
     })
   );
   // Get info on timing/blocks.
@@ -205,12 +204,7 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
             })
             .map(async (p: string[], i: number) => {
               const addr = p[0].toLowerCase();
-              const decimals: number = parseInt(
-                addr in COMMON_DECIMALS
-                  ? COMMON_DECIMALS[addr]
-                  : await getDecimals(addr),
-                10
-              );
+              const decimals: number = await getDecimals(addr);
               return {
                 symbol: i.toString(),
                 decimals,

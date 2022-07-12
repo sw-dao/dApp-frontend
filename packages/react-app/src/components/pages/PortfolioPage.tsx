@@ -16,14 +16,16 @@ import { utils } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { useQuery } from 'graphql-hooks';
 import { useQueryParams } from 'hookrouter';
-import React, { useMemo, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { isUndefined, random } from 'lodash';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
 import { getPositions, getTxHistory } from '../../services/backend';
 
-import { extendedTokenDetailsState, tokenDetailsForCurrentPeriod } from '../../state';
+import { extendedTokenDetailsState, periodState, tokenDetailsForCurrentPeriod } from '../../state';
 import {
 	ChartData,
+	ChartDataMap,
 	ExtendedTokenDetailsMap,
 	Holding,
 	PortfolioTokenDetails,
@@ -57,78 +59,19 @@ const styles = {
 		borderColor: 'transparent',
 	},
 };
-// interface BuySell {
-// 	amount: number;
-// 	timestamp: number;
-// 	value: number;
-// }
-// interface BuySellMap {
-// 	[symbol: string]: BuySell[];
-// }
+interface BuySell {
+	amount: number;
+	timestamp: number;
+	value: number;
+}
+interface BuySellMap {
+	[symbol: string]: BuySell[];
+}
 
-// // interface PreChart {}
-
-// const CHART_DATA_PLUS: BuySellMap = {
-// 	SWD: [
-// 		{
-// 			amount: 6.9157720628e-7,
-// 			timestamp: 1656126439,
-// 			value: 0.000004750739133404401,
-// 		},
-// 		{
-// 			amount: 14.884087640518457,
-// 			timestamp: 1648603109,
-// 			value: 101.31820229806758,
-// 		},
-// 		{
-// 			amount: 15.200905151515181,
-// 			timestamp: 1646892888,
-// 			value: 100.206464483699,
-// 		},
-// 		{
-// 			amount: 317.49841749017236,
-// 			timestamp: 1653221831,
-// 			value: 998.2270895289665,
-// 		},
-// 	],
-// 	SWYF: [
-// 		{
-// 			amount: 4.99841534636992,
-// 			timestamp: 1653736755,
-// 			value: 5.921943428153019,
-// 		},
-// 		{
-// 			amount: 0.10016835664851025,
-// 			timestamp: 1653736809,
-// 			value: 0.11845987536915001,
-// 		},
-// 		{
-// 			amount: 5.875433971898958,
-// 			timestamp: 1655183972,
-// 			value: 6.62182029546848,
-// 		},
-// 	],
-// 	QME: [
-// 		{ amount: 0.037, timestamp: 1654414601, value: 17.628510435414263 },
-// 		{
-// 			amount: 0.000999,
-// 			timestamp: 1655783387,
-// 			value: 0.2991188722200339,
-// 		},
-// 		{ amount: 0.024, timestamp: 1654125214, value: 11.610666881044 },
-// 		{ amount: 3.786, timestamp: 1654414461, value: 1803.6510874326216 },
-// 	],
-// };
-// const CHART_DATA_MINUS: BuySellMap = {
-// 	SWYF: [
-// 		{
-// 			amount: 10.97401767,
-// 			timestamp: 1655525079,
-// 			value: 12.990251086564914,
-// 		},
-// 	],
-// 	QME: [{ amount: 0.001, timestamp: 1655781547, value: 0.2992440971591555 }],
-// };
+interface TxChart {
+	txHistory: Transaction[];
+	charts: BuySellMap[];
+}
 
 function TabButton({ label }: { label: string }): JSX.Element {
 	return (
@@ -148,57 +91,144 @@ const noop = () => {
 	//noop
 };
 
-// const convertTimestamp = (epoch: number) => {
-// 	const date = new Date(epoch * 1000);
-// 	return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
-// };
+const convertTimestamp = (epoch: number) => {
+	const date = new Date(epoch);
+	return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
+};
 
-// const getChartData = (detailMap: ExtendedTokenDetailsMap) => {
-// 	const chart = [];
-// 	for (const symbol in CHART_DATA_PLUS) {
-// 		chart.push(detailMap[symbol]);
-// 		for (const txIndex in CHART_DATA_PLUS[symbol]) {
-// 			const tx = CHART_DATA_PLUS[symbol][txIndex];
-// 			const tS = new Date(convertTimestamp(tx.timestamp)).getTime();
-// 			for (const data in chart[symbol])
-// 		}
-// 	}
-// };
+const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
+	const chart: ChartDataMap = {};
+	for (const symbol in chartData) {
+		if (!chart[symbol]) {
+			chart[symbol] = [];
+		}
+		if (isUndefined(tokenDetails[symbol].prices)) {
+			continue;
+		}
+		const product = tokenDetails[symbol].prices;
+		for (const txIndex in chartData[symbol]) {
+			const tx = chartData[symbol][txIndex];
+			product.forEach((data) => {
+				const timestamp = data[0];
+				const value = data[1];
+				if (timestamp >= tx.timestamp) {
+					let temp = false;
+					chart[symbol].every((e) => {
+						if (e[0] === timestamp) {
+							e[1] = (parseFloat(e[1]) + parseFloat(value) * tx.amount).toString();
+							temp = true;
+							return;
+						}
+					});
+					if (!temp) {
+						chart[symbol].push([timestamp, (parseFloat(value) * tx.amount).toString()]);
+						// chart[symbol].push([timestamp, tx.amount.toString()]);
+					}
+				}
+				// else {
+				// 	let temp = false;
+				// 	chart[symbol].every((e) => {
+				// 		if (e[0] == timestamp) {
+				// 			temp = true;
+				// 			return;
+				// 		}
+				// 	});
+				// }
+			});
+		}
+	}
+	return chart;
+};
+
+const combinePlusChartData = (plus: ChartDataMap) => {
+	const combinedChart: ChartData = [];
+	for (const symbol in plus) {
+		plus[symbol].forEach((data) => {
+			let temp = false;
+			// if (!combinedChart[symbol]) {
+			// 	combinedChart[symbol] = [];
+			// }
+			combinedChart.forEach((e) => {
+				if (e[0] === data[0]) {
+					e[1] = (parseFloat(e[1]) + parseFloat(data[1])).toString();
+					temp = true;
+				}
+			});
+			if (!temp) {
+				combinedChart.push(data);
+			}
+		});
+	}
+	return combinedChart;
+};
+const combinePlusWithMinusChartData = (combinedPlus: ChartData, minus: ChartDataMap) => {
+	const combinedChart: ChartData = combinedPlus;
+	for (const symbol in minus) {
+		minus[symbol].forEach((data) => {
+			combinedChart.forEach((e) => {
+				if (e[0] === data[0]) {
+					e[1] = (parseFloat(e[1]) - parseFloat(data[1])).toString();
+				}
+			});
+		});
+	}
+	return combinedChart;
+};
 
 export function PortfolioPage(): JSX.Element {
-	const [query] = useQueryParams();
+	const [query, setQuery] = useQueryParams();
+	const { period = '1Y' } = query;
 	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>();
-	const [txHistory, setTxHistory] = useState<Transaction[]>();
+	const [txHistory, setTxHistory] = useState<TxChart>();
+	// const [charts, setCharts] = useState<BuySellMap[]>();
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const [timeout, setTimeout] = useState(0);
 	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
 	const [refresh, setRefresh] = useState(false);
 	const [ogAddress, setOgAddress] = useState<string>();
-
+	const [periodVal, setPeriodState] = useRecoilState(periodState);
 	const { isConnected, address: walletAddress } = useWallet();
-
+	const [holdingsCharts, setHoldingsCharts] = useState<ChartDataMap>({});
+	const [chartData, setChartData] = useState<ChartData>([]);
 	const userHoldings: PortfolioTokenDetails[] = [];
 	if ((refresh && walletAddress) || (walletAddress && new Date().getTime() - timeout > 899999)) {
 		setRefresh(false);
 		setTimeout(new Date().getTime());
 		setOgAddress(walletAddress);
-		getTxHistory(walletAddress).then((h) => {
-			setTxHistory(h);
-		});
-		getPositions(walletAddress).then((holdings) => {
-			for (const e in holdings) {
-				// console.log(holdings, holdings[e], detailMap);
-				userHoldings.push({
-					amount: holdings[e].toString(),
-					price: '0', //detailMap[e].currentPrice.toString()
-					total: 0, //holdings[e] * detailMap[e].currentPrice
-					name: '',
-					symbol: e,
-					timestamp: '',
-				});
-			}
-			setUserHolding(userHoldings);
-		});
+		getTxHistory(walletAddress)
+			.then((h) => {
+				setTxHistory(h);
+			})
+			.catch((e) => console.error(e));
+		getPositions(walletAddress)
+			.then((holdings) => {
+				for (const e in holdings) {
+					userHoldings.push({
+						amount: holdings[e].toString(),
+						price: '0', //detailMap[e].currentPrice.toString()
+						total: 0, //holdings[e] * detailMap[e].currentPrice
+						name: '',
+						symbol: e,
+						timestamp: '',
+					});
+				}
+				setUserHolding(userHoldings);
+			})
+			.catch((e) => console.error(e));
+	}
+	if (
+		(txHistory && tokenDetails.SWD && !holdingsCharts[periodVal]) ||
+		(refresh && txHistory && tokenDetails.SWD)
+	) {
+		const plusCharts = getChartData(tokenDetails, txHistory.charts[0]);
+		const minusCharts = getChartData(tokenDetails, txHistory.charts[1]);
+		const plus = combinePlusChartData(plusCharts);
+		console.log(plusCharts, minusCharts, plus);
+		const chart = combinePlusWithMinusChartData(plus, minusCharts);
+		chart.sort((b, a) => timestampSorter(b[0].toString(), a[0].toString()));
+		holdingsCharts[periodVal] = chart;
+		setHoldingsCharts(holdingsCharts);
+		setChartData(holdingsCharts[periodVal]);
 	}
 	let balance = 0;
 	let oldBalance = 0;
@@ -220,19 +250,32 @@ export function PortfolioPage(): JSX.Element {
 	if (ogAddress && walletAddress && ogAddress != walletAddress) {
 		setUserHolding(undefined);
 		setTxHistory(undefined);
+		setHoldingsCharts({});
+		setChartData([]);
 		setRefresh(true);
 	}
 	const [loadDate, setLoadDate] = useState(Date.now());
-
-	const holdingsHistory: ChartData = [];
 
 	const handleReload = (evt: any) => {
 		evt.preventDefault();
 		setUserHolding(undefined);
 		setTxHistory(undefined);
+		setHoldingsCharts({});
+		setChartData([]);
 		setRefresh(true);
 	};
-
+	useEffect(() => {
+		if (periodVal !== period) {
+			setPeriodState(period);
+		}
+		if (holdingsCharts[periodVal] && chartData !== holdingsCharts[periodVal]) {
+			setChartData(holdingsCharts[periodVal]);
+		}
+	}, [periodVal, period, setPeriodState]);
+	const setPeriod = (p: string) => {
+		setQuery({ ...query, period: p });
+		setPeriodState(p);
+	};
 	return (
 		<FullHeightPage pageKey="portfoliopage">
 			<Center>
@@ -267,16 +310,17 @@ export function PortfolioPage(): JSX.Element {
 							showTime={true}
 							showZero={false}
 						/>
-						{/* <TokenChart
+						<TokenChart
+							update={chartData.length + random(1, 100)}
 							symbol="Total"
-							prices={holdingsHistory}
-							onDateChange={noop}
+							prices={chartData}
+							onDateChange={setPeriod}
 							size={[100, 500]}
 							heading={{ textAlign: 'center', id: 'chartHead' }}
-							period="1D"
-							allowChangePeriod={false}
+							period={period}
+							allowChangePeriod={true}
 							showComparison={false}
-						/> */}
+						/>
 						<Tabs id="portfoliotabs">
 							<TabList
 								variant="unstyled"
@@ -308,7 +352,7 @@ export function PortfolioPage(): JSX.Element {
 									<TransactionsTable
 										isConnected={isConnected}
 										first={false}
-										transactions={txHistory}
+										transactions={txHistory?.txHistory}
 									/>
 								</TabPanel>
 							</TabPanels>

@@ -2,7 +2,13 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { BigNumber } from 'ethers';
 
 import { BACKEND_SERVER_URL, TIMEOUT } from '../config';
-import { ExtendedTokenDetails, PortfolioHoldings, Transaction } from '../types';
+import {
+	BuySellMap,
+	ExtendedTokenDetails,
+	ExtendedTokenDetailsMap,
+	PortfolioHoldings,
+	Transaction,
+} from '../types';
 
 function numberOrZero(value: string | null) {
 	if (!value) {
@@ -71,7 +77,7 @@ export const getEthPrice = async (chainId: string) => {
 
 export const getTokenProductData = async (chainId: string, token: string, period = '1D') => {
 	const call = `/api/tokens/swappable/products/${token}/usd/${period}`;
-	console.log(`[getTokenProducData] Req: ${call}`);
+	// console.log(`[getTokenProducData] Req: ${call}`);
 
 	const config: AxiosRequestConfig = {
 		params: {
@@ -82,7 +88,7 @@ export const getTokenProductData = async (chainId: string, token: string, period
 	return await request
 		.get(call, config)
 		.then((res) => {
-			console.log('[getTokenProducData] Res: ', res.data);
+			// console.log('[getTokenProducData] Res: ', res.data);
 			return res.data;
 		})
 		.catch(handleError);
@@ -141,19 +147,25 @@ export const getQuote = async (
 export const getExtendedTokenDetails = async (
 	chainId: string,
 	symbol: string,
-): Promise<ExtendedTokenDetails> => {
+): Promise<ExtendedTokenDetailsMap> => {
 	return request
 		.get(`/api/tokens/detail/${symbol.toUpperCase()}?chainId=${chainId}`)
 		.then((res) => {
 			const { data } = res;
-			return {
-				...data,
-				marketCap: numberOrZero(data.marketCap),
-				changePercent1Day: numberOrZero(data.changePercent1Day),
-				volume1Day: numberOrZero(data.volume1Day),
-				currentPrice: numberOrZero(data.currentPrice),
-				totalSupply: numberOrZero(data.totalSupply),
-			} as ExtendedTokenDetails;
+
+			const dataAll: { [symbol: string]: ExtendedTokenDetails } = {};
+			for (const symbol in data) {
+				const d = data[symbol];
+				dataAll[d.symbol] = {
+					...d,
+					marketCap: numberOrZero(d.marketCap),
+					changePercent1Day: numberOrZero(d.changePercent1Day),
+					volume1Day: numberOrZero(d.volume1Day),
+					currentPrice: numberOrZero(d.currentPrice),
+					totalSupply: numberOrZero(d.totalSupply),
+				};
+			}
+			return dataAll;
 		})
 		.catch(handleError);
 };
@@ -167,7 +179,12 @@ export const getPositions = async (address: string): Promise<PortfolioHoldings> 
 		.catch(handleError);
 };
 
-export const getTxHistory = async (address: string): Promise<Transaction[]> => {
+export const getTxHistory = async (
+	address: string,
+): Promise<{
+	txHistory: Transaction[];
+	charts: BuySellMap[];
+}> => {
 	return request
 		.get(`/api/portfolio/history/${address}`)
 		.then((res) => {

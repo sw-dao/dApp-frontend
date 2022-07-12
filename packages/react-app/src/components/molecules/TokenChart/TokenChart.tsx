@@ -1,4 +1,4 @@
-import { Box, Checkbox, HStack, Text } from '@chakra-ui/react';
+import { Box, Checkbox, HStack, Spinner, Text } from '@chakra-ui/react';
 import { useWallet } from '@raidguild/quiver';
 import PromiseThrottle from 'promise-throttle';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -17,6 +17,7 @@ import { ErrorFallback } from './ErrorFallback';
 import { TimeButton } from './TimeButton';
 
 interface TokenChartProps {
+	update?: number;
 	onDateChange: (date: string) => void;
 	size: [number, number]; // percentage w, pixels h
 	allowChangePeriod?: boolean;
@@ -31,6 +32,7 @@ interface TokenChartProps {
 
 export function TokenChart(props: TokenChartProps): JSX.Element {
 	const {
+		update,
 		onDateChange,
 		size = [500, 500],
 		allowChangePeriod = true,
@@ -57,13 +59,14 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		if (loadPrices && tokenDetails) {
+		if (loadPrices && tokenDetails[symbol]) {
 			const product = tokenDetails[symbol];
-			if (product) {
-				setPrices(product.prices);
-			}
+			setPrices(product.prices);
 		}
-	}, [loadPrices, period, prices, symbol, tokenDetails]);
+		if (defaultPrices && !tokenDetails[symbol]) {
+			setPrices(defaultPrices);
+		}
+	}, [loadPrices, prices, symbol, tokenDetails, update]);
 
 	useEffect(() => {
 		if (!loading) {
@@ -109,16 +112,18 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	}, [loadedPrices, chainId, period, showComparison, loading]);
 
 	useEffect(() => {
-		const merged = mergePrices(
-			symbol,
-			prices,
-			ethPrices,
-			btcPrices,
-			compareEth,
-			compareBtc,
-			period,
-		);
-		setMergedPrices(merged);
+		if (prices.length !== 0) {
+			const merged = mergePrices(
+				symbol,
+				prices,
+				ethPrices,
+				btcPrices,
+				compareEth,
+				compareBtc,
+				period,
+			);
+			setMergedPrices(merged);
+		}
 	}, [compareBtc, compareEth, prices, ethPrices, btcPrices, symbol, period]);
 
 	function handleCompareBtc(e: React.ChangeEvent<HTMLInputElement>) {
@@ -246,6 +251,14 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 									activeDot={renderEthDot}
 									animationDuration={500}
 								/>
+							)}
+							{prices.length === 0 && (
+								<Box colSpan={6} textAlign="center" color="bodytext">
+									<Text fontStyle="italic" p="2rem 2rem 0 2rem">
+										Loading your wallet ...
+									</Text>
+									<Spinner size="lg" margin="2rem auto" />
+								</Box>
 							)}
 							<Tooltip
 								offset={-200}

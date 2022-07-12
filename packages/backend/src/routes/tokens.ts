@@ -38,7 +38,7 @@ const verifyCacheCompleteData = (
     console.log(`Cache key for ${token} ${currency} ${timeframe} is ${key}`);
     if (cache.has(key)) {
       const cachedData = cache.get(key);
-      console.log("Returning cached data");
+      // console.log("Returning cached data");
       return res.status(200).json(cache.get(key));
     }
     return next();
@@ -97,7 +97,8 @@ router.get(
       return res.status(400).json({ errors: errors.array() });
     }
     const chainId = req.query.chainId as string;
-    const symbol = req.params.symbol;
+    const symbols = req.params.symbol.slice(0, -1).split(",");
+
     if (
       !SwappableTokens.ERC20[chainId] ||
       !SwappableTokens.TokenProducts[chainId]
@@ -110,10 +111,18 @@ router.get(
         ],
       });
     }
-    const extendedTokenDetails: ExtendedTokenDetailResponse =
-      await getExtendedTokenDetails(symbol, chainId);
-
-    res.json(extendedTokenDetails);
+    const promises = [];
+    const tokenDetails: { [symbol: string]: ExtendedTokenDetailResponse } = {};
+    for (const symbol of symbols) {
+      promises.push(
+        getExtendedTokenDetails(symbol, chainId).then((r) => {
+          tokenDetails[r.symbol] = r;
+        })
+      );
+    }
+    Promise.allSettled(promises).then(() => {
+      res.json(tokenDetails);
+    });
   }
 );
 
@@ -156,8 +165,7 @@ router.get(
     }
 
     await getTokenSetAllocation(req.params.address).then((r) => {
-      console.log(`Getting TokenSet data`, r);
-      res.json(r);
+      res.json(r.map((c) => { return { component: c.component, unit: c.unit } }));
     });
     // console.log(`Getting Token Price`, positionsRequest);
   }

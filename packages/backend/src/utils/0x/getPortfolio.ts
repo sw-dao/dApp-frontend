@@ -14,7 +14,7 @@ export const getPositions = async (address: string) => {
       const contract = new web3.eth.Contract(ERC20ABI as AbiItem[], p);
       await contract.methods.balanceOf(address).call((err: any, res: any) => {
         if (err) {
-          console.log("[GET PORFOLIO POSITONS]", err);
+          console.log("[GET PORTFOLIO POSITIONS]", err);
         }
         if (parseInt(res, 10) > 0) {
           portfolio[symbol] = parseInt(res, 10) / 10 ** 18;

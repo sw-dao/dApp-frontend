@@ -65,7 +65,7 @@ export function SwyfToken({ details, data }: TokenDetailPane): JSX.Element {
 					in crypto today and intelligently allocates across them to mitigate risk while taking full
 					advantage of the interest payments they generate.
 					<b />
-					The goal of the {token} Yield Fund is to generate more Bitcoin.
+					The goal of the {token} Yield Fund is to generate more {token}.
 				</Text>
 				<Text fontWeight={500}>
 					That can be done by going into specific strategies that generate {token}, like staking it

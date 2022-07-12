@@ -1,6 +1,5 @@
 import { useTokenBalance, useWallet } from '@raidguild/quiver';
 import { Contract } from 'ethers';
-import PromiseThrottle from 'promise-throttle';
 import { useEffect, useState } from 'react';
 import { SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -83,9 +82,8 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 	const period = useRecoilValue(periodState);
 	const [contract, setContract] = useState<Contract | null>(null);
 	const [updated, setUpdated] = useState(0);
-	const [updatedTokens, setUpdatedTokens] = useState(0);
+	const [updatedTokens, setUpdatedTokens] = useState(new Date().getTime() - 30000);
 	const [updating, setUpdating] = useState(false);
-	// const [loadedExtended, setLoadedExtended] = useState('');
 	const setBreakpoint = useSetRecoilState(breakpointState);
 	const breakpoint = useSiteBreakpoint();
 
@@ -105,39 +103,16 @@ export function SwdDataProvider({ children }: { children: JSX.Element }): JSX.El
 	}, [swdBalance, setSwdBalance]);
 	useEffect(() => {
 		const cId = chainId || DEFAULT_CHAIN_ID;
-		// if (loadedExtended !== cId) {
-		if (new Date().getTime() - updatedTokens > 10000) {
+		if (new Date().getTime() - updatedTokens > 30000) {
 			setUpdatedTokens(new Date().getTime());
 			const tokenKeys = Object.keys(PRODUCTS_BY_SYMBOL);
-			const promiseThrottle = new PromiseThrottle({
-				requestsPerSecond: 1,
-				promiseImplementation: Promise,
-			});
-			const xMap: ExtendedTokenDetailsMap = {};
-			const promises: any[] = [];
-			tokenKeys.map(
-				(symbol) =>
-					// promiseThrottle.add(() =>
-					promises.push(
-						getExtendedTokenDetails(cId, symbol).then((detail) => {
-							xMap[symbol] = detail;
-						}),
-					),
-				// ),
-			);
-
-			Promise.all(promises).then(() => {
-				// setLoadedExtended(cId);
-				setExtendedTokensMap(xMap);
-			});
+			let symbolAll = '';
+			tokenKeys.map((symbol) => (symbolAll = symbolAll.concat(`${symbol},`))),
+				getExtendedTokenDetails(cId, symbolAll).then((details) => {
+					setExtendedTokensMap(details);
+				});
 		}
-	}, [
-		allSwappableTokens.TokenProducts,
-		chainId,
-		// loadedExtended,
-		setExtendedTokensMap,
-		tokensLoaded,
-	]);
+	}, [allSwappableTokens.TokenProducts, chainId, setExtendedTokensMap, tokensLoaded]);
 
 	// Get token list and then the SWD contract
 	useEffect(() => {

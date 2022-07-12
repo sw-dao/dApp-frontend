@@ -28,7 +28,7 @@ router.get(
     }
 
     const positionsRequest = await getPositions(req.params.address);
-    console.log(`Getting Portfolio`, positionsRequest);
+    // console.log(`Getting Portfolio`, positionsRequest);
     res.json(positionsRequest);
   }
 );
@@ -48,7 +48,7 @@ router.get(
     }
 
     await getTxHistory(req.params.address).then((r) => {
-      console.log(`Getting Portfolio`, r);
+      // console.log(`Getting Portfolio`, r);
       res.json(r);
     });
   }

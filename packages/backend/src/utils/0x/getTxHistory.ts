@@ -10,25 +10,21 @@ import {
   createAlchemyWeb3,
 } from "@alch/alchemy-web3";
 import { Log } from "web3-core";
-import {
-  ALL_ADDRESSES,
-  COMMON_DECIMALS,
-  CONTRACT_ADDRESSES,
-  Transaction,
-} from "./exports";
+import { ALL_ADDRESSES, COMMON_DECIMALS, Transaction } from "./exports";
+import portfolioCharts from "./portfolioChart";
 
 const callGetAssetTransfers = async (
   a: string | undefined,
   b: string | undefined
 ) => {
   return await web3.alchemy.getAssetTransfers({
-    maxCount: 500,
+    maxCount: 1000,
     excludeZeroValue: false,
     fromBlock: "0x0",
     fromAddress: a,
     toAddress: b,
 
-    contractAddresses: CONTRACT_ADDRESSES,
+    contractAddresses: Object.values(TokenProducts["0x89"]),
     category: [AssetTransfersCategory.ERC20],
   });
 };
@@ -37,7 +33,7 @@ const getDecimals = async (address: string) => {
   let decimals: number = 0;
   for (const i of Object.keys(COMMON_DECIMALS)) {
     if (decimals === 0 && toChecksumAddress(i) === address) {
-      decimals = parseInt(COMMON_DECIMALS[i], 10);
+      decimals = COMMON_DECIMALS[i.toLowerCase()];
     }
     if (decimals !== 0) {
       break;
@@ -53,7 +49,10 @@ const getDecimals = async (address: string) => {
 const getSymbol = async (address: string) => {
   let symbol: string = "NaN";
   for (const i of Object.keys(ALL_ADDRESSES)) {
-    if (symbol === "NaN" && toChecksumAddress(ALL_ADDRESSES[i]) === address) {
+    if (
+      symbol === "NaN" &&
+      toChecksumAddress(ALL_ADDRESSES[i.toLowerCase()]) === address
+    ) {
       symbol = i;
     }
     if (symbol !== "NaN") {
@@ -67,7 +66,7 @@ const getSymbol = async (address: string) => {
   return symbol;
 };
 
-const getTxHistory = async (address: string) => {
+const getTxHistoryMain = async (address: string) => {
   const res1 = await callGetAssetTransfers(address, undefined);
   const res2 = await callGetAssetTransfers(undefined, address);
   const res: AssetTransfersResult[] = [];
@@ -75,9 +74,17 @@ const getTxHistory = async (address: string) => {
     res.push(tr);
   }
   for (const tr of res2.transfers) {
-    res.push(tr);
+    let temp = false;
+    for (const i of res) {
+      if (i.hash === tr.hash) {
+        temp = true;
+      }
+    }
+    if (!temp) {
+      res.push(tr);
+    }
   }
-  const masterObj: any[] = [];
+  const masterObj: Transaction[] = [];
   const promises = [];
   console.log("Getting Total Transactions: ", res.length);
   for (const i of res) {
@@ -104,7 +111,7 @@ const mainLoop = async (
   //   console.log(i.hash);
   const tx = await web3.eth.getTransactionReceipt(i.hash);
   const obj: Transaction = {
-    timestamp: "",
+    timestamp: 0,
     fromSymbol: "",
     fromAmount: 0,
     fromAddress: "",
@@ -161,7 +168,11 @@ const mainLoop = async (
     //   }
   }
   obj.transactionHash = tx.transactionHash;
-  obj.timestamp = (await web3.eth.getBlock(tx.blockNumber)).timestamp;
+  let ts = (await web3.eth.getBlock(tx.blockNumber)).timestamp;
+  if (typeof ts === "string") {
+    ts = parseInt(ts, 10);
+  }
+  obj.timestamp = ts;
   obj.blockNumber = tx.blockNumber;
   masterObj.push(obj);
   // console.log(obj);
@@ -188,7 +199,11 @@ const processTxTopic = async (
   }
 
   if (address2 === address) {
-    if (obj.toSymbol === "") {
+    if (
+      obj.toSymbol === "" ||
+      address1 !==
+        toChecksumAddress("0x1c0c05a2aa31692e5dc9511b04f651db9e4d8320")
+    ) {
       obj.toSymbol = await getSymbol(logs.address);
       const decimals = await getDecimals(logs.address);
       obj.toDecimals = decimals;
@@ -197,6 +212,15 @@ const processTxTopic = async (
       obj.toAddress = logs.address;
     }
   }
+};
+
+const getTxHistory = async (address: string) => {
+  const txHistory = await getTxHistoryMain(address);
+  if (txHistory) {
+    const charts = await portfolioCharts(txHistory);
+    return { txHistory, charts };
+  }
+  return;
 };
 
 export default getTxHistory;

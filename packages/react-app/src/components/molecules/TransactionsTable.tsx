@@ -12,7 +12,9 @@ import {
 	Tr,
 } from '@chakra-ui/react';
 import { isString } from 'lodash';
+import { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
+import { JsxElement } from 'typescript';
 import { breakpointState } from '../../state';
 
 import { getTokenUrl, timestampSorter } from '../../utils';
@@ -31,13 +33,13 @@ export const formatNumber = (n: number | string): string => {
 			minimumSignificantDigits: 2,
 			maximumSignificantDigits: 6,
 		});
-		return num.length > 8 ? parseFloat(n).toExponential(5) : num;
+		return num.length > 8 ? parseFloat(n).toExponential(2) : num;
 	} else {
 		const num: string = n.toLocaleString(undefined, {
 			minimumSignificantDigits: 2,
 			maximumSignificantDigits: 6,
 		});
-		return num.length > 8 ? n.toExponential(5) : num;
+		return num.length > 8 ? n.toExponential(2) : num;
 	}
 };
 
@@ -72,29 +74,31 @@ function TableRow({ row, last }: TableRowProps): JSX.Element {
 	const icon = getTokenUrl(row.toSymbol)[0];
 	const url = `https://polygonscan.com/tx/` + row.transactionHash;
 	let t = '';
-	let action = '';
+	let action: ReactNode[] = [''];
 	let tIcon = '';
 	if (row.fromAmount > 0 && row.toAmount > 0) {
 		t = 'Exchange';
 		tIcon = '/images/portfolio/exchange-circle.png';
-		action = `${formatNumber(row.fromAmount)} ${row.fromSymbol} for ${formatNumber(row.toAmount)} ${
-			row.toSymbol
-		} `;
+		action = [
+			`${formatNumber(row.fromAmount)} ${row.fromSymbol} for`,
+			<br />,
+			`${formatNumber(row.toAmount)} ${row.toSymbol}`,
+		];
 	}
 	if (row.fromSymbol === 'SWX') {
 		t = 'Bond Issuance';
 		tIcon = '/images/portfolio/plus-circle.png';
-		action = `Deposited ${formatNumber(row.fromAmount)} ${row.fromSymbol}`;
+		action = [`Deposited ${formatNumber(row.fromAmount)} ${row.fromSymbol}`];
 	}
 	if (t === '' && row.fromAmount > 0 && row.toAmount <= 0) {
 		t = 'Transfer';
 		tIcon = '/images/portfolio/send.png';
-		action = `Sent ${formatNumber(row.fromAmount)} ${row.fromSymbol}`;
+		action = [`Sent ${formatNumber(row.fromAmount)} ${row.fromSymbol}`];
 	}
 	if (t === '' && row.fromAmount <= 0 && row.toAmount > 0) {
 		t = 'Transfer';
 		tIcon = '/images/portfolio/recieve.png';
-		action = `Recieved ${formatNumber(row.toAmount)} ${row.toSymbol}`;
+		action = [`Recieved ${formatNumber(row.toAmount)} ${row.toSymbol}`];
 	}
 	return (
 		<Tr {...props}>
