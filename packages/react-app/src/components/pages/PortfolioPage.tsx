@@ -288,7 +288,7 @@ export function PortfolioPage(): JSX.Element {
 					width="max(90%, 28rem)"
 				>
 					<VStack spacing="2rem" align="left" className="bodycontent">
-						<Box textAlign="left">
+						<Box textAlign="left" className="overwrite-leftAlign">
 							<Heading fontSize="2rem">
 								Portfolio Balance
 								<ReloadIcon

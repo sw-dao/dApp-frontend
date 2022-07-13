@@ -497,6 +497,11 @@ const config = {
 				color: 'white',
 				padding: '1rem 2rem 2rem',
 			},
+			'.overwrite-leftAlign': {
+				h2: {
+					textAlign: 'left',
+				},
+			},
 			// get rid of blue outline for clicked elements
 			'.js-focus-visible :focus:not([data-focus-visible-added]), :focus, .focus-visible': {
 				outline: 'none !important',
