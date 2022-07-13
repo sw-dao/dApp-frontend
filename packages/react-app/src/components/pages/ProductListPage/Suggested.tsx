@@ -85,7 +85,7 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 
 					<Box className="suggested-clc">
 						<CoinLabelCell
-							icon={`/images/token-${bgm}.png`}
+							icon={`/images/token-${bgm.toLowerCase()}.png`}
 							symbol={bgm}
 							name={PRODUCTS_BY_SYMBOL[bgm].name}
 							url={`/product/${bgm}`}
@@ -114,7 +114,7 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 					</Text>
 					<Box className="suggested-clc">
 						<CoinLabelCell
-							icon={'/images/token-SWYF.png'}
+							icon={'/images/token-swyf.png'}
 							symbol={'SWYF'}
 							name={'USDC Yield Fund'}
 							url={'/product/SWYF'}
@@ -143,7 +143,7 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 					</Text>
 					<Box className="suggested-clc">
 						<CoinLabelCell
-							icon={'/images/token-QMM.png'}
+							icon={'/images/token-qmm.png'}
 							symbol={'QMM'}
 							name={'Quantum Momentum MATIC'}
 							url={'/product/QMM'}
