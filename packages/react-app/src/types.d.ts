@@ -265,6 +265,7 @@ export interface ExtendedTokenDetailsMap {
 
 export type ProductSetupDescription = {
 	name: string;
+	description?: string;
 	symbol: string;
 	addresses: Record<string, string>;
 	is_tokenset: boolean;

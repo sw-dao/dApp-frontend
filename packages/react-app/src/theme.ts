@@ -455,7 +455,63 @@ const config = {
 					textDecoration: 'underline',
 				},
 			},
+			'.suggested-box': {
+				width: '30%',
+				borderRadius: '1.3em',
+				bgColor: 'blue7',
+				display: 'flex',
+				flexDir: 'column',
+				alignItems: 'center',
+				position: 'relative',
+				'&:hover': {
+					bgColor: '#2c1e4b',
+					'.suggested-title': {
+						bgColor: '#332766',
+					},
+				},
+			},
 
+			'.suggested-title': {
+				borderRadius: '1.3rem 1.3rem 0 0',
+				width: '100%',
+				bgColor: 'blue5',
+				textColor: '#2089fd',
+				fontSize: '2rem',
+				textDecoration: 'bold',
+				img: {
+					marginLeft: '.5rem',
+				},
+			},
+			'.suggested-clc': {
+				paddingTop: '1rem',
+				div: {
+					display: 'flex',
+					alignItems: 'center',
+				},
+			},
+			'.suggested-change': {
+				color: '#2089fd',
+
+				// position: 'absolute',
+				bottom: '.5rem',
+			},
+			'.suggested-description': {
+				color: 'white',
+				padding: '1rem 2rem 2rem',
+			},
+			'.suggested-flex': {
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			'.overwrite-leftAlign': {
+				h2: {
+					textAlign: 'left',
+				},
+			},
+			'.slick-slide': {
+				padding: '1rem',
+			},
 			// get rid of blue outline for clicked elements
 			'.js-focus-visible :focus:not([data-focus-visible-added]), :focus, .focus-visible': {
 				outline: 'none !important',

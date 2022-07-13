@@ -14,6 +14,8 @@ interface CoinLabelCellProps {
 	width?: string;
 	linkCell?: boolean;
 	hideSymbol?: boolean;
+	fontSize?: string;
+	color?: string;
 }
 export function CoinLabelCell({
 	symbol,
@@ -24,6 +26,8 @@ export function CoinLabelCell({
 	linkCell,
 	width,
 	hideSymbol,
+	fontSize,
+	color = 'bodytext',
 }: CoinLabelCellProps): JSX.Element {
 	const [hover, setHover] = useState(false);
 
@@ -47,7 +51,7 @@ export function CoinLabelCell({
 			<Box display="inline-block" marginRight="1.5rem">
 				<CoinIcon symbol={symbol} src={icon} verticalAlign="middle" height={height || '2.5rem'} />
 				<A href={url}>
-					<Text as="span" color={hover ? 'white' : 'bodytext'}>
+					<Text as="span" fontSize={fontSize} color={hover ? 'white' : color}>
 						{name}
 					</Text>
 					{!hideSymbol && (
