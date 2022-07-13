@@ -478,6 +478,9 @@ const config = {
 				textColor: '#2089fd',
 				fontSize: '2rem',
 				textDecoration: 'bold',
+				img: {
+					marginLeft: '.5rem',
+				},
 			},
 			'.suggested-clc': {
 				paddingTop: '1rem',
@@ -488,19 +491,26 @@ const config = {
 			},
 			'.suggested-change': {
 				color: '#2089fd',
-				display: 'flex',
-				position: 'absolute',
+
+				// position: 'absolute',
 				bottom: '.5rem',
-				// marginBottom: '1rem',
 			},
 			'.suggested-description': {
 				color: 'white',
 				padding: '1rem 2rem 2rem',
 			},
+			'.suggested-flex': {
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
 			'.overwrite-leftAlign': {
 				h2: {
 					textAlign: 'left',
 				},
+			},
+			'.slick-slide': {
+				padding: '1rem',
 			},
 			// get rid of blue outline for clicked elements
 			'.js-focus-visible :focus:not([data-focus-visible-added]), :focus, .focus-visible': {

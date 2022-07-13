@@ -92,7 +92,7 @@ export function ProductListPage(): JSX.Element {
 			<Center id="productlist">
 				<StyledSection section="body">
 					<Box className="bodycontent">
-						{breakpoint !== 'sm' && breakpoint !== 'md' && <Suggested tokenDetails={detailMap} />}
+						<Suggested tokenDetails={detailMap} />
 
 						<Box margin="0 auto">
 							<TokenPriceTable
