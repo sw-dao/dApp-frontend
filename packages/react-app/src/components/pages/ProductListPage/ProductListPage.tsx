@@ -7,6 +7,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { DEFAULT_CHAIN_ID } from '../../../config';
 import { PRODUCTS, PRODUCTS_BY_CATEGORY } from '../../../config/products';
 import {
+	breakpointState,
 	extendedTokenDetailsState,
 	periodState,
 	tokenDetailsForCurrentPeriod,
@@ -39,6 +40,7 @@ export function ProductListPage(): JSX.Element {
 	const tokenPriceDetail = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const detailMap = useRecoilValue(extendedTokenDetailsState);
 	const { chainId } = useWallet();
+	const breakpoint = useRecoilValue(breakpointState);
 
 	const [periodVal, setPeriodState] = useRecoilState(periodState);
 
@@ -90,7 +92,8 @@ export function ProductListPage(): JSX.Element {
 			<Center id="productlist">
 				<StyledSection section="body">
 					<Box className="bodycontent">
-						<Suggested tokenDetails={detailMap} />
+						{breakpoint !== 'sm' && breakpoint !== 'md' && <Suggested tokenDetails={detailMap} />}
+
 						<Box margin="0 auto">
 							<TokenPriceTable
 								priceDetails={filteredTokens}

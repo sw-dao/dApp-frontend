@@ -17,7 +17,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	{
 		name: 'SW Governance',
 		description:
-			"SW DAO's native token that aligns the DAO with its holders, enabling community-led ownership and governance.",
+			"SW DAO's native token that aligns the DAO with its holders, enabling communityled ownership and governance.",
 		symbol: 'SWD',
 		addresses: { '0x89': '0xaee24d5296444c007a532696aada9de5ce6cafd0' },
 		is_tokenset: false,
