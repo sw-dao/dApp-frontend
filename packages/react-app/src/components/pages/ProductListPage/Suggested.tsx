@@ -13,7 +13,7 @@ interface SuggestedProps {
 	tokenDetails: ExtendedTokenDetailsMap;
 }
 
-export function Suggested(props: SuggestedProps): JSX.Element {
+export default function Suggested(props: SuggestedProps): JSX.Element {
 	const { tokenDetails } = props;
 	const tokensYear = useRecoilValue(tokenDetailsFor1Y);
 	const breakpoint = useRecoilValue(breakpointState);

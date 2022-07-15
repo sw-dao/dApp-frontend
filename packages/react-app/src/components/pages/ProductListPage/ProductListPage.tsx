@@ -18,7 +18,7 @@ import { StyledSection } from '../../molecules/StyledSection';
 import { TokenPriceTable } from '../../molecules/TokenPriceTable/TokenPriceTable';
 import { FullHeightPage } from '../../templates/FullHeightPage';
 import ProductListHeader from './ProductListHeader';
-import { Suggested } from './Suggested';
+import Suggested from './Suggested';
 
 function fakeTokenDetails(product: ProductSetupDescription, chainId: string): TokenDetails {
 	return {
