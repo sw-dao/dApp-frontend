@@ -24,7 +24,6 @@ interface TokenPriceTableProps {
 function getChange(d: TokenDetails, tokenDetails: ExtendedTokenDetailsMap): number {
 	// const details = tokenDetails[d.symbol]
 	if (tokenDetails[d.symbol] && d.prices[0][1]) {
-		console.log(d);
 		const curp = getPrice(d, tokenDetails);
 		const cP = curp;
 		const p = parseFloat(d.prices[0][1]);
