@@ -70,7 +70,7 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 	};
 
 	const settings = {
-		dots: true,
+		dots: false,
 		infinite: false,
 		speed: 500,
 		slidesToShow: 3,
@@ -83,7 +83,7 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 					slidesToShow: 1,
 					slidesToScroll: 1,
 					infinite: true,
-					dots: true,
+					dots: false,
 				},
 			},
 		],

@@ -512,6 +512,22 @@ const config = {
 			'.slick-slide': {
 				padding: '1rem',
 			},
+			'.slick-next': {
+				right: ' -10px',
+			},
+			'.slick-prev': {
+				left: ' -10px',
+			},
+			// '.slick-dots': {
+			// 	top: '-5',
+			// 	position: 'relative',
+			// 	'li button': {
+			// 		borderColor: '#2089fd',
+			// 	},
+			// 	'.slick-active': {
+			// 		borderColor: 'blue5',
+			// 	},
+			// },
 			// get rid of blue outline for clicked elements
 			'.js-focus-visible :focus:not([data-focus-visible-added]), :focus, .focus-visible': {
 				outline: 'none !important',
