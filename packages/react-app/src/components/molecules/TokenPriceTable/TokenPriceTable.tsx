@@ -21,12 +21,22 @@ interface TokenPriceTableProps {
 	width?: string;
 }
 
-function getChange(symbol: string, tokenDetails: ExtendedTokenDetailsMap): number {
-	return tokenDetails[symbol]?.changePercent1Day || 0;
+function getChange(d: TokenDetails, tokenDetails: ExtendedTokenDetailsMap): number {
+	// const details = tokenDetails[d.symbol]
+	if (tokenDetails[d.symbol] && d.prices[0][1]) {
+		console.log(d);
+		const curp = getPrice(d, tokenDetails);
+		const cP = curp;
+		const p = parseFloat(d.prices[0][1]);
+		return ((cP - p) / p) * 100 || 0;
+	}
+	return 0;
+
+	// return tokenDetails[d.symbol]?.changePercent1Day || 0;
 }
 
-function getPrice(symbol: string, tokenDetails: ExtendedTokenDetailsMap): number {
-	return tokenDetails[symbol]?.currentPrice || 0;
+function getPrice(d: TokenDetails, tokenDetails: ExtendedTokenDetailsMap): number {
+	return tokenDetails[d.symbol]?.currentPrice || 0;
 }
 
 export function TokenPriceTable(props: TokenPriceTableProps): JSX.Element {
@@ -67,10 +77,10 @@ export function TokenPriceTable(props: TokenPriceTableProps): JSX.Element {
 					result = a.symbol.localeCompare(b.symbol);
 					break;
 				case 'price':
-					result = getPrice(a.symbol, tokenDetails) - getPrice(b.symbol, tokenDetails);
+					result = getPrice(a, tokenDetails) - getPrice(b, tokenDetails);
 					break;
 				case 'change':
-					result = getChange(a.symbol, tokenDetails) - getChange(b.symbol, tokenDetails);
+					result = getChange(a, tokenDetails) - getChange(b, tokenDetails);
 					break;
 			}
 			if (reverse) {
