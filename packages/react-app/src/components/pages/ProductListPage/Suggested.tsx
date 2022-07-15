@@ -8,6 +8,7 @@ import { ChangeDisplay } from '../../atoms/ChangeDisplay';
 import { CoinLabelCell } from '../../atoms/CoinLabelCell';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { string } from 'prop-types';
 interface SuggestedProps {
 	tokenDetails: ExtendedTokenDetailsMap;
 }
@@ -50,12 +51,30 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 	};
 	const titleFont: Record<string, string> = {
 		sm: '1rem',
-		md: '1rem',
+		md: '.8rem',
 		lg: '1rem',
 		xl: '1rem',
 	};
+	const clcHeight: Record<string, string> = {
+		sm: '4rem',
+		md: '2rem',
+		lg: '4rem',
+		xl: '4rem',
+	};
+	const boxHeight: Record<string, string> = {
+		sm: '7em',
+		md: '11em',
+		lg: '9em',
+		xl: '7em',
+	};
+	const titleFontSize: Record<string, string> = {
+		sm: '2rem',
+		md: '1.5rem',
+		lg: '2rem',
+		xl: '2rem',
+	};
 	const clc = {
-		height: '4rem',
+		height: clcHeight[breakpoint],
 		fontSize: titleFont[breakpoint],
 		color: 'white',
 		linkCell: true,
@@ -95,14 +114,14 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 				{/* Biggest Mover */}
 				{!tokenDetails.SWD ? (
 					<Box className="suggested-box">
-						<Text className="suggested-title suggested-flex">
+						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
 							Best Performer <Image {...img} src="/images/biggest-mover.png" alt={`bgm icon`} />
 						</Text>
 						<Spinner size="xl" margin="4rem auto" color="#2089fd" />
 					</Box>
 				) : (
 					<a href={`/product/${bgm}`} className="suggested-box">
-						<Text className="suggested-title suggested-flex">
+						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
 							Biggest Mover <Image {...img} src="/images/biggest-mover.png" alt={`bgm icon`} />
 						</Text>
 
@@ -115,7 +134,9 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 								{...clc}
 							/>
 						</Box>
-						<Text className="suggested-description">{PRODUCTS_BY_SYMBOL[bgm].description}</Text>
+						<Text className="suggested-description" height={boxHeight[breakpoint]}>
+							{PRODUCTS_BY_SYMBOL[bgm].description}
+						</Text>
 						<Box className="suggested-change suggested-flex">
 							<Text paddingRight=".5rem">24h Change </Text>
 							{isZero(bgmChange) ? noData : <ChangeDisplay change={bgmChange} />}
@@ -125,14 +146,14 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 				{/* Largest TVL */}
 				{!tokenDetails.SWD ? (
 					<Box className="suggested-box">
-						<Text className="suggested-title suggested-flex">
+						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
 							Largest TVL <Image {...img} src="/images/largest-tvl.png" alt={`tvl icon`} />
 						</Text>
 						<Spinner size="xl" margin="4rem auto" color="#2089fd" />
 					</Box>
 				) : (
 					<a href="/product/SWYF" className="suggested-box">
-						<Text className="suggested-title suggested-flex">
+						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
 							Largest TVL <Image {...img} src="/images/largest-tvl.png" alt={`tvl icon`} />
 						</Text>
 						<Box className="suggested-clc suggested-flex">
@@ -144,7 +165,9 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 								{...clc}
 							/>
 						</Box>
-						<Text className="suggested-description">{PRODUCTS_BY_SYMBOL.SWYF.description}</Text>
+						<Text className="suggested-description" height={boxHeight[breakpoint]}>
+							{PRODUCTS_BY_SYMBOL.SWYF.description}
+						</Text>
 						<Box className="suggested-change suggested-flex">
 							<Text paddingRight=".5rem">1 Year Change: </Text>
 							{isZero(change) ? noData : <ChangeDisplay change={change} />}
@@ -154,14 +177,14 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 				{/* NEW */}
 				{!tokenDetails.SWD ? (
 					<Box className="suggested-box">
-						<Text className="suggested-title suggested-flex">
+						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
 							New <Image {...img} src="/images/new.png" alt={`new icon`} />
 						</Text>
 						<Spinner size="xl" margin="4rem auto" color="#2089fd" />
 					</Box>
 				) : (
 					<a href="/product/QMM" className="suggested-box">
-						<Text className="suggested-title suggested-flex">
+						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
 							New <Image {...img} src="/images/new.png" alt={`new icon`} />
 						</Text>
 						<Box className="suggested-clc suggested-flex">
@@ -173,7 +196,9 @@ export function Suggested(props: SuggestedProps): JSX.Element {
 								{...clc}
 							/>
 						</Box>
-						<Text className="suggested-description">{PRODUCTS_BY_SYMBOL.QMM.description}</Text>
+						<Text className="suggested-description" height={boxHeight[breakpoint]}>
+							{PRODUCTS_BY_SYMBOL.QMM.description}
+						</Text>
 						<Box className="suggested-change suggested-flex">
 							<Text paddingRight=".5rem">24h Change: </Text>
 							{isZero(newChange) ? noData : <ChangeDisplay change={newChange} />}

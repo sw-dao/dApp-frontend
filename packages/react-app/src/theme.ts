@@ -476,7 +476,7 @@ const config = {
 				width: '100%',
 				bgColor: 'blue5',
 				textColor: '#2089fd',
-				fontSize: '2rem',
+				// fontSize: '2rem',
 				textDecoration: 'bold',
 				img: {
 					marginLeft: '.5rem',
