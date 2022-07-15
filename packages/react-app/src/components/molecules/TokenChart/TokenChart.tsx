@@ -57,6 +57,10 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	const [mergedPrices, setMergedPrices] = useState<MergedPrice[]>([]);
 	const [loadedPrices, setLoadedPrices] = useState('');
 	const [loading, setLoading] = useState(false);
+	let borderRadius = '0';
+	if (!showComparison) {
+		borderRadius = '0 0 1.25em 1.25em';
+	}
 
 	useEffect(() => {
 		if (loadPrices && tokenDetails[symbol]) {
@@ -200,7 +204,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 				{timeButtons}
 			</HStack>
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
-				<Box bgColor="blue7">
+				<Box bgColor="blue7" borderRadius={borderRadius}>
 					<ResponsiveContainer width="99%" height={size[1] - 4}>
 						<LineChart data={mergedPrices}>
 							<defs>
