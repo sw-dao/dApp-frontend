@@ -16,11 +16,11 @@ import { SwapRequest } from "../types";
 import { getSwapParameters, validSwap, validToken } from "../utils/0x";
 import { getCallToUrl } from "../utils/axios";
 import { handleError } from "../utils/error";
-import { baseUrl0x } from "src/settings";
+// import { baseUrl0x } from "src/settings";
 
 const router: Router = express.Router();
 
-// const baseUrl0x = "https://polygon.api.0x.org/swap/v1";
+const baseUrl0x = "https://polygon.api.0x.org/swap/v1";
 
 /* GET prices from 0x API. */
 // TODO DRY validation
