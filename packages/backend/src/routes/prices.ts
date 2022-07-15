@@ -16,10 +16,11 @@ import { SwapRequest } from "../types";
 import { getSwapParameters, validSwap, validToken } from "../utils/0x";
 import { getCallToUrl } from "../utils/axios";
 import { handleError } from "../utils/error";
+import { baseUrl0x } from "src/settings";
 
 const router: Router = express.Router();
 
-const baseUrl0x = "https://polygon.api.0x.org/swap/v1";
+// const baseUrl0x = "https://polygon.api.0x.org/swap/v1";
 
 /* GET prices from 0x API. */
 // TODO DRY validation
@@ -33,13 +34,8 @@ router.post(
   param("buyToken").custom((value, { req }) =>
     validSwap(req?.body?.data?.chainId, value, req?.params?.sellToken)
   ),
-  param("sellAmount", "Please provide valid amount")
-    .notEmpty()
-    .trim()
-    .isInt(),
-  body("data.chainId", "Please provide valid chainId")
-    .notEmpty()
-    .trim(),
+  param("sellAmount", "Please provide valid amount").notEmpty().trim().isInt(),
+  body("data.chainId", "Please provide valid chainId").notEmpty().trim(),
   async (req: Request, res: Response) => {
     const errors: Result<ValidationError> = validationResult(req);
 
