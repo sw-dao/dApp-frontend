@@ -22,7 +22,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 	let bgmChange = 0;
 	let bgm = '';
 	let newChange = 0;
-	if (tokenDetails.SWD) {
+	if (tokenDetails && tokenDetails.SWD) {
 		newChange = tokenDetails.QMM.changePercent1Day;
 		for (const symbol in tokenDetails) {
 			const c = tokenDetails[symbol].changePercent1Day;
@@ -50,21 +50,21 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 		return false;
 	};
 	const titleFont: Record<string, string> = {
-		sm: '1rem',
-		md: '.8rem',
-		lg: '1rem',
-		xl: '1rem',
+		sm: '1.5vw',
+		md: '1.5vw',
+		lg: '1.5vw',
+		xl: '1.5vw',
 	};
 	const clcHeight: Record<string, string> = {
 		sm: '4rem',
 		md: '2rem',
-		lg: '4rem',
-		xl: '4rem',
+		lg: '3rem',
+		xl: '3rem',
 	};
 	const boxHeight: Record<string, string> = {
 		sm: '7em',
 		md: '11em',
-		lg: '9em',
+		lg: '10em',
 		xl: '7em',
 	};
 	const titleFontSize: Record<string, string> = {
@@ -97,7 +97,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 		initialSlide: 0,
 		responsive: [
 			{
-				breakpoint: 720,
+				breakpoint: 850,
 				settings: {
 					slidesToShow: 1,
 					slidesToScroll: 1,
