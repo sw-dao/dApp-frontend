@@ -456,6 +456,8 @@ const config = {
 				},
 			},
 			'.suggested-box': {
+				border: '1px solid ',
+				borderColor: 'alttext',
 				width: '30%',
 				borderRadius: '1.3em',
 				bgColor: 'blue7',

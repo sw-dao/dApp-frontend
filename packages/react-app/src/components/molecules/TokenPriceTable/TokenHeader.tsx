@@ -73,7 +73,15 @@ export function TokenHeader({
 
 	// note - "nowrap" because this is only shown if the screen is large
 	return (
-		<Flex flexFlow="row nowrap" padding="0.5rem 0" mb="0.5rem" bgColor="blue5" color="purple">
+		<Flex
+			flexFlow="row nowrap"
+			padding="0.5rem 0"
+			mb="0.5rem"
+			bgColor="blue5"
+			color="purple"
+			border="2px solid #120046"
+			borderRadius="1em 1em 0 0"
+		>
 			<Box {...firstProps} {...styles.name} cursor="pointer" onClick={() => onSort('name')}>
 				Name{sorts.name}
 			</Box>

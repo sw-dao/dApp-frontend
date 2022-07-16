@@ -23,6 +23,7 @@ export default function TimeButton({ period, onClick }: TimeButtonProps): JSX.El
 			_hover={{ color: '#120046', bgColor: 'alttext' }}
 			borderColor="alttext"
 			borderWidth="1px"
+			borderRadius="12px"
 			padding="0.4rem 0.6rem 0.4rem 1rem"
 			fontSize="0.9rem"
 			width="7rem"

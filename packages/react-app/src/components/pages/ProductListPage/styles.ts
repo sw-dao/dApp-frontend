@@ -27,7 +27,7 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		},
 		inactive: {
 			color: 'alttext',
-			bgColor: 'transparent',
+			bgColor: 'blue7',
 			borderColor: 'alttext',
 		},
 	},
@@ -57,7 +57,7 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		},
 		inactive: {
 			color: 'alttext',
-			bgColor: 'transparent',
+			bgColor: 'blue7',
 			borderColor: 'alttext',
 		},
 	},
@@ -71,7 +71,7 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		},
 		inactive: {
 			color: 'alttext',
-			bgColor: 'transparent',
+			bgColor: 'blue7',
 			borderColor: 'alttext',
 		},
 	},

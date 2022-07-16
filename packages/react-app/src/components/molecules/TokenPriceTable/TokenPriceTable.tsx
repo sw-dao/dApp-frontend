@@ -51,14 +51,6 @@ export function TokenPriceTable(props: TokenPriceTableProps): JSX.Element {
 
 	const isLarge = useRecoilValue(isLargeBreakpoint);
 
-	const borders: Record<string, string> = useMemo(
-		() =>
-			isLarge
-				? { border: '2px solid #120046', borderRadius: '2em' }
-				: { border: 'none', borderRadius: 'none' },
-		[isLarge],
-	);
-
 	const sortFn = useCallback(
 		(a: TokenDetails, b: TokenDetails): number => {
 			const reverse = sort.startsWith('-');
@@ -131,7 +123,7 @@ export function TokenPriceTable(props: TokenPriceTableProps): JSX.Element {
 	const borderRadius = useMemo(() => (isLarge ? '2em 2em 0 0' : '2em'), [isLarge]);
 
 	return (
-		<Box {...borders} width="100%">
+		<Box width="100%">
 			{children && (
 				<Box bgColor="bodydark" borderRadius={borderRadius}>
 					{children}

@@ -134,10 +134,11 @@ export default function ProductListHeader({
 			id="mainheader"
 			width="100%"
 			borderRadius={borderRadius}
-			bgColor="blue5"
+			bgColor="#060119"
 			padding="1rem"
 			mb={mb}
 			pos="relative"
+			alignItems="flex-end"
 		>
 			{dynamicButtons}
 			<Spacer />
@@ -146,7 +147,7 @@ export default function ProductListHeader({
 				<VStack
 					border="1px solid #3861F7"
 					bgColor="blue5"
-					borderRadius="2em"
+					borderRadius="12px"
 					pos="absolute"
 					right="0"
 					top="0"
@@ -159,6 +160,7 @@ export default function ProductListHeader({
 						bgColor="transparent"
 						borderColor="alttext"
 						borderWidth="1px"
+						borderRadius="12px"
 						color="alttext"
 						fontSize="0.9rem"
 						onClick={onTimeClose}
