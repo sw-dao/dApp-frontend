@@ -50,7 +50,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 		return false;
 	};
 	const titleFont: Record<string, string> = {
-		sm: '1.5vw',
+		sm: '5vw',
 		md: '1.5vw',
 		lg: '1.5vw',
 		xl: '1.5vw',
