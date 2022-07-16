@@ -21,8 +21,8 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		label: 'Strategies',
 		image: '/images/green-gem.png',
 		active: {
-			color: '#FFCC50',
-			bgColor: '#301FA0',
+			color: '#301FA0',
+			bgColor: '#FFCC50',
 			borderColor: 'transparent',
 		},
 		inactive: {
@@ -65,8 +65,8 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		label: 'All',
 		image: '/images/blue-gem.png',
 		active: {
-			color: '#23CBFF',
-			bgColor: '#301FA0',
+			color: '#301FA0',
+			bgColor: '#23CBFF',
 			borderColor: 'transparent',
 		},
 		inactive: {
