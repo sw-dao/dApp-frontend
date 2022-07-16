@@ -56,6 +56,7 @@ export default function ProductListHeader({
 					onClick={handleFilter}
 					active={effectiveFilter === key}
 					widths={CATEGORY_BUTTON_WIDTHS}
+					isOpen
 				/>
 			);
 		});
@@ -69,7 +70,7 @@ export default function ProductListHeader({
 						alignItems="baseline"
 						bgColor="blue5"
 						border="1px solid #3861F7"
-						borderRadius="2em"
+						borderRadius="12px"
 						left="0"
 						padding="0.5rem 0.5rem 1rem 1rem"
 						pos="absolute"
@@ -84,6 +85,7 @@ export default function ProductListHeader({
 							bgColor="transparent"
 							borderColor="alttext"
 							borderWidth="1px"
+							borderRadius="12px"
 							color="alttext"
 							fontSize="0.9rem"
 							onClick={onToggle}
@@ -103,6 +105,7 @@ export default function ProductListHeader({
 					bgColor="transparent"
 					borderColor="alttext"
 					borderWidth="1px"
+					borderRadius="12px"
 					color="alttext"
 					fontSize="0.9rem"
 					onClick={onToggle}

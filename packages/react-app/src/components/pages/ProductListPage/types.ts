@@ -3,6 +3,7 @@ export interface CategoryButtonProps {
 	onClick: (name: string) => void;
 	active: boolean;
 	widths: Record<string, string>;
+	isOpen: boolean;
 }
 
 export interface ActiveProps {
