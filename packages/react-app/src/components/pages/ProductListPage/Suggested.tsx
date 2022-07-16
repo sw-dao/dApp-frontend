@@ -111,7 +111,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 	return (
 		<Box>
 			<Slider {...settings}>
-				{/* Biggest Mover */}
+				{/* Best Performer */}
 				{!tokenDetails.SWD ? (
 					<Box className="suggested-box">
 						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
@@ -122,7 +122,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 				) : (
 					<a href={`/product/${bgm}`} className="suggested-box">
 						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
-							Biggest Mover <Image {...img} src="/images/biggest-mover.png" alt={`bgm icon`} />
+							Best Performer <Image {...img} src="/images/biggest-mover.png" alt={`bgm icon`} />
 						</Text>
 
 						<Box className="suggested-clc suggested-flex">
@@ -185,7 +185,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 				) : (
 					<a href="/product/QMM" className="suggested-box">
 						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
-							New <Image {...img} src="/images/new.png" alt={`new icon`} />
+							Newest <Image {...img} src="/images/new.png" alt={`new icon`} />
 						</Text>
 						<Box className="suggested-clc suggested-flex">
 							<CoinLabelCell
