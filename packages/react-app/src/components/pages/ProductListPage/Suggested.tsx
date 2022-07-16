@@ -178,7 +178,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 				{!tokenDetails.SWD ? (
 					<Box className="suggested-box">
 						<Text className="suggested-title suggested-flex" fontSize={titleFontSize[breakpoint]}>
-							New <Image {...img} src="/images/new.png" alt={`new icon`} />
+							Newest <Image {...img} src="/images/new.png" alt={`new icon`} />
 						</Text>
 						<Spinner size="xl" margin="4rem auto" color="#2089fd" />
 					</Box>
