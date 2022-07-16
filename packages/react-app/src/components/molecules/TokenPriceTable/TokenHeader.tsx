@@ -76,7 +76,7 @@ export function TokenHeader({
 		<Flex
 			flexFlow="row nowrap"
 			padding="0.5rem 0"
-			mb="0.5rem"
+			// mb="0.5rem"
 			bgColor="blue5"
 			color="purple"
 			border="2px solid #120046"

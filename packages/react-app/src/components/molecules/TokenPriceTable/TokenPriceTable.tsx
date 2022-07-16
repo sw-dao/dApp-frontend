@@ -132,7 +132,14 @@ export function TokenPriceTable(props: TokenPriceTableProps): JSX.Element {
 			{isLarge && (
 				<TokenHeader colStyles={colStyles} first={!children} onSort={handleSort} sort={sort} />
 			)}
-			<Box bgColor="transparent">{rows}</Box>
+			<Box
+				bgColor="transparent"
+				border="2px solid #120046"
+				borderRadius="0 0 2em 2em"
+				borderTop="0"
+			>
+				{rows}
+			</Box>
 		</Box>
 	);
 }
