@@ -253,7 +253,7 @@ export function RedeemForm(props: FormPanelProps): JSX.Element {
 				</Thead>
 				<Tbody>{tableRows}</Tbody>
 			</Table>
-			{!disabled ? (
+			{!disabled || isBusy ? (
 				<Tooltip label={sellTooltip} shouldWrapChildren>
 					<Button disabled={!sellEnabled} onClick={handleSell}>
 						{sellLabel}

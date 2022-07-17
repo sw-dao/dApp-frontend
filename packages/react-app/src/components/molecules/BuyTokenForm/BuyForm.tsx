@@ -233,7 +233,7 @@ export default function BuyForm(props: FormProps): JSX.Element {
 					{buySymbol}
 				</Text>
 			</Flex>
-			{!disabled ? (
+			{!disabled || isBusy ? (
 				<Tooltip label={buyTooltip}>
 					<Button disabled={disabled || !buyEnabled} onClick={onSubmit} isLoading={isBusy}>
 						{buyLabel}

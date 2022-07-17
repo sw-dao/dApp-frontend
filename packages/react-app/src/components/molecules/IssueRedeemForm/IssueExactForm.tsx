@@ -219,7 +219,7 @@ export function IssueExactForm(props: FormPanelProps): JSX.Element {
 					{buySymbol}
 				</Text>
 			</Flex>
-			{!disabled ? (
+			{!disabled || isBusy ? (
 				<Tooltip label={buyTooltip} shouldWrapChildren>
 					<Button disabled={!buyEnabled} onClick={handleBuy} isLoading={isBusy}>
 						{buyLabel}

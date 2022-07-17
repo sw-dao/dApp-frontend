@@ -266,7 +266,7 @@ export function IssueForm(props: FormPanelProps): JSX.Element {
 				</Thead>
 				<Tbody>{tableRows}</Tbody>
 			</Table>
-			{!disabled ? (
+			{!disabled || isBusy ? (
 				<Tooltip label={buyTooltip} shouldWrapChildren>
 					<Button disabled={!buyEnabled} onClick={handleBuy} isLoading={isBusy}>
 						{buyLabel}

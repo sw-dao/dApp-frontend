@@ -274,7 +274,7 @@ export function RedeemExactForm(props: FormPanelProps): JSX.Element {
 					disabled={disabled}
 				/>
 			</Flex>
-			{!disabled ? (
+			{!disabled || isBusy ? (
 				<Tooltip label={buttonTooltip} shouldWrapChildren>
 					<Button disabled={!buttonEnabled} onClick={handleRedeem} isLoading={isBusy}>
 						{buttonLabel}

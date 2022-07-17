@@ -258,7 +258,7 @@ export default function SellForm(props: FormProps): JSX.Element {
 					margin="0 0.5rem"
 				/>
 			</Flex>
-			{!disabled ? (
+			{!disabled || isBusy ? (
 				<Tooltip label={sellTooltip}>
 					<Button disabled={!sellEnabled} onClick={onSubmit} isLoading={isBusy}>
 						{sellLabel}
