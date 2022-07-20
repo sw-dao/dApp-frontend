@@ -53,7 +53,7 @@ export default function Suggested(props: SuggestedProps): JSX.Element {
 		sm: '5vw',
 		md: '1.5vw',
 		lg: '1.5vw',
-		xl: '1.5vw',
+		xl: '1.25em',
 	};
 	const clcHeight: Record<string, string> = {
 		sm: '4rem',
