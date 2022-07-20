@@ -23,6 +23,7 @@ import { ChartAndBuy } from '../organisms/ChartAndBuy';
 import { FullHeightPage } from '../templates/FullHeightPage';
 import RiskModal from '../atoms/RiskModal';
 import AddToWalletButton from '../atoms/AddToWalletButton';
+import { useRedirect } from 'hookrouter';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -41,6 +42,8 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 	const [prices, setPrices] = useState<ChartData>([]); // SWD prices
 	const [product, setProduct] = useState<TokenDetails | null>(null);
 	const breakpoint = useRecoilValue(breakpointState);
+
+	useRedirect('/product/SWD', '/token'); // redirects from /product/SWD to /token
 
 	useEffect(() => {
 		if (tokenDetails) {

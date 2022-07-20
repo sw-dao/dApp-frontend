@@ -1,9 +1,11 @@
 import React from 'react';
+import { NotFoundPage } from './components/pages/NotFoundPage';
 
 import { PortfolioPage } from './components/pages/PortfolioPage';
 import { ProductDetailsPage } from './components/pages/ProductDetailsPage';
 import { ProductListPage } from './components/pages/ProductListPage/ProductListPage';
 import { SWDTokenPage } from './components/pages/SWDTokenPage';
+import { PRODUCTS_BY_SYMBOL } from './config/products';
 import { getTokenName } from './utils';
 
 interface SymbolPath {
@@ -37,7 +39,13 @@ export const routeDetails: RouteDetails = {
 		title: () => 'SW DAO | Products',
 	},
 	'/product/:symbol': {
-		component: ({ symbol }: SymbolPath) => <ProductDetailsPage symbol={symbol} />,
+		component: ({ symbol }: SymbolPath) => {
+			return !(symbol in PRODUCTS_BY_SYMBOL) ? (
+				<NotFoundPage />
+			) : (
+				<ProductDetailsPage symbol={symbol} />
+			);
+		},
 		title: ({ symbol }: SymbolPath) => `SW DAO | ${getTokenName(symbol)}`,
 	},
 	'/portfolio': {
