@@ -85,7 +85,7 @@ export default function WalletButton(props: WalletProps): JSX.Element {
 	const breakpoints = width || ['7rem', '7rem', '9rem', '11rem'];
 	return (
 		<>
-			<TooltipWrapper show={tooltip} label={label}>
+			<TooltipWrapper show={tooltip} label={label} zIndex="1">
 				<Button
 					variant={variant}
 					disabled={isConnecting}

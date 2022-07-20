@@ -265,6 +265,7 @@ export interface ExtendedTokenDetailsMap {
 
 export type ProductSetupDescription = {
 	name: string;
+	risk: 'one' | 'two' | 'three' | 'four' | 'five';
 	description?: string;
 	symbol: string;
 	addresses: Record<string, string>;

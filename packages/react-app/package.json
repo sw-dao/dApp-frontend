@@ -33,6 +33,7 @@
     "@walletconnect/web3-provider": "^1.6.6",
     "authereum": "^0.1.14",
     "axios": "^0.24.0",
+    "charts.css": "^0.9.0",
     "coingecko-api": "^1.0.10",
     "date-fns": "^2.27.0",
     "dotenv": "^10.0.0",

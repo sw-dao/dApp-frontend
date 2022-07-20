@@ -8754,6 +8754,11 @@ charm@~0.1.1:
   resolved "https://registry.yarnpkg.com/charm/-/charm-0.1.2.tgz#06c21eed1a1b06aeb67553cdc53e23274bac2296"
   integrity sha512-syedaZ9cPe7r3hoQA9twWYKu5AIyCswN5+szkmPBe9ccdLrj4bYaCnLVPTLd2kgVRc7+zoX4tyPgRnFKCj5YjQ==
 
+charts.css@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/charts.css/-/charts.css-0.9.0.tgz#df0da443226d549b2ab36ed6532fa04571c59916"
+  integrity sha512-gOqyyRZGifTNCdyVdMwO6/9+5sHyue1csqOrCr7V/FwzuAiaj+gGL6DX7LGPXCHIQBumsM5/mKiIe/BadwzvzA==
+
 check-error@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"

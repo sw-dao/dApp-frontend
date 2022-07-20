@@ -1,0 +1,88 @@
+#riskModal {
+    height: 100px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+#riskModal tbody td {
+  margin-inline-start: 10px;
+  margin-inline-end: 20px;
+  box-shadow:
+    1px -1px 1px lightgrey,
+    2px -2px 1px lightgrey,
+    3px -3px 1px lightgrey,
+    4px -4px 1px lightgrey,
+    5px -5px 1px lightgrey,
+    6px -6px 1px lightgrey,
+    7px -7px 1px lightgrey,
+    8px -8px 1px lightgrey,
+    9px -9px 1px lightgrey,
+    10px -10px 1px lightgrey;
+}
+#riskModal.column {
+  --lable-size: 2rem;
+}
+
+.lable {
+  color: #BCE7FE;
+}
+
+.one {
+  --size: 0.2;
+  --color: linear-gradient(45deg, #7200e6, #6c0be8);
+}
+.two {
+  --size: 0.4;
+  --color:linear-gradient(45deg, #6c0be8, #572dee);
+
+}
+.three {
+  --size: 0.6;
+  --color:linear-gradient(45deg, #572dee, #4d3ff1);
+ 
+}
+.four {
+  --size: 0.8;
+  --color:linear-gradient(45deg, #4d3ff1, #444df3);
+}
+.five {
+  --size: 1;
+  --color: linear-gradient(45deg, #4d3ff1, #444df3);
+
+  /* --color: #BCE7FE; */
+}
+
+.center { 
+  text-align: center
+  
+}
+
+.riskBlocker {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.riskModalTextBox {
+  display : flex;
+  flex-direction: column;
+  position : absolute;
+  background : white;
+  color : black;
+  padding : 3em;
+  left : 50%;
+  top : 50%;
+  width : 33%;
+  transform : translate(-50%,-50%);
+  z-index : 2;
+}
+
+.riskButton {
+  margin-top:1rem;
+  color:white;
+  align-self:center;
+  width:fit-content;
+}

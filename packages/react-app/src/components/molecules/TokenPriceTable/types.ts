@@ -23,7 +23,7 @@ export const DEFAULT_COL_STYLES: SizedColumnStyles = {
 		},
 		price: {
 			width: 'auto',
-			ml: '4.5rem',
+			ml: '17rem',
 			mt: '-2.5rem',
 			textAlign: 'left',
 		},

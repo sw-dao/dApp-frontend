@@ -4,7 +4,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useWindowSize } from '../../hooks/useWindowSize';
-import { extendedTokenDetailsState, periodState, tokenDetailsForCurrentPeriod } from '../../state';
+import {
+	breakpointState,
+	extendedTokenDetailsState,
+	periodState,
+	tokenDetailsForCurrentPeriod,
+} from '../../state';
 import { ChartData, TokenDetails } from '../../types';
 import { getOverriddenDetails } from '../../utils';
 import { HoveringArrowLink } from '../molecules/HoveringArrowLink';
@@ -16,6 +21,8 @@ import { StyledSection } from '../molecules/StyledSection';
 import { AboutTokenSet } from '../organisms/AboutTokenSet';
 import { ChartAndBuy } from '../organisms/ChartAndBuy';
 import { FullHeightPage } from '../templates/FullHeightPage';
+import RiskModal from '../atoms/RiskModal';
+import AddToWalletButton from '../atoms/AddToWalletButton';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -33,6 +40,7 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 	const detailMap = useRecoilValue(extendedTokenDetailsState);
 	const [prices, setPrices] = useState<ChartData>([]); // SWD prices
 	const [product, setProduct] = useState<TokenDetails | null>(null);
+	const breakpoint = useRecoilValue(breakpointState);
 
 	useEffect(() => {
 		if (tokenDetails) {
@@ -135,25 +143,37 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 		/>,
 	];
 
+	function AddToMetamaskButton() {
+		if (product?.address) {
+			return <AddToWalletButton address={product?.address} symbol={symbol} />;
+		}
+		return null;
+	}
+
 	const metaTitle = 'SW DAO - ' + symbol;
 	const metaDesc = 'Buy ' + name;
 	const metaImage = '/images/meta/meta_' + symbol + '.png';
-
 	return (
 		<FullHeightPage pageKey="details">
 			<Center>
 				<StyledSection id="ProductDetails" section="body" marginBottom="3rem">
 					<Box className="bodycontent">
 						<VStack spacing="1rem" textAlign="left" align="left" margin="0 0 2rem 0.5rem">
-							<ProductDetailHeader symbol={symbol} icon={icon || ''} name={name || ''} h="5rem" />
-							<PriceAndDateHeader
-								symbol={symbol}
-								address={product?.address}
-								change={change}
-								price={currentPrice}
-								date={Date.now()}
-								showZero={true}
-							/>
+							<Box display="flex" alignItems="center">
+								<ProductDetailHeader symbol={symbol} icon={icon || ''} name={name || ''} h="5rem" />
+								{breakpoint !== 'sm' && <AddToMetamaskButton />}
+							</Box>
+							<Box>
+								<PriceAndDateHeader
+									symbol={symbol}
+									address={product?.address}
+									change={change}
+									price={currentPrice}
+									date={Date.now()}
+									showZero={true}
+								/>
+								<RiskModal symbol={symbol} />
+							</Box>
 						</VStack>
 						<VStack spacing="2rem" margin="0 auto">
 							<ChartAndBuy symbol={symbol} handleDateChange={setPeriod} period={periodVal} />

@@ -4,8 +4,15 @@ import { useQueryParams } from 'hookrouter';
 import React, { useEffect, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { extendedTokenDetailsState, periodState, tokenDetailsForCurrentPeriod } from '../../state';
+import {
+	breakpointState,
+	extendedTokenDetailsState,
+	periodState,
+	tokenDetailsForCurrentPeriod,
+} from '../../state';
+import AddToWalletButton from '../atoms/AddToWalletButton';
 import { EtherscanLink } from '../atoms/EtherscanLink';
+import RiskModal from '../atoms/RiskModal';
 import { YoutubeEmbed } from '../atoms/YoutubeEmbed';
 import { DynamicGrid } from '../molecules/DynamicGrid';
 import { PriceAndDateHeader } from '../molecules/PriceAndDateHeader';
@@ -32,6 +39,7 @@ export function SWDTokenPage(): JSX.Element {
 	const detailMap = useRecoilValue(extendedTokenDetailsState);
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const { chainId } = useWallet();
+	const breakpoint = useRecoilValue(breakpointState);
 
 	useEffect(() => {
 		if (periodVal !== period) {
@@ -159,27 +167,33 @@ export function SWDTokenPage(): JSX.Element {
 		],
 		[displayTokenAddress, detailMap, tokenDetails],
 	);
-
+	function AddToMetamaskButton() {
+		return <AddToWalletButton address="0xaee24d5296444c007a532696aada9de5ce6cafd0" symbol="SWD" />;
+	}
 	return (
 		<FullHeightPage pageKey="token">
 			<Center>
-				<StyledSection id="ProductDetails" section="body">
+				<StyledSection id="ProductDetails" section="body" marginBottom="3rem">
 					<Box className="bodycontent">
-						<VStack spacing="1rem" textAlign="left" align="left" className="bodycontent">
-							<ProductDetailHeader
-								icon="/images/token-swd.png"
-								symbol="SWD"
-								name="SW DAO Token"
-								h="5rem"
-							/>
-							<PriceAndDateHeader
-								symbol={symbol}
-								address={displayTokenAddress}
-								price={currentPrice}
-								change={priceChange}
-								date={Date.now()}
-								padding="0 0 2rem 0"
-							/>
+						<VStack spacing="1rem" textAlign="left" align="left" margin="0 0 2rem 0.5rem">
+							<Box display="flex" alignItems="center">
+								<ProductDetailHeader
+									icon="/images/token-swd.png"
+									symbol="SWD"
+									name="SW DAO Token"
+									h="5rem"
+								/>
+								{breakpoint !== 'sm' && <AddToMetamaskButton />}
+							</Box>
+							<Box>
+								<PriceAndDateHeader
+									symbol={symbol}
+									address={displayTokenAddress}
+									price={currentPrice}
+									change={priceChange}
+									date={Date.now()}
+								/>
+							</Box>
 						</VStack>
 						<VStack spacing="2rem" margin="0 auto">
 							<ChartAndBuy symbol={symbol} handleDateChange={setPeriod} period={periodVal} />

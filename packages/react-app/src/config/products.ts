@@ -16,6 +16,7 @@ import { ProductSetupDescription } from '../types';
 export const PRODUCTS: ProductSetupDescription[] = [
 	{
 		name: 'SW Governance',
+		risk: 'one',
 		description:
 			"SW DAO's native token that aligns the DAO with its holders, enabling communityled ownership and governance.",
 		symbol: 'SWD',
@@ -26,6 +27,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Alpha Portfolio',
+		risk: 'four',
 		description:
 			'A discretionarily managed investment vehicle for those who want to outperform the market.',
 		symbol: 'SWAP',
@@ -37,6 +39,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Macro Trend BTC',
+		risk: 'five',
 		description:
 			'An automated trend-following strategy that seeks to capitalize on the larger price movements of Bitcoin.',
 		symbol: 'MTBTC',
@@ -48,6 +51,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Macro Trend ETH',
+		risk: 'five',
 		description:
 			'An automated trend-following strategy that seeks to capitalize on the larger price movements of Ethereum.',
 		symbol: 'MTETH',
@@ -59,6 +63,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Quantum Momentum BTC',
+		risk: 'five',
 		description:
 			'An automated high-frequency strategy that leverages machine learning to seek out the strongest risk-adjusted returns in Bitcoin.',
 		symbol: 'QMB',
@@ -70,6 +75,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Quantum Momentum ETH',
+		risk: 'five',
 		description:
 			'An automated high-frequency strategy that leverages machine learning to seek out the strongest risk-adjusted returns in Ethereum.',
 		symbol: 'QME',
@@ -81,6 +87,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Quantum Momentum MATIC',
+		risk: 'five',
 		description:
 			'An automated high-frequency strategy that leverages machine learning to seek out the strongest risk-adjusted returns in MATIC.',
 		symbol: 'QMM',
@@ -92,6 +99,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Buy the Dip BTC',
+		risk: 'two',
 		description:
 			'An automated strategy that allows you to take advantage of lower Bitcoin prices and build your portfolio with ease.',
 		symbol: 'BTBTC',
@@ -103,6 +111,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Buy the Dip ETH',
+		risk: 'two',
 		description:
 			'An automated strategy that allows you to take advantage of lower Ethereum prices and build your portfolio with ease.',
 		symbol: 'BTETH',
@@ -114,6 +123,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'Buy the Dip MATIC',
+		risk: 'two',
 		description:
 			'An automated strategy that allows you to take advantage of lower MATIC prices and build your portfolio with ease.',
 		symbol: 'BTMAT',
@@ -125,6 +135,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	// {
 	// 	name: 'Discretionary BTC',
+	// 	risk: 'five',
 	// 	symbol: 'DBTC',
 	// 	addresses: { '0x89': '0xf2aa5ccea80c246a71e97b418173fcc956408d3f' },
 	// 	is_tokenset: true,
@@ -134,6 +145,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'Discretionary ETH',
+	// 	risk: 'five',
 	// 	symbol: 'DETH',
 	// 	addresses: { '0x89': '0x72b467cacbdbec5918d8eec0371ca33e6xfd42421' },
 	// 	is_tokenset: true,
@@ -143,6 +155,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'Discretionary MATIC',
+	//  risk: 'five',
 	// 	symbol: 'DMATI',
 	// 	addresses: { '0x89': '0xab80a6e2909c8089ebd84f331c05bbefa3276cd2' },
 	// 	is_tokenset: true,
@@ -152,6 +165,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'DeFi Value Index',
+	// 	risk: 'three',
 	// 	symbol: 'DVI',
 	// 	addresses: { '0x89': '0x62135f85899d97aed95f4405d710208e68b99f39' },
 	// 	is_tokenset: true,
@@ -161,6 +175,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'BTC Momentum Index',
+	//  risk: 'three',
 	// 	symbol: 'BMI',
 	// 	addresses: { '0x89': '0xB4f78a05ab16CD3e6d0100112D0CC431942859Bb' },
 	// 	is_tokenset: true,
@@ -170,6 +185,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'ETH Momentum Index',
+	// 	risk: 'three',
 	// 	symbol: 'EMI',
 	// 	addresses: { '0x89': '0xd3ef811331a98d24a2B2FB64cEBeEa5aF31b2568' },
 	// 	is_tokenset: true,
@@ -179,6 +195,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'MATIC Momentum Index',
+	// risk: 'three',
 	// 	symbol: 'MMI',
 	// 	addresses: { '0x89': '0xDFdDd9811796F72bA32a031724f5B1403CD48B91' },
 	// 	is_tokenset: true,
@@ -188,6 +205,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'DPI Momentum Index',
+	// risk: 'three',
 	// 	symbol: 'DMI',
 	// 	addresses: { '0x89': '0xB5253C58b8a361d9901922b23eC9fB9E7d38C98a' },
 	// 	is_tokenset: true,
@@ -197,6 +215,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	// {
 	// 	name: 'SWD Momentum Index',
+	// risk: 'three',
 	// 	symbol: 'SMI',
 	// 	addresses: { '0x89': '0xad2b726fd2bd3a7f8f4b3929152438eba637ef19' },
 	// 	is_tokenset: true,
@@ -224,6 +243,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	// },
 	{
 		name: 'USDC Yield Fund',
+		risk: 'one',
 		description:
 			'A discretionarily managed yield farming fund that seeks to generate yield denominated in USDC.',
 		symbol: 'SWYF',
@@ -235,6 +255,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'BTC Yield Fund',
+		risk: 'one',
 		description:
 			'A discretionarily managed yield farming fund that seeks to generate yield denominated in Bitcoin.',
 		symbol: 'SWBYF',
@@ -246,6 +267,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'ETH Yield Fund',
+		risk: 'one',
 		description:
 			'A discretionarily managed yield farming fund that seeks to generate yield denominated in Ethereum.',
 		symbol: 'SWEYF',
@@ -257,6 +279,7 @@ export const PRODUCTS: ProductSetupDescription[] = [
 	},
 	{
 		name: 'MATIC Yield Fund',
+		risk: 'one',
 		description:
 			'A discretionarily managed yield farming fund that seeks to generate yield denominated in Matic.',
 		symbol: 'SWMYF',

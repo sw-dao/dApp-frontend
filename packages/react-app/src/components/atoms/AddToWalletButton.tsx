@@ -1,10 +1,12 @@
 import { Button, Image, useToast } from '@chakra-ui/react';
 import { useWallet } from '@raidguild/quiver';
 import React, { useCallback, useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
 import { getProviderInfo } from 'web3modal';
 
 import { TOAST_TIMEOUT_ALERT } from '../../config';
 import { PRODUCTS } from '../../config/products';
+import { breakpointState } from '../../state';
 import { Toaster } from '../../types';
 import { getTokenUrl } from '../../utils';
 import { decimalsOf } from '../../utils/contracts';
@@ -18,6 +20,7 @@ type WalletButtonProps = {
 export default function AddToWalletButton({ symbol, address }: WalletButtonProps): JSX.Element {
 	const toast: Toaster = useToast();
 	const { isConnected, provider } = useWallet();
+	const breakpoint = useRecoilValue(breakpointState);
 	const providerInfo = useMemo(() => getProviderInfo(provider), [provider]);
 
 	const handleAdd = useCallback(() => {
@@ -79,6 +82,11 @@ export default function AddToWalletButton({ symbol, address }: WalletButtonProps
 		return <></>;
 	}
 
+	let textByBreakpoint = 'Add to MetaMask +';
+	if (breakpoint === 'sm') {
+		textByBreakpoint = '+';
+	}
+
 	return (
 		<Button
 			className="border-thicken"
@@ -93,9 +101,10 @@ export default function AddToWalletButton({ symbol, address }: WalletButtonProps
 			borderColor="blue5"
 			borderWidth={2}
 			_hover={{ bgColor: '#BCE7FE', color: '#000', borderColor: '#BCE7FE' }}
+			// marginRight="1rem"
 		>
 			<Image src="/images/metamask.png" alt="add to Metamask" />
-			&nbsp;+
+			&nbsp;{textByBreakpoint}&nbsp;
 		</Button>
 	);
 }

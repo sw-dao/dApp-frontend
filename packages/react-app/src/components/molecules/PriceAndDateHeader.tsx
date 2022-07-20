@@ -1,8 +1,10 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { utils } from 'ethers';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { DATE_FORMAT, DATE_FORMAT_WITH_TIME } from '../../config';
+import { breakpointState } from '../../state';
 import { safeFixed } from '../../utils/contracts';
 import AddToWalletButton from '../atoms/AddToWalletButton';
 import { ChangeDisplay } from '../atoms/ChangeDisplay';
@@ -30,7 +32,7 @@ export function PriceAndDateHeader(props: PriceAndDateHeaderProps): JSX.Element 
 		symbol,
 		...rest
 	} = props;
-
+	const breakpoint = useRecoilValue(breakpointState);
 	function AddToMetamaskButton() {
 		if (address) {
 			return <AddToWalletButton address={address} symbol={symbol} />;
@@ -60,7 +62,7 @@ export function PriceAndDateHeader(props: PriceAndDateHeaderProps): JSX.Element 
 						<ChangeDisplay change={change} />
 					</Box>
 				)}
-				<AddToMetamaskButton />
+				{breakpoint === 'sm' && <AddToMetamaskButton />}
 			</Flex>
 		</Box>
 	);

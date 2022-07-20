@@ -118,6 +118,10 @@ const config = {
 	useSystemColorMode: false,
 	styles: {
 		global: () => ({
+			'.css-1s3pwbb, .css-1bblxtj, .css-d7kz7, .css-vavy6g': {
+				position: 'unset !important',
+			},
+
 			html: {
 				backgroundColor: '#070019',
 				overflowX: 'hidden',
@@ -394,7 +398,7 @@ const config = {
 				},
 			},
 			'.styled-box, .styled-container': {
-				position: 'relative',
+				// position: 'relative',
 				'.styled-content': {
 					paddingBottom: '2.5rem',
 				},
@@ -520,16 +524,7 @@ const config = {
 			'.slick-prev': {
 				left: ' -10px',
 			},
-			// '.slick-dots': {
-			// 	top: '-5',
-			// 	position: 'relative',
-			// 	'li button': {
-			// 		borderColor: '#2089fd',
-			// 	},
-			// 	'.slick-active': {
-			// 		borderColor: 'blue5',
-			// 	},
-			// },
+
 			// get rid of blue outline for clicked elements
 			'.js-focus-visible :focus:not([data-focus-visible-added]), :focus, .focus-visible': {
 				outline: 'none !important',
