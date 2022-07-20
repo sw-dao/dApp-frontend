@@ -21,8 +21,8 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		label: 'Strategies',
 		image: '/images/green-gem.png',
 		active: {
-			color: '#301FA0',
-			bgColor: '#FFCC50',
+			color: '#FFCC50',
+			bgColor: '#301FA0',
 			borderColor: 'transparent',
 		},
 		inactive: {
@@ -51,8 +51,8 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		imageHeight: '3.1rem',
 		imageTop: '-0.5rem',
 		active: {
-			color: '#301FA0',
-			bgColor: '#43A047',
+			color: '#43A047',
+			bgColor: '#301FA0',
 			borderColor: 'transparent',
 		},
 		inactive: {
@@ -65,8 +65,8 @@ export const BUTTON_STYLES: ButtonStyleProps = {
 		label: 'All',
 		image: '/images/blue-gem.png',
 		active: {
-			color: '#301FA0',
-			bgColor: '#23CBFF',
+			color: '#23CBFF',
+			bgColor: '#301FA0',
 			borderColor: 'transparent',
 		},
 		inactive: {
