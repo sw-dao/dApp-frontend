@@ -32,7 +32,7 @@ export default function RiskModal({ symbol }: RiskModal) {
 		return null;
 	}
 	return (
-		<Box position="absolute" left="76vw" top="24vh">
+		<Box display="flex" justifyContent="flex-end">
 			<Box
 				display="flex"
 				justifyContent="center"

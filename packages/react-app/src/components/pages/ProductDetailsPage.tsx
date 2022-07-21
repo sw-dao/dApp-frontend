@@ -161,12 +161,12 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 			<Center>
 				<StyledSection id="ProductDetails" section="body" marginBottom="3rem">
 					<Box className="bodycontent">
-						<VStack spacing="1rem" textAlign="left" align="left" margin="0 0 2rem 0.5rem">
+						<VStack spacing="1rem" textAlign="left" align="left">
 							<Box display="flex" alignItems="center">
 								<ProductDetailHeader symbol={symbol} icon={icon || ''} name={name || ''} h="5rem" />
 								{breakpoint !== 'sm' && <AddToMetamaskButton />}
 							</Box>
-							<Box>
+							<Box display="flex">
 								<PriceAndDateHeader
 									symbol={symbol}
 									address={product?.address}
