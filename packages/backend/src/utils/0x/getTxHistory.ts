@@ -139,17 +139,17 @@ const mainLoop = async (
         await processTxTopic(logs, address, address1, address2, obj);
       }
     }
-    if (
-      logs.topics[0] ===
-      "0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"
-    ) {
-      const decimals = await getDecimals(logs.address);
-      obj.toDecimals = decimals;
-      obj.toAmount =
-        parseInt(web3.utils.hexToNumberString(logs.data), 10) / 10 ** decimals;
-      obj.toSymbol = await getSymbol(logs.address);
-      obj.toAddress = logs.address;
-    }
+    // if (
+    //   logs.topics[0] ===
+    //   "0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"
+    // ) {
+    //   const decimals = await getDecimals(logs.address);
+    //   obj.toDecimals = decimals;
+    //   obj.toAmount =
+    //     parseInt(web3.utils.hexToNumberString(logs.data), 10) / 10 ** decimals;
+    //   obj.toSymbol = await getSymbol(logs.address);
+    //   obj.toAddress = logs.address;
+    // }
     if (
       logs.topics[0] ===
       "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c"
