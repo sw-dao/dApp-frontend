@@ -4,7 +4,7 @@ import { AbiItem } from "web3-utils";
 import TokenSetABI from "../../abi/TokenSetABI.json";
 import { baseUrl0x } from "../../settings";
 import { web3 } from "../../bin/www";
-import { ADDRESSES, COMMON_DECIMALS, PRECISION_REQUIRED } from "./exports";
+import { ADDRESSES, COMMON_DECIMALS, PRECISION_REQUIRED, HARDCODED_SUPPLY } from "./exports";
 import { isUndefined } from "lodash";
 
 export const getDecimals = async (address: string) => {
@@ -25,7 +25,7 @@ const getTotalSupply = async (address: string) => {
         return res;
       })) / 10 ** 18;
   } else {
-    return 0;
+    return HARDCODED_SUPPLY[address.toLowerCase()] || 0;
   }
 };
 

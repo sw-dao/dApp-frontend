@@ -18,7 +18,7 @@
     "react-app:test": "yarn workspace @project/react-app test",
     "backend:test": "yarn workspace @project/backend test",
     "clean": "rimraf build && yarn workspace @project/backend clean && yarn workspace @project/react-app clean",
-    "dist": "mv node_modules/charts.css/dist/charts.css node_modules/charts.css/dist/charts.min.css && yarn clean && yarn workspace @project/backend dist && ncp packages/backend/build build",
+    "dist": "cp node_modules/charts.css/dist/charts.css node_modules/charts.css/dist/charts.min.css && yarn clean && yarn workspace @project/backend dist && ncp packages/backend/build build",
     "dist:dev": "yarn clean &&  yarn workspace @project/backend dist:dev && ncp packages/backend/build build",
     "start": "pm2-runtime ecosystem.config.js",
     "start:dApp": "env-cmd -f ./build/.env nodemon ./build/bin/www",

@@ -37,6 +37,11 @@ export async function asyncForEach<T>(
   }
 }
 
+export const HARDCODED_SUPPLY: { [key: string]: number } = {
+  "0xdc8d88d9e57cc7be548f76e5e413c4838f953018": 322096.1173,
+  "0xe525deec6eb2566c29c272bb69eed2e8a46389dc": 2909.514705,
+};
+
 export const ADDRESSES = [
   "0x25ad32265c9354c29e145c902ae876f6b69806f2", // # alpha portfolio
   "0x71b41b3b19aac53ca4063aec2d17fc3caeb38026", // # macro trend btc
