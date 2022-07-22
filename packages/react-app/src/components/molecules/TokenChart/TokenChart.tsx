@@ -68,7 +68,6 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 			setPrices(product.prices);
 		}
 		if (defaultPrices && symbol == 'Total') {
-			console.log(tokenDetails);
 			setPrices(defaultPrices);
 		}
 	}, [loadPrices, prices, symbol, tokenDetails, update]);

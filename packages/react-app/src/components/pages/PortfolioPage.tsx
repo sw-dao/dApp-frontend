@@ -40,6 +40,7 @@ import { ReloadIcon } from '../atoms/ClientIcons';
 import { HoldingsTable } from '../molecules/HoldingsTable';
 import { PriceAndDateHeader } from '../molecules/PriceAndDateHeader';
 import { StyledSection } from '../molecules/StyledSection';
+import { PortfolioTokenChart } from '../molecules/TokenChart/PortfolioTokenChart';
 import { TokenChart } from '../molecules/TokenChart/TokenChart';
 import { TransactionsTable } from '../molecules/TransactionsTable';
 import { FullHeightPage } from '../templates/FullHeightPage';
@@ -72,6 +73,9 @@ interface TxChart {
 	txHistory: Transaction[];
 	charts: BuySellMap[];
 }
+// interface TempChart {
+// 	[timestamp: number]: number;
+// }
 
 function TabButton({ label }: { label: string }): JSX.Element {
 	return (
@@ -86,15 +90,6 @@ function TabButton({ label }: { label: string }): JSX.Element {
 		</Tab>
 	);
 }
-
-const noop = () => {
-	//noop
-};
-
-const convertTimestamp = (epoch: number) => {
-	const date = new Date(epoch);
-	return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
-};
 
 const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 	const chart: ChartDataMap = {};
@@ -122,18 +117,8 @@ const getChartData = (tokenDetails: TokenDetailsMap, chartData: BuySellMap) => {
 					});
 					if (!temp) {
 						chart[symbol].push([timestamp, (parseFloat(value) * tx.amount).toString()]);
-						// chart[symbol].push([timestamp, tx.amount.toString()]);
 					}
 				}
-				// else {
-				// 	let temp = false;
-				// 	chart[symbol].every((e) => {
-				// 		if (e[0] == timestamp) {
-				// 			temp = true;
-				// 			return;
-				// 		}
-				// 	});
-				// }
 			});
 		}
 	}
@@ -145,9 +130,6 @@ const combinePlusChartData = (plus: ChartDataMap) => {
 	for (const symbol in plus) {
 		plus[symbol].forEach((data) => {
 			let temp = false;
-			// if (!combinedChart[symbol]) {
-			// 	combinedChart[symbol] = [];
-			// }
 			combinedChart.forEach((e) => {
 				if (e[0] === data[0]) {
 					e[1] = (parseFloat(e[1]) + parseFloat(data[1])).toString();
@@ -175,12 +157,48 @@ const combinePlusWithMinusChartData = (combinedPlus: ChartData, minus: ChartData
 	return combinedChart;
 };
 
+// This generates Individual charts for each Asset in the Portfolio
+
+// const combineIndividual = (plus: ChartDataMap, minus: ChartDataMap) => {
+// 	const cmbndCrt: ChartDataMap = {};
+// 	for (const symbol in plus) {
+// 		cmbndCrt[symbol] = [];
+// 		const tmp: TempChart = [];
+// 		plus[symbol].forEach((d) => {
+// 			if (tmp[d[0]]) {
+// 				tmp[d[0]] += parseFloat(d[1]);
+// 			} else {
+// 				tmp[d[0]] = parseFloat(d[1]);
+// 			}
+// 		});
+// 		for (const each in tmp) {
+// 			cmbndCrt[symbol].push([parseInt(each, 10), tmp[each].toString()]);
+// 		}
+// 	}
+// 	for (const symbol in cmbndCrt) {
+// 		if (minus[symbol]) {
+// 			minus[symbol].forEach((m) => {
+// 				cmbndCrt[symbol].forEach((p) => {
+// 					if (m[0] == p[0]) {
+// 						p[1] = (parseFloat(p[1]) - parseFloat(m[1])).toString();
+// 					}
+// 				});
+// 			});
+// 		}
+// 	}
+// 	for (const symbol in cmbndCrt) {
+// 		cmbndCrt[symbol] = cmbndCrt[symbol].sort((b, a) =>
+// 			timestampSorter(b[0].toString(), a[0].toString()),
+// 		);
+// 	}
+// 	return cmbndCrt;
+// };
+
 export function PortfolioPage(): JSX.Element {
 	const [query, setQuery] = useQueryParams();
 	const { period = '1Y' } = query;
 	const [userHolding, setUserHolding] = useState<PortfolioTokenDetails[]>();
 	const [txHistory, setTxHistory] = useState<TxChart>();
-	// const [charts, setCharts] = useState<BuySellMap[]>();
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const [timeout, setTimeout] = useState(0);
 	const detailMap = useRecoilValue(extendedTokenDetailsState); // NEW
@@ -190,6 +208,7 @@ export function PortfolioPage(): JSX.Element {
 	const { isConnected, address: walletAddress } = useWallet();
 	const [holdingsCharts, setHoldingsCharts] = useState<ChartDataMap>({});
 	const [chartData, setChartData] = useState<ChartData>([]);
+	// const [idvChart, setIdvChart] = useState<ChartDataMap>({});
 	const userHoldings: PortfolioTokenDetails[] = [];
 	if ((refresh && walletAddress) || (walletAddress && new Date().getTime() - timeout > 899999)) {
 		setRefresh(false);
@@ -222,8 +241,8 @@ export function PortfolioPage(): JSX.Element {
 	) {
 		const plusCharts = getChartData(tokenDetails, txHistory.charts[0]);
 		const minusCharts = getChartData(tokenDetails, txHistory.charts[1]);
+		// setIdvChart(combineIndividual(plusCharts, minusCharts));
 		const plus = combinePlusChartData(plusCharts);
-		console.log(plusCharts, minusCharts, plus);
 		const chart = combinePlusWithMinusChartData(plus, minusCharts);
 		chart.sort((b, a) => timestampSorter(b[0].toString(), a[0].toString()));
 		holdingsCharts[periodVal] = chart;
@@ -304,8 +323,8 @@ export function PortfolioPage(): JSX.Element {
 						<PriceAndDateHeader
 							symbol="PORTFOLIO"
 							price={balance}
-							// change={priceChange}
-							change={0}
+							change={priceChange}
+							// change={0}
 							date={loadDate}
 							showTime={true}
 							showZero={false}
@@ -345,10 +364,16 @@ export function PortfolioPage(): JSX.Element {
 								borderTop="1px solid #120046"
 								borderColor="#120046"
 							>
-								<TabPanel p="0">
-									<HoldingsTable isConnected={isConnected} first={false} holdings={userHolding} />
+								<TabPanel p="0" key={'1'}>
+									<HoldingsTable
+										isConnected={isConnected}
+										first={false}
+										holdings={userHolding}
+										tokenDetails={detailMap}
+										d={tokenDetails}
+									/>
 								</TabPanel>
-								<TabPanel p="0">
+								<TabPanel p="0" key={'2'}>
 									<TransactionsTable
 										isConnected={isConnected}
 										first={false}

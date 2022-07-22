@@ -1,14 +1,33 @@
-import { Box, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+	Box,
+	Center,
+	Spinner,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tooltip,
+	Tr,
+} from '@chakra-ui/react';
 import { A } from 'hookrouter';
 import { useRecoilValue } from 'recoil';
 import { PRODUCTS } from '../../config/products';
 import { breakpointState } from '../../state';
 
-import { PortfolioTokenDetails } from '../../types';
+import {
+	ExtendedTokenDetailsMap,
+	PortfolioTokenDetails,
+	TokenDetails,
+	TokenDetailsMap,
+} from '../../types';
 import { getTokenUrl } from '../../utils';
 import { ButtonLink } from '../atoms/ButtonLink';
+import { ChangeDisplay } from '../atoms/ChangeDisplay';
 import { CoinLabelCell } from '../atoms/CoinLabelCell';
 import { DEFAULT_COL_STYLES } from './HoldingsTable/types';
+import { getChange } from './TokenPriceTable/TokenPriceTable';
 import { formatNumber } from './TransactionsTable';
 import WalletButton from './WalletButton';
 
@@ -16,6 +35,8 @@ interface HoldingsRow {
 	row: PortfolioTokenDetails;
 	index: number;
 	last: boolean;
+	tokenDetails: ExtendedTokenDetailsMap;
+	d: TokenDetails;
 }
 
 interface TrProps {
@@ -24,7 +45,7 @@ interface TrProps {
 	borderRadius?: string;
 }
 
-function TableRow({ row, last }: HoldingsRow): JSX.Element {
+function TableRow({ row, last, tokenDetails, d }: HoldingsRow): JSX.Element {
 	const breakpoint = useRecoilValue(breakpointState);
 	const productUrl = `/product/${row.symbol}`;
 	//console.log(`ROW ${index}: ${JSON.stringify(row)}`);
@@ -39,7 +60,7 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 	PRODUCTS.forEach((e) => {
 		if (e.symbol == row.symbol) name = e.name;
 	});
-	if (breakpoint !== 'sm') {
+	if (breakpoint !== 'sm' && breakpoint !== 'md') {
 		return (
 			<Tr {...props}>
 				<Td paddingInlineEnd="0px">
@@ -82,6 +103,17 @@ function TableRow({ row, last }: HoldingsRow): JSX.Element {
 						maximumFractionDigits: 2,
 					})}
 				</Td>
+				{breakpoint !== 'sm' && (
+					<Td
+						textAlign="center"
+						paddingInlineStart="0px"
+						{...DEFAULT_COL_STYLES[breakpoint].change}
+					>
+						<Center>
+							<ChangeDisplay change={getChange(d, tokenDetails)} />
+						</Center>
+					</Td>
+				)}
 				{breakpoint !== 'sm' && (
 					<Td
 						textAlign="center"
@@ -168,7 +200,7 @@ function TokenHeader({ first = true }) {
 		lastProps.border = '2px solid #120046';
 		middleProps.border = '2px solid #120046';
 	}
-	if (breakpoint !== 'sm') {
+	if (breakpoint !== 'sm' && breakpoint !== 'md') {
 		return (
 			<Tr>
 				{/* <Th bgColor="lightline"></Th> */}
@@ -187,11 +219,12 @@ function TokenHeader({ first = true }) {
 				<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
 					Total
 				</Th>
-				{breakpoint !== 'sm' && (
-					<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
-						Trade
-					</Th>
-				)}
+				<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
+					<Tooltip label="For selected chart timeframe">Price Change 𝓲</Tooltip>
+				</Th>
+				<Th bgColor="lightline" paddingInlineStart="0px" textAlign="center">
+					Trade
+				</Th>
 			</Tr>
 		);
 	}
@@ -202,16 +235,18 @@ interface HoldingsTableProps {
 	isConnected: boolean;
 	holdings: PortfolioTokenDetails[] | undefined;
 	first?: boolean;
+	tokenDetails: ExtendedTokenDetailsMap;
+	d: TokenDetailsMap;
 }
 
 export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
-	const { isConnected, holdings, first = true } = props;
+	const { isConnected, holdings, first = true, tokenDetails, d } = props;
 	let rows;
 
 	if (!isConnected) {
 		rows = (
 			<Tr>
-				<Td colSpan={6} textAlign="center" color="bodytext">
+				<Td colSpan={7} textAlign="center" color="bodytext">
 					<Text paddingBottom="1rem">Please connect your wallet</Text>
 					<WalletButton width="5rem" />
 				</Td>
@@ -220,7 +255,7 @@ export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
 	} else if (!holdings) {
 		rows = (
 			<Tr>
-				<Td colSpan={6} textAlign="center" color="bodytext">
+				<Td colSpan={7} textAlign="center" color="bodytext">
 					<Text fontStyle="italic" p="2rem 2rem 0 2rem">
 						Loading your wallet ...
 					</Text>
@@ -231,7 +266,7 @@ export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
 	} else if (holdings.length === 0) {
 		rows = (
 			<Tr>
-				<Td colSpan={6} textAlign="center" color="bodytext">
+				<Td colSpan={7} textAlign="center" color="bodytext">
 					<Text fontStyle="italic" p="2rem">
 						No holdings
 					</Text>
@@ -241,7 +276,14 @@ export function HoldingsTable(props: HoldingsTableProps): JSX.Element {
 	} else {
 		const lastIx = holdings.length - 1;
 		rows = holdings.map((row, ix) => (
-			<TableRow key={ix} row={row} index={ix} last={ix === lastIx} />
+			<TableRow
+				key={ix}
+				row={row}
+				index={ix}
+				last={ix === lastIx}
+				tokenDetails={tokenDetails}
+				d={d[row.symbol]}
+			/>
 		));
 	}
 

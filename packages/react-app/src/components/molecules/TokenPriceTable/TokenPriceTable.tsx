@@ -21,7 +21,7 @@ interface TokenPriceTableProps {
 	width?: string;
 }
 
-function getChange(d: TokenDetails, tokenDetails: ExtendedTokenDetailsMap): number {
+export function getChange(d: TokenDetails, tokenDetails: ExtendedTokenDetailsMap): number {
 	// const details = tokenDetails[d.symbol]
 	if (tokenDetails[d.symbol] && d.prices.length > 0) {
 		const curp = getPrice(d, tokenDetails);
