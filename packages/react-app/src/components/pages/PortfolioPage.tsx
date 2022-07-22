@@ -40,7 +40,6 @@ import { ReloadIcon } from '../atoms/ClientIcons';
 import { HoldingsTable } from '../molecules/HoldingsTable';
 import { PriceAndDateHeader } from '../molecules/PriceAndDateHeader';
 import { StyledSection } from '../molecules/StyledSection';
-import { PortfolioTokenChart } from '../molecules/TokenChart/PortfolioTokenChart';
 import { TokenChart } from '../molecules/TokenChart/TokenChart';
 import { TransactionsTable } from '../molecules/TransactionsTable';
 import { FullHeightPage } from '../templates/FullHeightPage';
