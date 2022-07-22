@@ -103,7 +103,7 @@ function TableRow({ row, last, tokenDetails, d }: HoldingsRow): JSX.Element {
 						maximumFractionDigits: 2,
 					})}
 				</Td>
-				{breakpoint !== 'sm' && (
+				{breakpoint !== 'sm' && tokenDetails && (
 					<Td
 						textAlign="center"
 						paddingInlineStart="0px"
