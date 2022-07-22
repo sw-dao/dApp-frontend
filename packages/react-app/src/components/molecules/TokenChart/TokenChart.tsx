@@ -271,7 +271,6 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 								animationDuration={600}
 								animationEasing="ease"
 								content={ChartTooltip}
-								allowEscapeViewBox={{ x: true, y: true }}
 							/>
 						</LineChart>
 					</ResponsiveContainer>
