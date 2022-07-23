@@ -209,7 +209,10 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
 				<Box bgColor="blue7" borderRadius={borderRadius}>
 					<ResponsiveContainer width="99%" height={size[1] - 4}>
-						<LineChart data={mergedPrices.merged}>
+						<LineChart
+							data={mergedPrices.merged}
+							margin={{ top: 25, bottom: 25, left: 5, right: 5 }}
+						>
 							<defs>
 								<linearGradient id="gradient1" x1="0" y1="0" x2="0" y2="1">
 									<stop offset="5%" stopColor="#1f8cfd" stopOpacity={1} />
@@ -228,7 +231,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 							{compareBtc && btcPrices && (
 								<Line
 									dataKey="btcScaled"
-									type="basis"
+									type="monotone"
 									stroke="#F7931A"
 									strokeWidth={2}
 									stroke-linecap="round"
@@ -241,7 +244,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 							{compareEth && ethPrices && (
 								<Line
 									dataKey="ethScaled"
-									type="basis"
+									type="monotone"
 									stroke="#66A236"
 									strokeWidth={2}
 									stroke-linecap="round"
@@ -253,7 +256,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 							)}
 							<Line
 								dataKey="coinScaled"
-								type="basis"
+								type="monotone"
 								stroke={mergedPrices.flat ? '#1f8cfd' : 'url(#gradient1)'}
 								strokeWidth={2}
 								stroke-linecap="round"
