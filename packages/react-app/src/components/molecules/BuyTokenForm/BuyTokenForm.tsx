@@ -108,7 +108,7 @@ export function BuyTokenForm(props: BuyTokenProps): JSX.Element {
 			const tokens = [s1, s2];
 			// console.log(`getting tokens: ${tokens}`);
 			const promiseThrottle = new PromiseThrottle({
-				requestsPerSecond: 1,
+				requestsPerSecond: 60,
 				promiseImplementation: Promise,
 			});
 			const promises = [

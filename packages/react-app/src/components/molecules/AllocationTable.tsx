@@ -40,7 +40,7 @@ async function getPrices(componentTokens: TokenSummaryInfoMap, chainId: string) 
 	const prices: Record<string, [number, number]> = {};
 
 	const promiseThrottle = new PromiseThrottle({
-		requestsPerSecond: 1,
+		requestsPerSecond: 120,
 		promiseImplementation: Promise,
 	});
 	// const cId = chainId ?? DEFAULT_CHAIN_ID;

@@ -78,7 +78,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 			if (showComparison && loadedPrices !== `${cId}-${period}`) {
 				setLoading(true);
 				const promiseThrottle = new PromiseThrottle({
-					requestsPerSecond: 1,
+					requestsPerSecond: 120,
 					promiseImplementation: Promise,
 				});
 				const promises = [
@@ -116,6 +116,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	}, [loadedPrices, chainId, period, showComparison, loading]);
 
 	useEffect(() => {
+		setMergedPrices([]);
 		if (prices.length !== 0) {
 			const merged = mergePrices(
 				symbol,
@@ -214,12 +215,12 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 								</linearGradient>
 							</defs>
 							<YAxis
-								domain={['dataMin - dataMin * 1.2', 'dataMax * 1.2']}
+								domain={['auto', 'auto']}
 								type="number"
 								axisLine={false}
 								tick={false}
 								tickLine={false}
-								scale="log"
+								scale="auto"
 								hide={true}
 							/>
 							<Line

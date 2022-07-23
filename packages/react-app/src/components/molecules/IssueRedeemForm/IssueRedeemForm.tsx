@@ -247,7 +247,7 @@ export function IssueRedeemForm({
 			const coins: CoinBalances = {};
 			// console.log(`Updating balances for ${tokens.join(', ')} @ ${new Date().toISOString()}`);
 			const promiseThrottle = new PromiseThrottle({
-				requestsPerSecond: 1,
+				requestsPerSecond: 60,
 				promiseImplementation: Promise,
 			});
 			const promises = tokens.map(async (token) =>

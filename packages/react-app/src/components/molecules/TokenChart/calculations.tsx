@@ -1,6 +1,7 @@
 import { DATE_FORMAT, TIME_PERIODS } from '../../../config';
 import { ChartData } from '../../../types';
 import { closest } from '../../../utils';
+import { DateTime } from 'luxon';
 
 type Formatter = (timestamp: string) => string;
 
@@ -80,16 +81,17 @@ export function mergePrices(
 		return merged;
 	}
 	keys.sort((a, b) => parseInt(a) - parseInt(b));
-	const endTs = new Date().getTime() / 1000;
-	const startTs = endTs - TIME_PERIODS[period].seconds;
+	const endTs = Math.round(DateTime.now().toSeconds());
+	const startTs =
+		Math.round(DateTime.now().startOf('day').toSeconds()) - TIME_PERIODS[period].seconds;
 	const isMilliseconds = looksLikeMilliseconds(keys[0]);
 	// build initial set of merged prices
 	keys.forEach((timestamp) => {
 		let ts = parseInt(timestamp);
 		if (isMilliseconds) {
-			ts /= 1000;
+			ts = Math.round(ts / 1000);
 		}
-		if (ts > startTs && ts < endTs) {
+		if (ts >= startTs && ts <= endTs) {
 			const mergedPrice: MergedPrice = {
 				...blankMergedPrice,
 				timestamp: `${ts}`,
@@ -125,7 +127,9 @@ export function mergePrices(
 		if (compareBtc && btcStart > 0) {
 			btcScale = maxVal / btcStart;
 		}
-		priceScale = maxVal / Math.max(coinStart, 0.01); // don't divide by zero
+		if (coinStart > 0) {
+			priceScale = maxVal / coinStart;
+		}
 		for (let i = 0; i < merged.length; i++) {
 			const { coin, btc, eth } = merged[i];
 			merged[i].coinScaled = coin * priceScale;
