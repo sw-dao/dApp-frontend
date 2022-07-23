@@ -105,6 +105,9 @@ export const DEFAULT_COL_STYLES: SizedColumnStyles = {
 			width: '200px',
 			minWidth: '200px',
 			textAlign: 'center',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		action: {
 			height: '4rem',
@@ -142,6 +145,9 @@ export const DEFAULT_COL_STYLES: SizedColumnStyles = {
 			width: '40%',
 			minWidth: '300px',
 			textAlign: 'center',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		action: {
 			height: '4rem',

@@ -64,7 +64,7 @@ export function TokenSparkline(props: TokenSparklineProps): JSX.Element {
 	}
 	return (
 		<ResponsiveContainer width="99%" height={height}>
-			<LineChart data={cleanedPrices} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+			<LineChart data={cleanedPrices} margin={{ top: 10, right: 0, left: 0, bottom: 10 }}>
 				<YAxis
 					domain={[minData, maxData]}
 					type="number"
