@@ -217,12 +217,12 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 								</linearGradient>
 							</defs>
 							<YAxis
-								domain={['auto', 'auto']}
+								domain={['dataMin - dataMin * 1.2', 'dataMax * 1.2']}
 								type="number"
 								axisLine={false}
 								tick={false}
 								tickLine={false}
-								scale="auto"
+								scale="log"
 								hide={true}
 							/>
 							{compareBtc && btcPrices && (
