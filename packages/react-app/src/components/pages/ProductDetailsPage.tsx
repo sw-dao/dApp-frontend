@@ -33,7 +33,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element {
 	const [query, setQuery] = useQueryParams();
-	const { period = '1D' } = query;
+	const { period = '1Y' } = query;
 	const [periodVal, setPeriodState] = useRecoilState(periodState);
 	const windowSize = useWindowSize();
 	const tokenPrices = useRecoilValue(tokenDetailsForCurrentPeriod);
@@ -74,6 +74,9 @@ export function ProductDetailsPage({ symbol }: { symbol: string }): JSX.Element 
 		setQuery({ ...query, period: p });
 		setPeriodState(p);
 	};
+	useEffect(() => {
+		setPeriod('1Y');
+	}, []);
 
 	const { image: icon, name } = getOverriddenDetails(symbol);
 

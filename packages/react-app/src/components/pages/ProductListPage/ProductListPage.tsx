@@ -70,6 +70,9 @@ export function ProductListPage(): JSX.Element {
 		},
 		[setQuery, query],
 	);
+	useEffect(() => {
+		setPeriod('1D');
+	}, []);
 
 	useEffect(() => {
 		if (periodVal !== period) {
