@@ -209,6 +209,7 @@ export function PortfolioPage(): JSX.Element {
 	const [chartData, setChartData] = useState<ChartData>([]);
 	// const [idvChart, setIdvChart] = useState<ChartDataMap>({});
 	const userHoldings: PortfolioTokenDetails[] = [];
+
 	if ((refresh && walletAddress) || (walletAddress && new Date().getTime() - timeout > 899999)) {
 		setRefresh(false);
 		setTimeout(new Date().getTime());
