@@ -54,7 +54,10 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	const [btcPrices, setBtcPrices] = useState<ChartData>([]); // bitcoin prices
 	const [compareEth, setCompareEth] = useState(false);
 	const [compareBtc, setCompareBtc] = useState(false);
-	const [mergedPrices, setMergedPrices] = useState<MergedPrice[]>([]);
+	const [mergedPrices, setMergedPrices] = useState<{ merged: MergedPrice[]; flat: boolean }>({
+		merged: [],
+		flat: true,
+	});
 	const [loadedPrices, setLoadedPrices] = useState('');
 	const [loading, setLoading] = useState(false);
 	let borderRadius = '0';
@@ -116,9 +119,8 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 	}, [loadedPrices, chainId, period, showComparison, loading]);
 
 	useEffect(() => {
-		setMergedPrices([]);
 		if (prices.length !== 0) {
-			const merged = mergePrices(
+			const { merged, flat } = mergePrices(
 				symbol,
 				prices,
 				ethPrices,
@@ -127,7 +129,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 				compareBtc,
 				period,
 			);
-			setMergedPrices(merged);
+			setMergedPrices({ merged, flat });
 		}
 	}, [compareBtc, compareEth, prices, ethPrices, btcPrices, symbol, period]);
 
@@ -207,7 +209,7 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
 				<Box bgColor="blue7" borderRadius={borderRadius}>
 					<ResponsiveContainer width="99%" height={size[1] - 4}>
-						<LineChart data={mergedPrices}>
+						<LineChart data={mergedPrices.merged}>
 							<defs>
 								<linearGradient id="gradient1" x1="0" y1="0" x2="0" y2="1">
 									<stop offset="5%" stopColor="#1f8cfd" stopOpacity={1} />
@@ -223,22 +225,13 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 								scale="auto"
 								hide={true}
 							/>
-							<Line
-								dataKey="coinScaled"
-								type="basis"
-								stroke="url(#gradient1)"
-								strokeWidth={2}
-								legendType="none"
-								dot={false}
-								activeDot={renderCoinDot}
-								animationDuration={500}
-							/>
 							{compareBtc && btcPrices && (
 								<Line
 									dataKey="btcScaled"
 									type="basis"
 									stroke="#F7931A"
 									strokeWidth={2}
+									stroke-linecap="round"
 									legendType="none"
 									dot={false}
 									activeDot={renderBtcDot}
@@ -251,12 +244,24 @@ export function TokenChart(props: TokenChartProps): JSX.Element {
 									type="basis"
 									stroke="#66A236"
 									strokeWidth={2}
+									stroke-linecap="round"
 									legendType="none"
 									dot={false}
 									activeDot={renderEthDot}
 									animationDuration={500}
 								/>
 							)}
+							<Line
+								dataKey="coinScaled"
+								type="basis"
+								stroke={mergedPrices.flat ? '#1f8cfd' : 'url(#gradient1)'}
+								strokeWidth={2}
+								stroke-linecap="round"
+								legendType="none"
+								dot={false}
+								activeDot={renderCoinDot}
+								animationDuration={500}
+							/>
 							{prices.length === 0 && (
 								<Box colSpan={6} textAlign="center" color="bodytext">
 									<Text fontStyle="italic" p="2rem 2rem 0 2rem">

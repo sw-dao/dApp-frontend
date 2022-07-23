@@ -58,16 +58,16 @@ export function mergePrices(
 	compareEth: boolean,
 	compareBtc: boolean,
 	period: string,
-): MergedPrice[] {
+): { merged: MergedPrice[]; flat: boolean } {
 	const merged: MergedPrice[] = [];
 	if (!prices) {
-		return merged;
+		return { merged, flat: true };
 	}
-	const priceMap = chartDataToMap(prices);
+	const { map: priceMap, flat } = chartDataToMap(prices);
 	// console.log(`Compare ETH ${compareEth} with ${ethPrices?.length}`);
 	// console.log(`Compare BTC ${compareBtc} with ${btcPrices?.length}`);
-	const ethPriceMap = compareEth && ethPrices ? chartDataToMap(ethPrices) : {};
-	const btcPriceMap = compareBtc && btcPrices ? chartDataToMap(btcPrices) : {};
+	const ethPriceMap = compareEth && ethPrices ? chartDataToMap(ethPrices).map : {};
+	const btcPriceMap = compareBtc && btcPrices ? chartDataToMap(btcPrices).map : {};
 	const ethTimestamps: number[] =
 		compareEth && ethPrices ? Object.keys(ethPriceMap).map((k) => parseInt(k)) : [];
 	ethTimestamps.sort();
@@ -78,7 +78,7 @@ export function mergePrices(
 	const keys = Object.keys(priceMap);
 	if (keys.length === 0) {
 		console.log(`No prices found for ${symbol} in ${period}`);
-		return merged;
+		return { merged, flat: true };
 	}
 	keys.sort((a, b) => parseInt(a) - parseInt(b));
 	const endTs = Math.round(DateTime.now().toSeconds());
@@ -156,16 +156,25 @@ export function mergePrices(
 	// 	);
 	// }
 
-	return merged;
+	return { merged, flat };
 }
 
 type TimestampedMap = { [key: string]: number };
 
-function chartDataToMap(prices: ChartData): TimestampedMap {
+function chartDataToMap(prices: ChartData): { map: TimestampedMap; flat: boolean } {
 	const map: TimestampedMap = {};
+	let flat = true;
+	let firstPrice;
 	for (let i = 0; i < prices.length; i++) {
 		const [timestamp, price] = prices[i];
+		if (flat) {
+			if (i === 0) {
+				firstPrice = price;
+			} else {
+				if (price != firstPrice) flat = false;
+			}
+		}
 		map[timestamp.toString()] = parseFloat(`${price}`);
 	}
-	return map;
+	return { map, flat };
 }
