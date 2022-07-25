@@ -1,7 +1,7 @@
 import { Box, Center, Heading, Link, Text, VStack } from '@chakra-ui/react';
 import { useWallet } from '@raidguild/quiver';
 import { useQueryParams } from 'hookrouter';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import {
@@ -10,6 +10,7 @@ import {
 	periodState,
 	tokenDetailsForCurrentPeriod,
 } from '../../state';
+import { ChartData, TokenDetails } from '../../types';
 import AddToWalletButton from '../atoms/AddToWalletButton';
 import { EtherscanLink } from '../atoms/EtherscanLink';
 import RiskModal from '../atoms/RiskModal';
@@ -38,9 +39,30 @@ export function SWDTokenPage(): JSX.Element {
 	const [periodVal, setPeriodState] = useRecoilState(periodState);
 	const detailMap = useRecoilValue(extendedTokenDetailsState);
 	const tokenDetails = useRecoilValue(tokenDetailsForCurrentPeriod);
+	const tokenPrices = useRecoilValue(tokenDetailsForCurrentPeriod);
 	const { chainId } = useWallet();
+	const [prices, setPrices] = useState<ChartData>([]); // SWD prices
+	const [product, setProduct] = useState<TokenDetails | null>(null);
 	const breakpoint = useRecoilValue(breakpointState);
 
+	useEffect(() => {
+		if (tokenPrices) {
+			const sym = symbol.toUpperCase();
+			const token = tokenPrices[sym];
+			if (token) {
+				setProduct(token);
+			}
+		}
+	}, [tokenPrices, symbol, periodVal, tokenDetails]);
+
+	useEffect(() => {
+		if (tokenDetails) {
+			const product = tokenDetails[symbol];
+			if (product) {
+				setPrices(product.prices);
+			}
+		}
+	}, [period, prices, symbol, tokenDetails]);
 	useEffect(() => {
 		if (periodVal !== period) {
 			setPeriodState(period);
@@ -72,6 +94,16 @@ export function SWDTokenPage(): JSX.Element {
 			totalSupply: new Intl.NumberFormat('en-US').format(product.totalSupply),
 		};
 	}, [detailMap]);
+
+	const change = useMemo(() => {
+		if (prices.length > 0) {
+			const cP = currentPrice;
+			const p = parseFloat(prices[0][1]);
+			console.log(symbol, cP, p);
+			return ((cP - p) / p) * 100;
+		}
+		return priceChange || product?.changePercent1Day || 0;
+	}, [product, currentPrice, prices]);
 
 	const swdDetailCells = [
 		<TokenDetailBox
@@ -190,7 +222,7 @@ export function SWDTokenPage(): JSX.Element {
 									symbol={symbol}
 									address={displayTokenAddress}
 									price={currentPrice}
-									change={priceChange}
+									change={change}
 									date={Date.now()}
 								/>
 							</Box>
