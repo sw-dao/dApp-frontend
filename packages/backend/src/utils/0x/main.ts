@@ -112,16 +112,13 @@ export const getSingleTokenPrice = async (address: string) => {
       changePercentDay: ((currentPrice - yesterdayPrice) / yesterdayPrice) * 100
     };
   } else {
-    let precision = false;
-    if (PRECISION_REQUIRED.includes(address.toLowerCase())) {
-      precision = true;
-    }
+    let precision = PRECISION_REQUIRED.includes(address.toLowerCase());
     const prices: { symbol: string; prices: number[] }[] =
       (await axios.post(
         baseUrl0x + `/history`,
         {
           buyTokens: [{
-            symbol: "SET",
+            symbol: "",
             decimals: await getDecimals(address),
             tokenAddress: address
           }],

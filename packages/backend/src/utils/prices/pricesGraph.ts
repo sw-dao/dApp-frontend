@@ -9,7 +9,7 @@ import TokenSetABI from "../../abi/TokenSetABI.json";
 import ERC20ABI from "../../abi/ERC20.json";
 import { DateTime } from "luxon";
 import { isEmpty, isUndefined } from "lodash";
-import { ADDRESSES } from "../0x/exports";
+import { ADDRESSES, PRECISION_REQUIRED } from "../0x/exports";
 
 // document: DocumentNode | TypedDocumentNode<TSubscriptionData, TSubscriptionVariables>;
 // variables?: TSubscriptionVariables;
@@ -77,6 +77,7 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
   // Separate tokens into groups.
   const tokensSet: TokenInfo[] = [];
   const tokensRaw: TokenInfo[] = [];
+  const tokensRawPrecision: TokenInfo[] = [];
   const addresses: string[] = Object.values(tokens).map((a) => a.toLowerCase());
   const symbols: string[] = Object.keys(tokens);
   addresses.forEach((a: string, i: number) => {
@@ -84,11 +85,24 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
     if (ADDRESSES.includes(a)) {
       tokensSet.push(token);
     } else {
-      tokensRaw.push(token);
+      if (PRECISION_REQUIRED.includes(a.toLowerCase())) {
+        tokensRawPrecision.push(token);
+      } else {
+        tokensRaw.push(token);
+      }
     }
   });
   const tokensRawData: TokenInfoZeroX[] = await Promise.all<TokenInfoZeroX>(
     tokensRaw.map(async (t) => {
+      return {
+        symbol: t.symbol,
+        decimals: await getDecimals(t.address),
+        tokenAddress: t.address
+      } as TokenInfoZeroX;
+    })
+  );
+  const tokensRawPrecisionData: TokenInfoZeroX[] = await Promise.all<TokenInfoZeroX>(
+    tokensRawPrecision.map(async (t) => {
       return {
         symbol: t.symbol,
         decimals: await getDecimals(t.address),
@@ -194,6 +208,7 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
           const positionsLocal = step.positions as any[];
           let hasUSDC: boolean = false;
           const USDC: string = "0x2791bca1f2de4661ed88a30c99a7a9449aa84174";
+          let precision = false;
           const tokensDataPromise: Promise<TokenInfoZeroX>[] = positionsLocal
             .filter((p: string[]) => {
               const isUSDC: boolean = p[0].toLowerCase() === USDC;
@@ -205,6 +220,9 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
             .map(async (p: string[], i: number) => {
               const addr = p[0].toLowerCase();
               const decimals: number = await getDecimals(addr);
+              if (PRECISION_REQUIRED.includes(addr.toLowerCase())) {
+                precision = true;
+              }
               return {
                 symbol: i.toString(),
                 decimals,
@@ -218,6 +236,7 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
               stepSize: step.steps !== 0 ? stepSize : undefined,
               stepCount: step.steps !== 0 ? step.steps : undefined,
               startBlock: step.block,
+              precision,
             })
             .then((res) => {
               return res.data as ZeroXReturn[];
@@ -261,6 +280,22 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
     );
   };
   // Handle tokensets separately, and get prices for all raw tokens at once.
+  const precisionRequest = async (): Promise<ZeroXReturn[]> => {
+    if (isEmpty(tokensRawPrecisionData)) {
+      return [];
+    } else {
+      return await axios
+        .post(baseUrl0x + `/history`, {
+          buyTokens: tokensRawPrecisionData,
+          stepSize,
+          stepCount,
+          startBlock: thisBlock,
+        })
+        .then((res) => {
+          return res.data;
+        });
+    }
+  };
   return await Promise.all([
     await axios
       .post(baseUrl0x + `/history`, {
@@ -272,6 +307,7 @@ const getPricesTokensHourly = async (tokens: AddressMap, days: number) => {
       .then((res) => {
         return res.data as ZeroXReturn[];
       }),
+    await precisionRequest(),
     await setPricing(),
   ])
     .then((res: ZeroXReturn[][]) => {
